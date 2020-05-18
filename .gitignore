@@ -1,0 +1,46 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+### VS Code ###
+.vscode/
+
+### Maven ###
+*/.mvn/wrapper/
+mvnw
+mvnw.*
+
+Prototype/CustomerService/src/main/resources/application.yml
+
+Prototype/CustomerService/stack.yml
+
+Prototype/CustomerService/.mvn/wrapper/maven-wrapper.jar
+
+Prototype/CustomerService/.mvn/wrapper/maven-wrapper.properties
+
+Prototype/CustomerService/.mvn/wrapper/MavenWrapperDownloader.java
