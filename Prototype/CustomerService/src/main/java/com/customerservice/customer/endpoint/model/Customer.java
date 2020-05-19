@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Data
@@ -25,6 +26,7 @@ public class Customer {
 
     @NotNull(message = "The field 'cellphone' is mandatory")
     @Column(nullable = false, name="ctm_cellphone")
+    @Size(max = 11)
     private String cellphone;
 
     @NotNull(message = "The field 'email' is mandatory")

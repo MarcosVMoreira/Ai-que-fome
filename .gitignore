@@ -44,3 +44,11 @@ Prototype/CustomerService/.mvn/wrapper/maven-wrapper.jar
 Prototype/CustomerService/.mvn/wrapper/maven-wrapper.properties
 
 Prototype/CustomerService/.mvn/wrapper/MavenWrapperDownloader.java
+
+Prototype/AddressService/.mvn/wrapper/maven-wrapper.properties
+
+Prototype/AddressService/.mvn/wrapper/MavenWrapperDownloader.java
+
+Prototype/AddressService/.mvn/wrapper/maven-wrapper.jar
+
+*.yml
