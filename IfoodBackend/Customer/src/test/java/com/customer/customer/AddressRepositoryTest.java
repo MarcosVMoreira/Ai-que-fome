@@ -1,7 +1,6 @@
 package com.customer.customer;
 
 import com.customer.customer.endpoint.DTO.Address;
-import com.customer.customer.endpoint.DTO.Customer;
 import com.customer.customer.endpoint.repository.AddressRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -80,6 +79,19 @@ public class AddressRepositoryTest {
                                 "ap 40", "", true)));
 
         assertTrue(exception.getMessage().contains("The field 'refPoint' is mandatory"));
+    }
+
+    @Test
+    public void whenInvalidComplementFieldSize_thenConstraintViolations () {
+
+        assertThrows(
+                ConstraintViolationException.class,
+                () -> addressRepository.save(
+                        new Address(0L, "London street", 123L,
+                                "Lorem ipsum dolor sit amet, consectetur " +
+                                        "adipiscing elit. Nulla blandit lorem velit, " +
+                                        "eu euismod justo. ", "next do Paris", true)));
+
     }
 
 }

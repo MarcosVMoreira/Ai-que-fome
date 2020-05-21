@@ -71,4 +71,11 @@ public class CustomerRepositoryTest {
         assertTrue(exception.getMessage().contains("The email must be valid"));
     }
 
+    @Test
+    public void whenInvalidCellphoneSize_thenConstraintViolations () {
+        assertThrows(
+                ConstraintViolationException.class,
+                () -> customerRepository.save(new Customer("marcos", "3799123456711", "email@gmail.com")));
+    }
+
 }
