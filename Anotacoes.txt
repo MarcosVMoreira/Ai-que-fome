@@ -3,3 +3,7 @@ docker run -d --hostname my-test-rabbit --name test-rabbit -p 15672:15672 -p 567
 docker start **CONTAINER ID**
 
 docker-compose -f stack.yml up
+
+
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//se eu nao quiser usar o h2 posso usar o proprio db anotando com notacao acima

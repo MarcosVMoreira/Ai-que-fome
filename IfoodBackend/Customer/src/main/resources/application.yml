@@ -12,9 +12,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
   datasource:
-    url: X
-    username: X
-    password: X
+    url:
+    username:
+    password: 
   cloud:
     stream:
       bindings:
