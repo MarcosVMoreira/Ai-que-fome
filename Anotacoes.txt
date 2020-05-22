@@ -4,6 +4,14 @@ docker start **CONTAINER ID**
 
 docker-compose -f stack.yml up
 
+---------------------------------
 
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 //se eu nao quiser usar o h2 posso usar o proprio db anotando com notacao acima
+
+---------------------------------
+
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference
+
+---------------------------------
+
