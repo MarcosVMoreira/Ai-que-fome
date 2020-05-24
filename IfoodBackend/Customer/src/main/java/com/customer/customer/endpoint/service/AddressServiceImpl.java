@@ -2,6 +2,7 @@ package com.customer.customer.endpoint.service;
 
 import com.customer.customer.endpoint.DTO.Address;
 import com.customer.customer.endpoint.repository.AddressRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -11,6 +12,7 @@ import java.util.Optional;
 @Component
 public class AddressServiceImpl implements AddressService {
 
+    @Autowired
     private AddressRepository addressRepository;
 
     @Override
