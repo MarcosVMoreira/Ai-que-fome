@@ -15,11 +15,11 @@ public interface CustomerService {
 
     public Iterable<Customer> findCustomerByName (@PathVariable String name);
 
-    public void save (@Valid @RequestBody Customer customer);
+    public boolean save (@Valid @RequestBody Customer customer);
 
-    public void delete (@PathVariable Long id);
+    public boolean delete (@PathVariable Long id);
 
-    public void update (@RequestBody Customer customer);
+    public boolean update (@RequestBody Customer customer);
 
     public boolean verifyIfCustomerExists(Long id);
 

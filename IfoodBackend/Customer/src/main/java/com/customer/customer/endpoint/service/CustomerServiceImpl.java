@@ -2,6 +2,8 @@ package com.customer.customer.endpoint.service;
 
 import com.customer.customer.endpoint.DTO.Customer;
 import com.customer.customer.endpoint.repository.CustomerRepository;
+import com.customer.customer.message.MessageProducer;
+import com.customer.customer.message.MessageSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +15,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private MessageProducer messageProducer;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Override
     public Iterable<Customer> listAll () {
@@ -30,18 +38,18 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void save (@Valid Customer customer) {
-
+    public boolean save (@Valid Customer customer) {
+        return messageProducer.sendMessageSaveCustomer(customer, messageSource);
     }
 
     @Override
-    public void delete (Long id) {
-
+    public boolean delete (Long id) {
+        return messageProducer.sendMessageDeleteCustomer(id, messageSource);
     }
 
     @Override
-    public void update (Customer customer) {
-
+    public boolean update (Customer customer) {
+        return messageProducer.sendMessageUpdateCustomer(customer, messageSource);
     }
 
     @Override

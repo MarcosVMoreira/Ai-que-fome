@@ -12,14 +12,37 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
   datasource:
-    url:
-    username:
-    password: 
+    url: X
+    username: X
+    password: X
   cloud:
     stream:
       bindings:
-        product-channel:
-          destination: product-process
+        input-save-customer: #nao importa pro rabbitMQ. É só pra dentro do programa mesmo ,do stream cloud
+          destination: customer-channel #destination se torna sempre uma exchange
+          group: save-customer #quando voce roda mais de um programa, pra nao ficar
+                                      #duas filas com noems estranhos, as duas vao ficar juntas no grupo
+                                      #que tu der o nome
+        input-update-customer:
+          destination: customer-channel
+          group: update-customer
+        input-delete-customer:
+          destination: customer-channel
+          group: delete-customer
+      rabbit:
+        bindings:
+          input-save-customer:
+            producer:
+              bindingRoutingKey: saveCustomerBinding
+              routing-key-expression: '"saveCustomerBinding"'
+          input-update-customer:
+            producer:
+              bindingRoutingKey: updateCustomerBinding
+              routing-key-expression: '"updateCustomerBinding"'
+          input-delete-customer:
+            producer:
+              bindingRoutingKey: deleteCustomerBinding
+              routing-key-expression: '"deleteCustomerBinding"'
   rabbitmq:
     host: localhost
     port: 5672
