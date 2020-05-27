@@ -2,8 +2,8 @@ package com.customer.customer.endpoint.service;
 
 import com.customer.customer.endpoint.DTO.Customer;
 import com.customer.customer.endpoint.repository.CustomerRepository;
-import com.customer.customer.message.MessageProducer;
-import com.customer.customer.message.MessageSource;
+import com.customer.customer.message.producer.MessageProducer;
+import com.customer.customer.message.producer.MessageSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,18 +38,34 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public boolean save (@Valid Customer customer) {
+    public boolean saveOutput (@Valid Customer customer) {
         return messageProducer.sendMessageSaveCustomer(customer, messageSource);
     }
 
     @Override
-    public boolean delete (Long id) {
+    public boolean deleteOutput (Long id) {
         return messageProducer.sendMessageDeleteCustomer(id, messageSource);
     }
 
     @Override
-    public boolean update (Customer customer) {
+    public boolean updateOutput (Customer customer) {
         return messageProducer.sendMessageUpdateCustomer(customer, messageSource);
+    }
+
+    @Override
+    public void saveInput (@Valid Customer customer) {
+        customerRepository.save(customer);
+    }
+
+    @Override
+    public void deleteInput (Long id) {
+        customerRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateInput (Customer customer) {
+        verifyIfCustomerExists(customer.getId());
+        customerRepository.save(customer);
     }
 
     @Override

@@ -15,11 +15,17 @@ public interface AddressService {
 
     public Iterable<Address> findAddressByCustomerID (@PathVariable Long id);
 
-    public void save (@Valid @RequestBody Address address);
+    public boolean saveOutput (@Valid @RequestBody Address address);
 
-    public void delete (@PathVariable Long id);
+    public boolean deleteOutput (@PathVariable Long id);
 
-    public void update (@RequestBody Address address);
+    public boolean updateOutput (@RequestBody Address address);
+
+    public void saveInput (@Valid @RequestBody Address address);
+
+    public void deleteInput (@PathVariable Long id);
+
+    public void updateInput (@RequestBody Address address);
 
     public boolean verifyIfCustomerHasAddress(Long id);
 

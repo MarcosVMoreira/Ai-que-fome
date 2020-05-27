@@ -33,17 +33,17 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<?> save (@Valid @RequestBody Customer customer) {
-        return new ResponseEntity<>(customerService.save(customer), HttpStatus.CREATED);
+        return new ResponseEntity<>(customerService.saveOutput(customer), HttpStatus.CREATED);
     }
 
     @PutMapping
     public ResponseEntity<?> update (@Valid @RequestBody Customer customer) {
-        return new ResponseEntity<>(customerService.update(customer), HttpStatus.OK);
+        return new ResponseEntity<>(customerService.updateOutput(customer), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> delete (@Valid @PathVariable Long id) {
-        return new ResponseEntity<>(customerService.delete(id), HttpStatus.OK);
+        return new ResponseEntity<>(customerService.deleteOutput(id), HttpStatus.OK);
     }
 
 }

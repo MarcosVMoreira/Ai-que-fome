@@ -1,6 +1,7 @@
-package com.customer.customer.message;
+package com.customer.customer.message.producer;
 
 
+import com.customer.customer.endpoint.DTO.Address;
 import com.customer.customer.endpoint.DTO.Customer;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
@@ -24,12 +25,20 @@ public class MessageProducer {
         return restSource.sendMessageToDeleteCustomerChannel().send(message);
     }
 
+    public boolean sendMessageSaveAddress (Address payload, MessageSource restSource) {
+        Message<Address> message = MessageBuilder.withPayload(payload).build();
+        return restSource.sendMessageToSaveAddressChannel().send(message);
+    }
 
+    public boolean sendMessageUpdateAddress (Address payload, MessageSource restSource) {
+        Message<Address> message = MessageBuilder.withPayload(payload).build();
+        return restSource.sendMessageToUpdateAddressChannel().send(message);
+    }
 
-//    public boolean sendMessageCustomer (Address payload, MessageSource restSource) {
-//        Message<Address> message = MessageBuilder.withPayload(payload).build();
-//        return restSource.sendMessageToCustomerChannel().send(message);
-//    }
+    public boolean sendMessageDeleteAddress (Long id, MessageSource restSource) {
+        Message<Long> message = MessageBuilder.withPayload(id).build();
+        return restSource.sendMessageToDeleteAddressChannel().send(message);
+    }
 
 
 }

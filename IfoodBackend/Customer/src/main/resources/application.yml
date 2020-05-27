@@ -18,7 +18,7 @@ spring:
   cloud:
     stream:
       bindings:
-        #outputs
+        #customer outputs
         output-save-customer:
           destination: customer-channel
           group: save-customer
@@ -28,7 +28,7 @@ spring:
         output-delete-customer:
           destination: customer-channel
           group: delete-customer
-        #inputs
+        #customer inputs
         input-save-customer:
           destination: customer-channel
           group: save-customer-queue
@@ -38,10 +38,29 @@ spring:
         input-delete-customer:
           destination: customer-channel
           group: delete-customer-queue
-
+        #address outputs
+        output-save-address:
+          destination: customer-channel
+          group: save-address
+        output-update-address:
+          destination: customer-channel
+          group: update-address
+        output-delete-address:
+          destination: customer-channel
+          group: delete-address
+        #address inputs
+        input-save-address:
+          destination: customer-channel
+          group: save-address-queue
+        input-update-address:
+          destination: customer-channel
+          group: update-address-queue
+        input-delete-address:
+          destination: customer-channel
+          group: delete-address-queue
       rabbit:
         bindings:
-          #outputs
+          #customer outputs
           output-save-customer:
             producer:
               bindingRoutingKey: saveCustomerBinding
@@ -54,7 +73,7 @@ spring:
             producer:
               bindingRoutingKey: deleteCustomerBinding
               routingKeyExpression: '"deleteCustomerBinding"'
-          #inputs
+          #customer inputs
           input-save-customer:
             consumer:
               bindingRoutingKey: saveCustomerBinding
@@ -79,7 +98,44 @@ spring:
               declareExchange: false
               bindQueue: false
               queueNameGroupOnly: true
-
+          #address outputs
+          output-save-address:
+            producer:
+              bindingRoutingKey: saveAddressBinding
+              routingKeyExpression: '"saveAddressBinding"'
+          output-update-address:
+            producer:
+              bindingRoutingKey: updateAddressBinding
+              routingKeyExpression: '"updateAddressBinding"'
+          output-delete-address:
+            producer:
+              bindingRoutingKey: deleteAddressBinding
+              routingKeyExpression: '"deleteAddressBinding"'
+          #address inputs
+          input-save-address:
+            consumer:
+              bindingRoutingKey: saveAddressBinding
+              routingKeyExpression: '"saveAddressBinding"'
+              acknowledgeMode: AUTO
+              declareExchange: false
+              bindQueue: false
+              queueNameGroupOnly: true
+          input-update-address:
+            consumer:
+              bindingRoutingKey: updateAddressBinding
+              routingKeyExpression: '"updateAddressBinding"'
+              acknowledgeMode: AUTO
+              declareExchange: false
+              bindQueue: false
+              queueNameGroupOnly: true
+          input-delete-address:
+            consumer:
+              bindingRoutingKey: deleteAddressBinding
+              routingKeyExpression: '"deleteAddressBinding"'
+              acknowledgeMode: AUTO
+              declareExchange: false
+              bindQueue: false
+              queueNameGroupOnly: true
   rabbitmq:
     host: localhost
     port: 5672

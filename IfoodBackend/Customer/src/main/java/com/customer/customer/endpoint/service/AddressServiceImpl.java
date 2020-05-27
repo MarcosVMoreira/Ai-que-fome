@@ -2,6 +2,8 @@ package com.customer.customer.endpoint.service;
 
 import com.customer.customer.endpoint.DTO.Address;
 import com.customer.customer.endpoint.repository.AddressRepository;
+import com.customer.customer.message.producer.MessageProducer;
+import com.customer.customer.message.producer.MessageSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,12 @@ public class AddressServiceImpl implements AddressService {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private MessageProducer messageProducer;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Override
     public Iterable<Address> listAll () {
@@ -31,18 +39,34 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void save (@Valid Address address) {
-
+    public boolean saveOutput (@Valid Address address) {
+        return messageProducer.sendMessageSaveAddress(address, messageSource);
     }
 
     @Override
-    public void delete (Long id) {
-
+    public boolean deleteOutput (Long id) {
+        return messageProducer.sendMessageDeleteAddress(id, messageSource);
     }
 
     @Override
-    public void update (Address address) {
+    public boolean updateOutput (Address address) {
+        return messageProducer.sendMessageUpdateAddress(address, messageSource);
+    }
 
+    @Override
+    public void saveInput (@Valid Address address) {
+        addressRepository.save(address);
+    }
+
+    @Override
+    public void deleteInput (Long id) {
+        addressRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateInput (Address address) {
+        verifyIfCustomerHasAddress(address.getId());
+        addressRepository.save(address);
     }
 
     @Override
