@@ -18,31 +18,68 @@ spring:
   cloud:
     stream:
       bindings:
-        input-save-customer: #nao importa pro rabbitMQ. É só pra dentro do programa mesmo ,do stream cloud
-          destination: customer-channel #destination se torna sempre uma exchange
-          group: save-customer #quando voce roda mais de um programa, pra nao ficar
-                                      #duas filas com noems estranhos, as duas vao ficar juntas no grupo
-                                      #que tu der o nome
-        input-update-customer:
+        #outputs
+        output-save-customer:
+          destination: customer-channel
+          group: save-customer
+        output-update-customer:
           destination: customer-channel
           group: update-customer
-        input-delete-customer:
+        output-delete-customer:
           destination: customer-channel
           group: delete-customer
+        #inputs
+        input-save-customer:
+          destination: customer-channel
+          group: save-customer-queue
+        input-update-customer:
+          destination: customer-channel
+          group: update-customer-queue
+        input-delete-customer:
+          destination: customer-channel
+          group: delete-customer-queue
+
       rabbit:
         bindings:
-          input-save-customer:
+          #outputs
+          output-save-customer:
             producer:
               bindingRoutingKey: saveCustomerBinding
-              routing-key-expression: '"saveCustomerBinding"'
-          input-update-customer:
+              routingKeyExpression: '"saveCustomerBinding"'
+          output-update-customer:
             producer:
               bindingRoutingKey: updateCustomerBinding
-              routing-key-expression: '"updateCustomerBinding"'
-          input-delete-customer:
+              routingKeyExpression: '"updateCustomerBinding"'
+          output-delete-customer:
             producer:
               bindingRoutingKey: deleteCustomerBinding
-              routing-key-expression: '"deleteCustomerBinding"'
+              routingKeyExpression: '"deleteCustomerBinding"'
+          #inputs
+          input-save-customer:
+            consumer:
+              bindingRoutingKey: saveCustomerBinding
+              routingKeyExpression: '"saveCustomerBinding"'
+              acknowledgeMode: AUTO
+              declareExchange: false
+              bindQueue: false
+              queueNameGroupOnly: true
+          input-update-customer:
+            consumer:
+              bindingRoutingKey: updateCustomerBinding
+              routingKeyExpression: '"updateCustomerBinding"'
+              acknowledgeMode: AUTO
+              declareExchange: false
+              bindQueue: false
+              queueNameGroupOnly: true
+          input-delete-customer:
+            consumer:
+              bindingRoutingKey: deleteCustomerBinding
+              routingKeyExpression: '"deleteCustomerBinding"'
+              acknowledgeMode: AUTO
+              declareExchange: false
+              bindQueue: false
+              queueNameGroupOnly: true
+
   rabbitmq:
     host: localhost
     port: 5672

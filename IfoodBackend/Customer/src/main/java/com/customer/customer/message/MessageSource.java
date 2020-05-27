@@ -1,18 +1,17 @@
 package com.customer.customer.message;
 
 import org.springframework.cloud.stream.annotation.Output;
-import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.messaging.MessageChannel;
 
 public interface MessageSource {
 
-    @Output("input-save-customer")
-    public MessageChannel sendMessageToSaveCustomerChannel();
+    @Output("output-save-customer")
+    MessageChannel sendMessageToSaveCustomerChannel();
 
-    @Output("input-update-customer")
-    public MessageChannel sendMessageToUpdateCustomerChannel();
+    @Output("output-update-customer")
+    MessageChannel sendMessageToUpdateCustomerChannel();
 
-    @Output("input-delete-customer")
-    public MessageChannel sendMessageToDeleteCustomerChannel();
+    @Output("output-delete-customer")
+    MessageChannel sendMessageToDeleteCustomerChannel();
 
 }
