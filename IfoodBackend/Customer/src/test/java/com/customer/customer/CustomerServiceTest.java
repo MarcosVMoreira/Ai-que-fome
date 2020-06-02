@@ -1,6 +1,7 @@
 package com.customer.customer;
 
 import com.customer.customer.endpoint.DTO.Customer;
+import com.customer.customer.endpoint.error.ResourceNotFoundException;
 import com.customer.customer.endpoint.repository.CustomerRepository;
 import com.customer.customer.endpoint.service.CustomerServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -11,8 +12,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.ConstraintViolationException;
+
+import java.util.List;
+
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 
@@ -58,6 +65,64 @@ public class CustomerServiceTest {
                 thenReturn(asList(customer1, customer2));
 
         assertThat(customerService.findCustomerByName("marcos")).isSameAs(customerRepository.findByNameIgnoreCaseContaining("marcos"));
+    }
+
+    @Test
+    public void whenDeleteOutputUsingWrongId_thenReturnResourceNotFoundException () {
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> customerService.deleteOutput(1L));
+
+        assertTrue(exception.getMessage().contains("Customer not found for ID: 1"));
+    }
+
+    @Test
+    public void whenUpdateOutputUsingWrongId_thenReturnResourceNotFoundException () {
+        Customer customer = new Customer(1L,"Marcos", "37991234567", "marcos.teste@email.com");
+
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> customerService.updateOutput(customer));
+
+        assertTrue(exception.getMessage().contains("Customer not found for ID: 1"));
+    }
+
+    @Test
+    public void whenDeleteInputUsingWrongId_thenReturnResourceNotFoundException () {
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> customerService.deleteInput(1L));
+
+        assertTrue(exception.getMessage().contains("Customer not found for ID: 1"));
+    }
+
+    @Test
+    public void whenUpdateInputUsingWrongId_thenReturnResourceNotFoundException () {
+        Customer customer = new Customer(1L,"Marcos", "37991234567", "marcos.teste@email.com");
+
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> customerService.updateInput(customer));
+
+        assertTrue(exception.getMessage().contains("Customer not found for ID: 1"));
+    }
+
+    @Test
+    public void whenVerifyIfCustomerExistsUsingWrongCustomerId_thenReturnResourceNotFoundException () {
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> customerService.verifyIfCustomerExists(1L));
+
+        assertTrue(exception.getMessage().contains("Customer not found for ID: 1"));
+    }
+
+    @Test
+    public void whenVerifyIfCustomerExistsUsingWrongCustomerName_thenReturnResourceNotFoundException () {
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> customerService.verifyIfCustomerExists("joaquim"));
+
+        assertTrue(exception.getMessage().contains("Customer not found for name: joaquim"));
     }
 
 }

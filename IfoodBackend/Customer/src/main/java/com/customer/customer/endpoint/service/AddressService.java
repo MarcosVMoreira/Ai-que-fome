@@ -27,6 +27,8 @@ public interface AddressService {
 
     public void updateInput (@RequestBody Address address);
 
-    public boolean verifyIfCustomerHasAddress(Long id);
+    public void verifyIfCustomerHasAddress(Long id);
+
+    public void verifyIfAddressExist(Long id);
 
 }

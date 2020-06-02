@@ -8,6 +8,7 @@ docker-compose -f stack.yml up
 
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 //se eu nao quiser usar o h2 posso usar o proprio db anotando com notacao acima
+//para resolver o problema do whenFindByNameIgnoreCaseContaining_thenIgnoreCase
 
 ---------------------------------
 
@@ -15,9 +16,4 @@ https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference
 
 ---------------------------------
 
-Criar uma exchange para cada microservico e uma queue para cada acao desse micro dentro dessa exchange (uma queue pra salvar, outra pra deletar, outra pra update, etc)
-
-Usar a ideia do producer-custom, ligando cada channel criado pelo InboundChannelAdapter a uma exchange
-ACho que fica +- assim:
-spring.cloud.stream.bindings.savecustomer-channel.destination=customer-chanel (customer-exchange devia chamar customer-exchange)
-spring.cloud.stream.bindings.savecustomer-channel.group=savecustomer-queue
+ideia de testar os serviços que utilizam o broker é muito complexa porque é complicado mockar o broker. Melhor, atualmente, deixa-los sem testes

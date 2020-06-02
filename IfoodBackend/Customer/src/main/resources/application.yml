@@ -14,7 +14,9 @@ spring:
   datasource:
     url: X
     username: X
+
     password: X
+
   cloud:
     stream:
       bindings:

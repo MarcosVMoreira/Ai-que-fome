@@ -27,6 +27,8 @@ public interface CustomerService {
 
     public void updateInput (@RequestBody Customer customer);
 
-    public boolean verifyIfCustomerExists(Long id);
+    public void verifyIfCustomerExists(Long id);
+
+    public void verifyIfCustomerExists(String name);
 
 }

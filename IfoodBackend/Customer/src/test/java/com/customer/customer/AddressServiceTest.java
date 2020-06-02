@@ -1,6 +1,8 @@
 package com.customer.customer;
 
 import com.customer.customer.endpoint.DTO.Address;
+import com.customer.customer.endpoint.DTO.Customer;
+import com.customer.customer.endpoint.error.ResourceNotFoundException;
 import com.customer.customer.endpoint.repository.AddressRepository;
 import com.customer.customer.endpoint.service.AddressServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @Transactional
@@ -69,6 +73,65 @@ public class AddressServiceTest {
     }
 
 
+    @Test
+    public void whenDeleteOutputUsingWrongId_thenReturnResourceNotFoundException () {
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> addressService.deleteOutput(1L));
+
+        assertTrue(exception.getMessage().contains("Address not found for ID: 1"));
+    }
+
+    @Test
+    public void whenUpdateOutputUsingWrongId_thenReturnResourceNotFoundException () {
+        Address address = new Address(1L, 1L, "London street", 123L,
+                "123", "next do Paris", true);
+
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> addressService.updateOutput(address));
+
+        assertTrue(exception.getMessage().contains("Address not found for ID: 1"));
+
+    }
+
+    @Test
+    public void whenDeleteInputUsingWrongId_thenReturnResourceNotFoundException () {
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> addressService.deleteInput(1L));
+
+        assertTrue(exception.getMessage().contains("Address not found for ID: 1"));
+    }
+
+    @Test
+    public void whenUpdateInputUsingWrongId_thenReturnResourceNotFoundException () {
+        Address address = new Address(1L, 1L, "London street", 123L,
+                "123", "next do Paris", true);
+
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> addressService.updateInput(address));
+
+        assertTrue(exception.getMessage().contains("Address not found for ID: 1"));
+    }
 
 
+    @Test
+    public void whenVerifyIfCustomerHasAddressUsingWrongId_thenReturnResourceNotFoundException () {
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> addressService.verifyIfCustomerHasAddress(1L));
+
+        assertTrue(exception.getMessage().contains("Address not found for customer ID: 1"));
+    }
+
+    @Test
+    public void whenVerifyIfAddressExistsUsingWrongId_thenReturnResourceNotFoundException () {
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> addressService.verifyIfAddressExist(1L));
+
+        assertTrue(exception.getMessage().contains("Address not found for ID: 1"));
+    }
 }

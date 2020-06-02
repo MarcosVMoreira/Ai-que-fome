@@ -5,8 +5,10 @@ import com.customer.customer.endpoint.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolationException;
 import java.util.List;
@@ -17,20 +19,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CustomerRepositoryTest {
 
     @Autowired
     private CustomerRepository customerRepository;
 
     @Test
+    @Transactional
     public void whenFindByNameIgnoreCaseContaining_thenIgnoreCase () {
-        Customer customer1 = new Customer("Marcos", "37991234567", "marcos.teste@email.com");
-        Customer customer2 = new Customer("marcos", "37991234567", "marcos.teste@email.com");
+        //para resolver esse problema, adicionar a
+        // notacao @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+        // para usar o proprio db
+        Customer customer1 = new Customer("joaozinho", "37991234567", "marcos.teste@email.com");
+        Customer customer2 = new Customer("Joaozinho", "37991234342", "marcosdois.teste@email.com");
 
         this.customerRepository.save(customer1);
         this.customerRepository.save(customer2);
 
-        List<Customer> customerList = customerRepository.findByNameIgnoreCaseContaining("marcos");
+        List<Customer> customerList = customerRepository.findByNameIgnoreCaseContaining("joaozinho");
 
         assertThat(customerList.size()).isEqualTo(2);
     }

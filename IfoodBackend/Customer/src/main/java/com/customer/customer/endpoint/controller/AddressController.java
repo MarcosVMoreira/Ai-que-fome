@@ -2,6 +2,7 @@ package com.customer.customer.endpoint.controller;
 
 import com.customer.customer.endpoint.DTO.Address;
 import com.customer.customer.endpoint.DTO.Customer;
+import com.customer.customer.endpoint.error.ResourceNotFoundException;
 import com.customer.customer.endpoint.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,28 +24,31 @@ public class AddressController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getAddressById (@PathVariable Long id) {
+    public ResponseEntity<?> getAddressById (@Valid @PathVariable Long id) {
         return new ResponseEntity<>(addressService.getAddressById(id), HttpStatus.OK);
     }
 
     @GetMapping("findByCustomerID/{customerID}")
-    public ResponseEntity<?> getAddressByCustomerID (@PathVariable Long customerID) {
+    public ResponseEntity<?> getAddressByCustomerID (@Valid @PathVariable Long customerID) {
         return new ResponseEntity<>(addressService.findAddressByCustomerID(customerID), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<?> save (@Valid @RequestBody Address address) {
-        return new ResponseEntity<>(addressService.saveOutput(address), HttpStatus.CREATED);
+        addressService.saveOutput(address);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping
     public ResponseEntity<?> update (@Valid @RequestBody Address address) {
-        return new ResponseEntity<>(addressService.updateOutput(address), HttpStatus.OK);
+        addressService.updateOutput(address);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> delete (@Valid @PathVariable Long id) {
-        return new ResponseEntity<>(addressService.deleteOutput(id), HttpStatus.OK);
+        addressService.deleteOutput(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
