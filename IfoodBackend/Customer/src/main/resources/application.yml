@@ -4,18 +4,11 @@ server:
 spring:
   application:
     name: customer
-  jpa:
-    show-sql: false
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-  datasource:
-    url: X
-    username: X
+  data:
+    mongodb:
+      uri: mongodb+srv://user:password@url/test?retryWrites=true
 
-    password: X
+
 
   cloud:
     stream:

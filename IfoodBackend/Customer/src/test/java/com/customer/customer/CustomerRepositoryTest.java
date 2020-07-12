@@ -1,6 +1,6 @@
 package com.customer.customer;
 
-import com.customer.customer.endpoint.DTO.Customer;
+import com.customer.customer.endpoint.entity.Customer;
 import com.customer.customer.endpoint.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

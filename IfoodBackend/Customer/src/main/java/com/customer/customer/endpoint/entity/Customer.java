@@ -1,37 +1,33 @@
-package com.customer.customer.endpoint.DTO;
+package com.customer.customer.endpoint.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Entity
 @Data
+@Document
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="CustomerID")
-    private Long id;
+    private String id;
 
     @NotEmpty(message = "The field 'name' is mandatory")
-    @Column(nullable = false, name="Name")
     private String name;
 
     @NotEmpty(message = "The field 'cellphone' is mandatory")
-    @Column(nullable = false, name="Cellphone")
     @Size(max = 11)
     private String cellphone;
 
     @NotEmpty(message = "The field 'email' is mandatory")
-    @Column(nullable = false, name="Email")
     @Email(message = "The email must be valid")
     private String email;
 

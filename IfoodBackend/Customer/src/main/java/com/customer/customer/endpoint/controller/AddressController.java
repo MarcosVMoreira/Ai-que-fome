@@ -1,8 +1,6 @@
 package com.customer.customer.endpoint.controller;
 
-import com.customer.customer.endpoint.DTO.Address;
-import com.customer.customer.endpoint.DTO.Customer;
-import com.customer.customer.endpoint.error.ResourceNotFoundException;
+import com.customer.customer.endpoint.entity.Address;
 import com.customer.customer.endpoint.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,12 +22,12 @@ public class AddressController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getAddressById (@Valid @PathVariable Long id) {
+    public ResponseEntity<?> getAddressById (@Valid @PathVariable String id) {
         return new ResponseEntity<>(addressService.getAddressById(id), HttpStatus.OK);
     }
 
     @GetMapping("findByCustomerID/{customerID}")
-    public ResponseEntity<?> getAddressByCustomerID (@Valid @PathVariable Long customerID) {
+    public ResponseEntity<?> getAddressByCustomerID (@Valid @PathVariable String customerID) {
         return new ResponseEntity<>(addressService.findAddressByCustomerID(customerID), HttpStatus.OK);
     }
 
@@ -46,7 +44,7 @@ public class AddressController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> delete (@Valid @PathVariable Long id) {
+    public ResponseEntity<?> delete (@Valid @PathVariable String id) {
         addressService.deleteOutput(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

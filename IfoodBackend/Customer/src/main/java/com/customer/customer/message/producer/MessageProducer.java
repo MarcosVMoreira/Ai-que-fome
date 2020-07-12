@@ -1,8 +1,8 @@
 package com.customer.customer.message.producer;
 
 
-import com.customer.customer.endpoint.DTO.Address;
-import com.customer.customer.endpoint.DTO.Customer;
+import com.customer.customer.endpoint.entity.Address;
+import com.customer.customer.endpoint.entity.Customer;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;

@@ -1,47 +1,40 @@
-package com.customer.customer.endpoint.DTO;
+package com.customer.customer.endpoint.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Entity
 @Data
+@Document
 @AllArgsConstructor
 @NoArgsConstructor
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "AddressID")
-    private Long id;
+    private String id;
 
     @NotNull(message = "The field 'idCustomer' is mandatory")
-    @Column(name = "CustomerID")
     private Long idCustomer;
 
     @NotEmpty(message = "The field 'information' is mandatory")
-    @Column(name = "Information")
     private String information;
 
     @NotNull(message = "The field 'number' is mandatory")
-    @Column(name = "Number")
     private Long number;
 
     @NotEmpty(message = "The field 'complement' is mandatory")
-    @Column(name = "Complement")
     @Size(max = 100)
     private String complement;
 
     @NotEmpty(message = "The field 'refPoint' is mandatory")
-    @Column(name = "ReferencePoint")
     private String refPoint;
 
-    @Column(name = "Favorite")
     private boolean favorite;
 
     public Address (@NotEmpty(message = "The field 'idCustomer' is mandatory") Long idCustomer,

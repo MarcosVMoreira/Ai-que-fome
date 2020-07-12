@@ -1,7 +1,7 @@
 package com.customer.customer.message.consumer;
 
-import com.customer.customer.endpoint.DTO.Address;
-import com.customer.customer.endpoint.DTO.Customer;
+import com.customer.customer.endpoint.entity.Address;
+import com.customer.customer.endpoint.entity.Customer;
 import com.customer.customer.endpoint.service.AddressService;
 import com.customer.customer.endpoint.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class MessageSinkImpl {
 
     @StreamListener(target = "input-delete-customer")
     public void receiveMessageToDeleteCustomer (Long id) {
-        customerService.deleteInput(id);
+       // customerService.deleteInput(id);
     }
 
     @StreamListener(target = "input-save-address")
@@ -46,7 +46,7 @@ public class MessageSinkImpl {
 
     @StreamListener(target = "input-delete-address")
     public void receiveMessageToDeleteAddress (Long id) {
-        addressService.deleteInput(id);
+       // addressService.deleteInput(id);
     }
 
 }

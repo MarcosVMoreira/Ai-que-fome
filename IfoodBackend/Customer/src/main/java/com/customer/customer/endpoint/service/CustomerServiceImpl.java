@@ -1,17 +1,19 @@
 package com.customer.customer.endpoint.service;
 
-import com.customer.customer.endpoint.DTO.Customer;
+import com.customer.customer.endpoint.entity.Customer;
 import com.customer.customer.endpoint.error.ResourceNotFoundException;
 import com.customer.customer.endpoint.repository.CustomerRepository;
 import com.customer.customer.message.producer.MessageProducer;
 import com.customer.customer.message.producer.MessageSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.Optional;
 
-@Component
+//@Component
+@Service
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
@@ -29,14 +31,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Optional<Customer> getCustomerById (Long id) {
-        verifyIfCustomerExists(id);
+    public Optional<Customer> getCustomerById (String id) {
+        verifyByIdIfCustomerExists(id);
         return customerRepository.findById(id);
     }
 
     @Override
     public Iterable<Customer> findCustomerByName (String name) {
-        verifyIfCustomerExists(name);
+        verifyByNameIfCustomerExists(name);
         return customerRepository.findByNameIgnoreCaseContaining(name);
     }
 
@@ -46,14 +48,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public boolean deleteOutput (Long id) {
-        verifyIfCustomerExists(id);
-        return messageProducer.sendMessageDeleteCustomer(id, messageSource);
+    public boolean deleteOutput (String id) {
+        verifyByIdIfCustomerExists(id);
+        return false;
     }
 
     @Override
     public boolean updateOutput (Customer customer) {
-        verifyIfCustomerExists(customer.getId());
+        verifyByIdIfCustomerExists(customer.getId());
         return messageProducer.sendMessageUpdateCustomer(customer, messageSource);
     }
 
@@ -63,26 +65,26 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteInput (Long id) {
-        verifyIfCustomerExists(id);
+    public void deleteInput (String id) {
+        verifyByIdIfCustomerExists(id);
         customerRepository.deleteById(id);
     }
 
     @Override
     public void updateInput (Customer customer) {
-        verifyIfCustomerExists(customer.getId());
+        verifyByIdIfCustomerExists(customer.getId());
         customerRepository.save(customer);
     }
 
     @Override
-    public void verifyIfCustomerExists (Long id) {
+    public void verifyByIdIfCustomerExists (String id) {
         if (customerRepository.findById(id).isEmpty()) {
             throw new ResourceNotFoundException("Customer not found for ID: " + id);
         }
     }
 
     @Override
-    public void verifyIfCustomerExists (String nome) {
+    public void verifyByNameIfCustomerExists (String nome) {
         if (customerRepository.findByNameIgnoreCaseContaining(nome).isEmpty()) {
             throw new ResourceNotFoundException("Customer not found for name: " + nome);
         }

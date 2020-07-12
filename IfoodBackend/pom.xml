@@ -7,11 +7,13 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
+
     </parent>
     <groupId>com.ifood</groupId>
     <artifactId>ifood</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ifood</name>
+    <packaging>pom</packaging>
     <description>iFood backend built with microservices architecture</description>
 
     <properties>
