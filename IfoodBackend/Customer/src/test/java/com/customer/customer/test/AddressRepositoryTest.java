@@ -1,10 +1,11 @@
-package com.customer.customer;
+package com.customer.customer.test;
 
 import com.customer.customer.endpoint.entity.Address;
 import com.customer.customer.endpoint.repository.AddressRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
-@DataJpaTest
+@DataMongoTest
 public class AddressRepositoryTest {
 
     @Autowired
@@ -39,7 +40,7 @@ public class AddressRepositoryTest {
         Exception exception = assertThrows(
                 ConstraintViolationException.class,
                 () -> addressRepository.save(
-                        new Address(0L, "", 123L,
+                        new Address("abcd", null, 123L,
                                 "ap 40", "next do Paris", true)));
 
         assertTrue(exception.getMessage().contains("The field 'information' is mandatory"));
@@ -51,7 +52,7 @@ public class AddressRepositoryTest {
         Exception exception = assertThrows(
                 ConstraintViolationException.class,
                 () -> addressRepository.save(
-                        new Address(0L, "London street", null,
+                        new Address("abcd", "London street", null,
                                 "ap 40", "next do Paris", true)));
 
         assertTrue(exception.getMessage().contains("The field 'number' is mandatory"));
@@ -63,7 +64,7 @@ public class AddressRepositoryTest {
         Exception exception = assertThrows(
                 ConstraintViolationException.class,
                 () -> addressRepository.save(
-                        new Address(0L, "London street", 123L,
+                        new Address("abcd", "London street", 123L,
                                 "", "next do Paris", true)));
 
         assertTrue(exception.getMessage().contains("The field 'complement' is mandatory"));
@@ -75,7 +76,7 @@ public class AddressRepositoryTest {
         Exception exception = assertThrows(
                 ConstraintViolationException.class,
                 () -> addressRepository.save(
-                        new Address(0L, "London street", 123L,
+                        new Address("abcd", "London street", 123L,
                                 "ap 40", "", true)));
 
         assertTrue(exception.getMessage().contains("The field 'refPoint' is mandatory"));
@@ -87,7 +88,7 @@ public class AddressRepositoryTest {
         assertThrows(
                 ConstraintViolationException.class,
                 () -> addressRepository.save(
-                        new Address(0L, "London street", 123L,
+                        new Address("abcd", "London street", 123L,
                                 "Lorem ipsum dolor sit amet, consectetur " +
                                         "adipiscing elit. Nulla blandit lorem velit, " +
                                         "eu euismod justo. ", "next do Paris", true)));

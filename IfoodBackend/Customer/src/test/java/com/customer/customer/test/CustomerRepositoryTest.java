@@ -5,6 +5,7 @@ import com.customer.customer.endpoint.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,20 +18,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@DataMongoTest
 @ExtendWith(SpringExtension.class)
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CustomerRepositoryTest {
 
     @Autowired
     private CustomerRepository customerRepository;
 
     @Test
-    @Transactional
     public void whenFindByNameIgnoreCaseContaining_thenIgnoreCase () {
-        //para resolver esse problema, adicionar a
-        // notacao @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-        // para usar o proprio db
         Customer customer1 = new Customer("joaozinho", "37991234567", "marcos.teste@email.com");
         Customer customer2 = new Customer("Joaozinho", "37991234342", "marcosdois.teste@email.com");
 

@@ -19,8 +19,8 @@ public class Address {
     @Id
     private String id;
 
-    @NotNull(message = "The field 'idCustomer' is mandatory")
-    private Long idCustomer;
+    @NotEmpty(message = "The field 'idCustomer' is mandatory")
+    private String idCustomer;
 
     @NotEmpty(message = "The field 'information' is mandatory")
     private String information;
@@ -37,7 +37,7 @@ public class Address {
 
     private boolean favorite;
 
-    public Address (@NotEmpty(message = "The field 'idCustomer' is mandatory") Long idCustomer,
+    public Address (@NotEmpty(message = "The field 'idCustomer' is mandatory") String idCustomer,
                     @NotEmpty(message = "The field 'information' is mandatory") String information,
                     @NotEmpty(message = "The field 'number' is mandatory") Long number,
                     @NotEmpty(message = "The field 'complement' is mandatory") @Size(max = 100) String complement,
