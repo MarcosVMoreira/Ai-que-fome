@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
@@ -25,17 +24,23 @@ public class Customer {
 
     @NotEmpty(message = "The field 'cellphone' is mandatory")
     @Size(max = 11)
-    private String cellphone;
+    private String phone;
 
     @NotEmpty(message = "The field 'email' is mandatory")
     @Email(message = "The email must be valid")
     private String email;
 
+    @NotEmpty(message = "The field 'taxPayerIdentificationNumber' is mandatory")
+    private String taxPayerIdentificationNumber;
+
     public Customer (@NotEmpty(message = "The field 'name' is mandatory") String name,
-                     @NotNull(message = "The field 'cellphone' is mandatory") @Size(max = 11) String cellphone,
-                     @NotNull(message = "The field 'email' is mandatory") @Email String email) {
+                     @NotEmpty(message = "The field 'cellphone' is mandatory") @Size(max = 11) String phone,
+                     @NotEmpty(message = "The field 'email' is mandatory") @Email(message = "The email must be valid") String email,
+                     @NotEmpty(message = "The field 'taxPayerIdentificationNumber' is mandatory") String taxPayerIdentificationNumber) {
         this.name = name;
-        this.cellphone = cellphone;
+        this.phone = phone;
         this.email = email;
+        this.taxPayerIdentificationNumber = taxPayerIdentificationNumber;
     }
+
 }

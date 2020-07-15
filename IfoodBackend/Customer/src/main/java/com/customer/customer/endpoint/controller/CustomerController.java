@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("customers")
@@ -21,37 +22,35 @@ public class CustomerController {
     private CustomerRepository customerRepository;
 
     @GetMapping
-    public ResponseEntity<?> listAll () {
+    public ResponseEntity<List<Customer>> listAll () {
         return new ResponseEntity<>(customerService.listAll(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getCustomerById (@Valid @PathVariable String id) {
+    public ResponseEntity<Customer> getCustomerById (@Valid @PathVariable String id) {
         return new ResponseEntity<>(customerService.getCustomerById(id), HttpStatus.OK);
     }
 
     @GetMapping("findByName/{name}")
-    public ResponseEntity<?> getCustomerByName (@Valid @PathVariable String name) {
+    public ResponseEntity<List<Customer>> getCustomerByName (@Valid @PathVariable String name) {
         return new ResponseEntity<>(customerService.findCustomerByName(name), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> save (@Valid @RequestBody Customer customer) {
-        //customerService.saveOutput(customer);
-        customerRepository.save(customer);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<Customer> save (@Valid @RequestBody Customer customer) {
+
+        return new ResponseEntity<>(customerRepository.save(customer),HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<?> update (@Valid @RequestBody Customer customer) {
-        customerService.updateOutput(customer);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Customer> update (@Valid @RequestBody Customer customer) {
+        return new ResponseEntity<>(customerService.update(customer), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<?> delete (@Valid @PathVariable String id) {
-        customerService.deleteOutput(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        customerService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

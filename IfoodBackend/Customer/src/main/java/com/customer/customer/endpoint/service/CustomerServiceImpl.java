@@ -10,9 +10,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
-//@Component
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -26,54 +27,37 @@ public class CustomerServiceImpl implements CustomerService {
     private MessageSource messageSource;
 
     @Override
-    public Iterable<Customer> listAll () {
+    public List<Customer> listAll () {
         return customerRepository.findAll();
     }
 
     @Override
-    public Optional<Customer> getCustomerById (String id) {
+    public Customer getCustomerById (String id) {
         verifyByIdIfCustomerExists(id);
-        return customerRepository.findById(id);
+        return customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found for given ID: "+id));
     }
 
     @Override
-    public Iterable<Customer> findCustomerByName (String name) {
+    public List<Customer> findCustomerByName (String name) {
         verifyByNameIfCustomerExists(name);
         return customerRepository.findByNameIgnoreCaseContaining(name);
     }
 
     @Override
-    public boolean saveOutput (@Valid Customer customer) {
-        return messageProducer.sendMessageSaveCustomer(customer, messageSource);
+    public Customer save (@Valid Customer customer) {
+        return customerRepository.save(customer);
     }
 
     @Override
-    public boolean deleteOutput (String id) {
-        verifyByIdIfCustomerExists(id);
-        return false;
-    }
-
-    @Override
-    public boolean updateOutput (Customer customer) {
-        verifyByIdIfCustomerExists(customer.getId());
-        return messageProducer.sendMessageUpdateCustomer(customer, messageSource);
-    }
-
-    @Override
-    public void saveInput (@Valid Customer customer) {
-        customerRepository.save(customer);
-    }
-
-    @Override
-    public void deleteInput (String id) {
+    public void delete (String id) {
         verifyByIdIfCustomerExists(id);
         customerRepository.deleteById(id);
     }
 
     @Override
-    public void updateInput (Customer customer) {
+    public Customer update (Customer customer) {
         verifyByIdIfCustomerExists(customer.getId());
-        customerRepository.save(customer);
+        return customerRepository.save(customer);
     }
 
     @Override
