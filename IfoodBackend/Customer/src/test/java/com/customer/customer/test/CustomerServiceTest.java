@@ -1,6 +1,6 @@
 //package com.customer.customer;
 //
-//import com.customer.customer.endpoint.entity.Customer;
+//import com.customer.customer.endpoint.model.entity.Customer;
 //import com.customer.customer.endpoint.error.ResourceNotFoundException;
 //import com.customer.customer.endpoint.repository.CustomerRepository;
 //import com.customer.customer.endpoint.service.CustomerServiceImpl;

@@ -1,60 +1,84 @@
 package com.customer.customer;
 
-import com.customer.customer.endpoint.entity.Address;
-import com.customer.customer.endpoint.error.ResourceNotFoundException;
+import com.customer.customer.endpoint.model.DTO.AddressDTO;
+import com.customer.customer.endpoint.model.entity.Address;
+import com.customer.customer.endpoint.model.mapper.AddressMapper;
 import com.customer.customer.endpoint.repository.AddressRepository;
 import com.customer.customer.endpoint.service.AddressServiceImpl;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @DataMongoTest
 @ExtendWith(MockitoExtension.class)
 public class AddressServiceTest {
 
-    @InjectMocks
-    private AddressServiceImpl addressService;
-
     @Mock
-    private AddressRepository addressRepository;
-//
+     AddressRepository addressRepository;
+
+     AddressServiceImpl addressService;
+
+    private final Address addressOne = new Address("addressId", "abc", "Rua Jasmim", 123L, "SP",
+                        "Campinas", "Mansoes Sto Antonio", "Brasil", "12345678",
+                        null, false, "", "");
+    private final Address addressTwo = new Address("def", "Rua Hermantino", 456L, "SP",
+            "Campinas", "Taquaral", "Brasil", "87654321",
+            null, false, "", "");
+
+    @Before
+    public void setUp() {
+
+        System.out.println("testando");
+
+        addressService = new AddressServiceImpl(AddressMapper.INSTANCE, addressRepository);
+    }
+
+    @Test
+    public void whenListAll_thenReturnCorrectData () {
+
+        when(addressRepository.findAll()).
+                thenReturn(asList(addressOne, addressTwo));
+
+        List<AddressDTO> addressDTOList = addressService.listAll();
+
+        assertEquals(3, addressDTOList.size());
+    }
+
+    @Test
+    public void whenGetAddressById_thenReturnAddress() {
+
+        when(addressRepository.findById("addressId")).
+                thenReturn(java.util.Optional.of(addressOne));
+
+        AddressDTO addressDTO = addressService.getAddressById("addressId");
+
+        assertEquals("Rua Jasmim", addressDTO.getStreetName());
+    }
+
 //    @Test
-//    public void whenListAll_thenReturnCorrectData () {
+//    public void whenGetAddressByCustomerId_thenReturnAddress() {
 //
-//        Address address1 = new Address("abc", "London street", 123L,
-//                "", "next do Paris", true);
-//        Address address2 = new Address("def", "New york street", 321L,
-//                "", "next do some NY place", false);
+//        when(addressRepository.findById("addressId")).
+//                thenReturn(java.util.Optional.of(addressOne));
 //
-//        when(addressRepository.findAll()).
-//                thenReturn(asList(address1, address2));
+//        System.out.println(addressService.listAll());
 //
-//        assertThat(addressService.listAll()).isSameAs(addressRepository.findAll());
+//        List<AddressDTO> addressDTO = addressService.getAddressByCustomerID("def");
+//
+//        assertEquals(1, addressDTO.size());
 //    }
-//
-//    @Test
-//    public void whenFindAddressByCustomerId_thenReturnAddress() {
-//        Address address1 = new Address("abc", "London street", 123L,
-//                "", "next do Paris", true);
-//
-//        Address address2 = new Address("abc", "Paris street", 1234L,
-//                "ap 30", "next do London", false);
-//
-//        when(addressRepository.findById("abc")).
-//                thenReturn(java.util.Optional.of(address2));
-//
-//        assertThat(addressService.getAddressById("abc")).isSameAs(addressRepository.findById("def"));
-//    }
+
 
 }

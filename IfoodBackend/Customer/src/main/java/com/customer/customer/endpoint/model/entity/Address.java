@@ -1,4 +1,4 @@
-package com.customer.customer.endpoint.entity;
+package com.customer.customer.endpoint.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,11 +29,6 @@ public class Address {
     @NotNull(message = "The field 'streetNumber' is mandatory")
     private Long streetNumber;
 
-    private String complement;
-
-    @NotEmpty(message = "The field 'refPoint' is mandatory")
-    private String refPoint;
-
     @NotEmpty(message = "The field 'district' is mandatory")
     private String district;
 
@@ -47,32 +42,35 @@ public class Address {
     private String country;
 
     @NotEmpty(message = "The field 'postalCode' is mandatory")
-    @Size(max = 8)
+    @Size(max = 8, message = "The field 'postalCode' must have size 8")
+    @Size(min = 8, message = "The field 'postalCode' must have size 8")
     private String postalCode;
 
     private List<String> coordinates;
 
     private boolean favorite;
 
+    private String complement;
+
+    private String refPoint;
+
+
     public Address (@NotEmpty(message = "The field 'idCustomer' is mandatory") String idCustomer,
                     @NotEmpty(message = "The field 'streetName' is mandatory") String streetName,
                     @NotNull(message = "The field 'streetNumber' is mandatory") Long streetNumber,
-                    String complement,
-                    @NotEmpty(message = "The field 'refPoint' is mandatory") String refPoint,
                     @NotEmpty(message = "The field 'district' is mandatory") String district,
                     @NotEmpty(message = "The field 'city' is mandatory") String city,
                     @NotEmpty(message = "The field 'neighborhood' is mandatory") String neighborhood,
                     @NotEmpty(message = "The field 'country' is mandatory") String country,
-                    @NotEmpty(message = "The field 'postalCode' is mandatory")
-                    @Size(max = 8) String postalCode,
+                    @NotEmpty(message = "The field 'postalCode' is mandatory") @Size(max = 8) String postalCode,
                     List<String> coordinates,
-                    boolean favorite) {
+                    boolean favorite,
+                    String complement,
+                    String refPoint) {
 
         this.idCustomer = idCustomer;
         this.streetName = streetName;
         this.streetNumber = streetNumber;
-        this.complement = complement;
-        this.refPoint = refPoint;
         this.district = district;
         this.city = city;
         this.neighborhood = neighborhood;
@@ -80,6 +78,8 @@ public class Address {
         this.postalCode = postalCode;
         this.coordinates = coordinates;
         this.favorite = favorite;
+        this.complement = complement;
+        this.refPoint = refPoint;
     }
 
 }

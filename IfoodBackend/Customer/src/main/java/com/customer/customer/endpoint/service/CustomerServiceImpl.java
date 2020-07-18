@@ -1,17 +1,15 @@
 package com.customer.customer.endpoint.service;
 
-import com.customer.customer.endpoint.entity.Customer;
+import com.customer.customer.endpoint.model.entity.Customer;
 import com.customer.customer.endpoint.error.ResourceNotFoundException;
 import com.customer.customer.endpoint.repository.CustomerRepository;
 import com.customer.customer.message.producer.MessageProducer;
 import com.customer.customer.message.producer.MessageSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -62,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void verifyByIdIfCustomerExists (String id) {
-        if (customerRepository.findById(id).isEmpty()) {
+        if (!customerRepository.findById(id).isPresent()) {
             throw new ResourceNotFoundException("Customer not found for ID: " + id);
         }
     }

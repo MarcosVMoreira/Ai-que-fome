@@ -1,4 +1,4 @@
-package com.customer.customer.endpoint.entity;
+package com.customer.customer.endpoint.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

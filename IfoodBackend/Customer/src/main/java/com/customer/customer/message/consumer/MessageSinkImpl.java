@@ -1,13 +1,9 @@
 package com.customer.customer.message.consumer;
 
-import com.customer.customer.endpoint.entity.Address;
-import com.customer.customer.endpoint.entity.Customer;
 import com.customer.customer.endpoint.service.AddressService;
 import com.customer.customer.endpoint.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.EnableBinding;
-import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.messaging.Message;
 
 @EnableBinding(MessageSink.class)
 public class MessageSinkImpl {
