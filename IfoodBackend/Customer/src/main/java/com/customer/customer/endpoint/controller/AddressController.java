@@ -18,34 +18,39 @@ public class AddressController {
     private AddressService addressService;
 
     @GetMapping
-    public ResponseEntity<List<AddressDTO>> listAll () {
-        return new ResponseEntity<>(addressService.listAll(), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public List<AddressDTO> listAll () {
+        return addressService.listAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AddressDTO> getAddressById (@Valid @PathVariable String id) {
-        return new ResponseEntity<>(addressService.getAddressById(id), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public AddressDTO getAddressById (@Valid @PathVariable String id) {
+        return addressService.getAddressById(id);
     }
 
     @GetMapping("/findByCustomerID/{customerID}")
-    public ResponseEntity<List<AddressDTO>> getAddressByCustomerID (@Valid @PathVariable String customerID) {
-        return new ResponseEntity<>(addressService.getAddressByCustomerID(customerID), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public List<AddressDTO> getAddressByCustomerID (@Valid @PathVariable String customerID) {
+        return addressService.getAddressByCustomerID(customerID);
     }
 
     @PostMapping
-    public ResponseEntity<AddressDTO> save (@Valid @RequestBody AddressDTO addressDTO) {
-        return new ResponseEntity<>(addressService.save(addressDTO), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public AddressDTO save (@Valid @RequestBody AddressDTO addressDTO) {
+        return addressService.save(addressDTO);
     }
 
-    @PutMapping
-    public ResponseEntity<AddressDTO> update (@Valid @RequestBody AddressDTO addressDTO) {
-        return new ResponseEntity<>(addressService.update(addressDTO), HttpStatus.OK);
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AddressDTO update (@PathVariable String id, @Valid @RequestBody AddressDTO addressDTO) {
+        return addressService.update(id, addressDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete (@Valid @PathVariable String id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete (@Valid @PathVariable String id) {
         addressService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

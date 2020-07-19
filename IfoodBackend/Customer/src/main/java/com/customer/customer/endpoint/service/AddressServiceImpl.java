@@ -12,17 +12,16 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.requireNonNull;
+
 @Service
 public class AddressServiceImpl implements AddressService {
 
-    private final AddressRepository addressRepository;
+    @Autowired
+    private AddressRepository addressRepository;
 
-    private final AddressMapper addressMapper;
-
-    public AddressServiceImpl (AddressMapper addressMapper, AddressRepository addressRepository) {
-        this.addressMapper = addressMapper;
-        this.addressRepository = addressRepository;
-    }
+    @Autowired
+    private AddressMapper addressMapper;
 
     @Override
     public List<AddressDTO> listAll () {
@@ -40,6 +39,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<AddressDTO> getAddressByCustomerID (String id) {
+
         return addressRepository.findByidCustomer(id)
                 .stream()
                 .map(addressMapper::addressToAddressDTO)
@@ -60,9 +60,10 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public AddressDTO update (AddressDTO addressDTO) {
+    public AddressDTO update (String id, AddressDTO addressDTO) {
+        verifyIfAddressExist(id);
         Address address = addressMapper.addressDTOToAddress(addressDTO);
-        verifyIfAddressExist(address.getId());
+        address.setId(id);
         return addressMapper.addressToAddressDTO(addressRepository.save(address));
     }
 

@@ -10,8 +10,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.validation.ConstraintViolationException;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @DataMongoTest
@@ -19,6 +20,25 @@ public class AddressRepositoryTest {
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Test
+    public void whenFindByidCustomer_thenReturnAddressList () {
+        Address addressOne = new Address("addressId", "abc", "Rua Jasmim", 123L, "SP",
+                "Campinas", "Mansoes Sto Antonio", "Brasil", "12345678",
+                null, false, "", "");
+
+        addressRepository.save(addressOne);
+
+        Address addressTwo = new Address("addressTwo", "def", "Rua Hermantino", 456L, "SP",
+                "Campinas", "Taquaral", "Brasil", "87654321",
+                null, false, "", "");
+
+        addressRepository.save(addressTwo);
+
+        List<Address> addressList = addressRepository.findByidCustomer("def");
+
+        assertEquals(addressList.size(), 1);
+    }
 
     @Test
     public void whenCustomerIDEmpty_thenConstraintViolations () {

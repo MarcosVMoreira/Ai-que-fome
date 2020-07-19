@@ -20,7 +20,7 @@ public interface AddressService {
 
     public void delete (@PathVariable String id);
 
-    public AddressDTO update (@RequestBody AddressDTO address);
+    public AddressDTO update (@PathVariable String id, @RequestBody AddressDTO address);
 
     public void verifyIfAddressExist(String id);
 
