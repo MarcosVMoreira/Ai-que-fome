@@ -1,124 +1,119 @@
-//package com.customer.customer;
-//
-//import com.customer.customer.endpoint.model.entity.Customer;
-//import com.customer.customer.endpoint.error.ResourceNotFoundException;
-//import com.customer.customer.endpoint.repository.CustomerRepository;
-//import com.customer.customer.endpoint.service.CustomerServiceImpl;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.junit.jupiter.MockitoExtension;
-//import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-//import org.springframework.transaction.annotation.Transactional;
-//
-//import static java.util.Arrays.asList;
-//import static org.assertj.core.api.Assertions.assertThat;
-//import static org.junit.jupiter.api.Assertions.assertThrows;
-//import static org.junit.jupiter.api.Assertions.assertTrue;
-//import static org.mockito.Mockito.when;
-//
-//
-//@Transactional
-//@ExtendWith(MockitoExtension.class)
-//@DataJpaTest
-//public class CustomerServiceTest {
-//
-//    @InjectMocks
-//    private CustomerServiceImpl customerService;
-//
-//    @Mock
-//    private CustomerRepository customerRepository;
-//
-////    @Test
-////    public void whenListAll_thenReturnCorrectData () {
-////
-////        Customer customer1 = new Customer("Marcos", "37991234567", "marcos.teste@email.com");
-////        Customer customer2 = new Customer("Jose", "37991234567", "jose.teste@email.com");
-////
-////        when(customerRepository.findAll()).
-////                thenReturn(asList(customer1, customer2));
-////
-////        assertThat(customerService.listAll()).isSameAs(customerRepository.findAll());
-////    }
-////
-////    @Test
-////    public void whenGetCustomerById_thenReturnCustomer() {
-////        Customer customer = new Customer(1L,"Marcos", "37991234567", "marcos.teste@email.com");
-////
-////        when(customerRepository.findById(1L)).
-////                thenReturn(java.util.Optional.of(customer));
-////
-////        assertThat(customerService.getCustomerById(1L)).isSameAs(customerRepository.findById(1L));
-////    }
-////
-////    @Test
-////    public void whenFindCustomerByName_thenReturnCustomer() {
-////        Customer customer1 = new Customer(1L,"Marcos", "37991234567", "marcos.teste@email.com");
-////        Customer customer2 = new Customer(1L,"marcos", "37991232222", "teste.teste@email.com");
-////
-////        when(customerRepository.findByNameIgnoreCaseContaining("marcos")).
-////                thenReturn(asList(customer1, customer2));
-////
-////        assertThat(customerService.findCustomerByName("marcos")).isSameAs(customerRepository.findByNameIgnoreCaseContaining("marcos"));
-////    }
-////
-////    @Test
-////    public void whenDeleteOutputUsingWrongId_thenReturnResourceNotFoundException () {
-////        Exception exception = assertThrows(
-////                ResourceNotFoundException.class,
-////                () -> customerService.deleteOutput(1L));
-////
-////        assertTrue(exception.getMessage().contains("Customer not found for ID: 1"));
-////    }
-////
-////    @Test
-////    public void whenUpdateOutputUsingWrongId_thenReturnResourceNotFoundException () {
-////        Customer customer = new Customer(1L,"Marcos", "37991234567", "marcos.teste@email.com");
-////
-////        Exception exception = assertThrows(
-////                ResourceNotFoundException.class,
-////                () -> customerService.updateOutput(customer));
-////
-////        assertTrue(exception.getMessage().contains("Customer not found for ID: 1"));
-////    }
-////
-////    @Test
-////    public void whenDeleteInputUsingWrongId_thenReturnResourceNotFoundException () {
-////        Exception exception = assertThrows(
-////                ResourceNotFoundException.class,
-////                () -> customerService.deleteInput(1L));
-////
-////        assertTrue(exception.getMessage().contains("Customer not found for ID: 1"));
-////    }
-////
-////    @Test
-////    public void whenUpdateInputUsingWrongId_thenReturnResourceNotFoundException () {
-////        Customer customer = new Customer(1L,"Marcos", "37991234567", "marcos.teste@email.com");
-////
-////        Exception exception = assertThrows(
-////                ResourceNotFoundException.class,
-////                () -> customerService.updateInput(customer));
-////
-////        assertTrue(exception.getMessage().contains("Customer not found for ID: 1"));
-////    }
-////
-////    @Test
-////    public void whenVerifyIfCustomerExistsUsingWrongCustomerId_thenReturnResourceNotFoundException () {
-////        Exception exception = assertThrows(
-////                ResourceNotFoundException.class,
-////                () -> customerService.verifyIfCustomerExists(1L));
-////
-////        assertTrue(exception.getMessage().contains("Customer not found for ID: 1"));
-////    }
-////
-////    @Test
-////    public void whenVerifyIfCustomerExistsUsingWrongCustomerName_thenReturnResourceNotFoundException () {
-////        Exception exception = assertThrows(
-////                ResourceNotFoundException.class,
-////                () -> customerService.verifyIfCustomerExists("joaquim"));
-////
-////        assertTrue(exception.getMessage().contains("Customer not found for name: joaquim"));
-////    }
-//
-//}
+package com.customer.customer.test;
+
+import com.customer.customer.endpoint.model.DTO.AddressDTO;
+import com.customer.customer.endpoint.model.DTO.CustomerDTO;
+import com.customer.customer.endpoint.model.entity.Address;
+import com.customer.customer.endpoint.model.entity.Customer;
+import com.customer.customer.endpoint.error.ResourceNotFoundException;
+import com.customer.customer.endpoint.model.mapper.CustomerMapper;
+import com.customer.customer.endpoint.repository.CustomerRepository;
+import com.customer.customer.endpoint.service.CustomerServiceImpl;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+
+
+@DataMongoTest
+@ExtendWith(MockitoExtension.class)
+public class CustomerServiceTest {
+
+    @InjectMocks
+    private CustomerServiceImpl customerService;
+
+    @Mock
+    private CustomerRepository customerRepository;
+
+    @Spy
+    CustomerMapper customerMapper = CustomerMapper.INSTANCE;
+
+    private final Customer customer1 = new Customer("customer1Id", "joaozinho", "37991234567",
+            "marcos.teste@email.com", "018931231283");
+
+    private final Customer customer2 = new Customer("customer2Id", "mariazinha", "35987123456",
+            "maria.teste@email.com", "01891234567");
+
+    @Test
+    public void whenListAll_thenReturnCorrectData () {
+
+        when(customerRepository.findAll()).
+                thenReturn(asList(customer1, customer2));
+
+        List<CustomerDTO> customerDTOList = customerService.listAll();
+
+        assertEquals(2, customerDTOList.size());
+    }
+
+    @Test
+    public void whenGetCustomerById_thenReturnCustomer() {
+
+        when(customerRepository.findById(anyString())).
+                thenReturn(java.util.Optional.of(customer1));
+
+        CustomerDTO customerDTO = customerService.getCustomerById("customer1Id");
+
+        assertThat(customerDTO).isNotNull();
+    }
+
+    @Test
+    public void whenFindCustomerByName_thenReturnCustomer() {
+
+        Customer customer3 = new Customer("customer3Id", "mariazinha", "35987123459",
+                "mariazinha.teste@email.com", "018673238477");
+
+        when(customerRepository.findByNameIgnoreCaseContaining(anyString())).
+                thenReturn(asList(customer2, customer3));
+
+        List<CustomerDTO> customerDTOList = customerService.findCustomerByName("mariazinha");
+
+        assertEquals(2, customerDTOList.size());
+    }
+
+    @Test
+    public void whenDeleteUsingWrongId_thenReturnResourceNotFoundException () {
+        String id = "abc";
+
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> customerService.delete(id));
+
+        assertTrue(exception.getMessage().contains("Customer not found for ID: "+id));
+    }
+
+    @Test
+    public void whenUpdateUsingWrongId_thenReturnResourceNotFoundException () {
+
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> customerService.update(customerMapper.customerToCustomerDTO(customer1)));
+
+        assertTrue(exception.getMessage().contains("Customer not found for ID: "+customer1.getId()));
+    }
+
+    @Test
+    public void whenSaveCustomer_thenPersistData() {
+        when(customerRepository.save(any(Customer.class))).
+                thenReturn(customer1);
+
+        CustomerDTO customerDTO = customerService.save(customerMapper.customerToCustomerDTO(customer1));
+
+        assertEquals(customerDTO.getName(), customer1.getName());
+    }
+
+
+}
+

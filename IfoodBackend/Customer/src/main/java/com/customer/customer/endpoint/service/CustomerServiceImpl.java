@@ -1,15 +1,16 @@
 package com.customer.customer.endpoint.service;
 
-import com.customer.customer.endpoint.model.entity.Customer;
 import com.customer.customer.endpoint.error.ResourceNotFoundException;
+import com.customer.customer.endpoint.model.DTO.CustomerDTO;
+import com.customer.customer.endpoint.model.entity.Customer;
+import com.customer.customer.endpoint.model.mapper.CustomerMapper;
 import com.customer.customer.endpoint.repository.CustomerRepository;
-import com.customer.customer.message.producer.MessageProducer;
-import com.customer.customer.message.producer.MessageSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -19,31 +20,37 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private MessageProducer messageProducer;
-
-    @Autowired
-    private MessageSource messageSource;
+    private CustomerMapper customerMapper;
 
     @Override
-    public List<Customer> listAll () {
-        return customerRepository.findAll();
+    public List<CustomerDTO> listAll () {
+        return customerRepository.findAll()
+                .stream()
+                .map(customerMapper::customerToCustomerDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Customer getCustomerById (String id) {
+    public CustomerDTO getCustomerById (String id) {
         verifyByIdIfCustomerExists(id);
-        return customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer not found for given ID: "+id));
+        return customerMapper.customerToCustomerDTO(customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found for given ID: "+id)));
     }
 
     @Override
-    public List<Customer> findCustomerByName (String name) {
+    public List<CustomerDTO> findCustomerByName (String name) {
         verifyByNameIfCustomerExists(name);
-        return customerRepository.findByNameIgnoreCaseContaining(name);
+        return customerRepository.findByNameIgnoreCaseContaining(name)
+                .stream()
+                .map(customerMapper::customerToCustomerDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Customer save (@Valid Customer customer) {
-        return customerRepository.save(customer);
+    public CustomerDTO save (@Valid CustomerDTO customerDTO) {
+        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
+
+        return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
     }
 
     @Override
@@ -53,9 +60,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer update (Customer customer) {
+    public CustomerDTO update (CustomerDTO customerDTO) {
+
+        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
+
         verifyByIdIfCustomerExists(customer.getId());
-        return customerRepository.save(customer);
+        return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
     }
 
     @Override

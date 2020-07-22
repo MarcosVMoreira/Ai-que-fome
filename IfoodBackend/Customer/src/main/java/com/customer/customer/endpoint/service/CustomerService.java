@@ -1,5 +1,6 @@
 package com.customer.customer.endpoint.service;
 
+import com.customer.customer.endpoint.model.DTO.CustomerDTO;
 import com.customer.customer.endpoint.model.entity.Customer;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,17 +10,17 @@ import java.util.List;
 
 public interface CustomerService {
 
-    public List<Customer> listAll ();
+    public List<CustomerDTO> listAll ();
 
-    public Customer getCustomerById (@PathVariable("id") String id);
+    public CustomerDTO getCustomerById (@PathVariable("id") String id);
 
-    public List<Customer> findCustomerByName (@PathVariable String name);
+    public List<CustomerDTO> findCustomerByName (@PathVariable String name);
 
-    public Customer save (@Valid @RequestBody Customer customer);
+    public CustomerDTO save (@Valid @RequestBody CustomerDTO customer);
 
     public void delete (@PathVariable String id);
 
-    public Customer update (@RequestBody Customer customer);
+    public CustomerDTO update (@RequestBody CustomerDTO customer);
 
     public void verifyByIdIfCustomerExists (String id);
 
