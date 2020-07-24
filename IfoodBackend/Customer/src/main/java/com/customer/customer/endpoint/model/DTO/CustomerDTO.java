@@ -1,6 +1,9 @@
 package com.customer.customer.endpoint.model.DTO;
 
+import com.customer.customer.endpoint.model.entity.Address;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class CustomerDTO {
@@ -14,5 +17,7 @@ public class CustomerDTO {
     private String email;
 
     private String taxPayerIdentificationNumber;
+
+    private List<Address> addresses;
 
 }
