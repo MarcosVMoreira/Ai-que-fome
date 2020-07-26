@@ -44,13 +44,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         ValidationErrorDetails cveDetails = ValidationErrorDetails.Builder
                 .newBuilder()
                 .timestamp(new Date().getTime())
-                .status(HttpStatus.NOT_FOUND.value())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .title("Field validation error")
                 .detail(fieldError)
                 .developerMessage(cveException.getClass().getName())
                 .build();
 
-        return new ResponseEntity<>(cveDetails, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(cveDetails, HttpStatus.BAD_REQUEST);
     }
 
     @Override

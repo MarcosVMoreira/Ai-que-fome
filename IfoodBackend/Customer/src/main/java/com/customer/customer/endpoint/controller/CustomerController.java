@@ -2,14 +2,21 @@ package com.customer.customer.endpoint.controller;
 
 import com.customer.customer.endpoint.error.ResourceNotFoundException;
 import com.customer.customer.endpoint.model.DTO.CustomerDTO;
+import com.customer.customer.endpoint.model.entity.Customer;
+import com.customer.customer.endpoint.repository.CustomerRepository;
 import com.customer.customer.endpoint.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 @RestController
 @RequestMapping("customers")
@@ -20,8 +27,8 @@ public class CustomerController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CustomerDTO> listAll () {
-        return customerService.listAll();
+    public Page<CustomerDTO> listAll (Pageable pageable) {
+        return new PageImpl<>(customerService.listAll(pageable));
     }
 
     @GetMapping("{id}")
@@ -31,7 +38,7 @@ public class CustomerController {
         return customerService.getCustomerById(id);
     }
 
-    @GetMapping("findByName/{name}")
+    @GetMapping("byName/{name}")
     @ResponseStatus(HttpStatus.OK)
     public List<CustomerDTO> getCustomerByName (@PathVariable String name) {
         verifyIfCustomerExistsByName(name);

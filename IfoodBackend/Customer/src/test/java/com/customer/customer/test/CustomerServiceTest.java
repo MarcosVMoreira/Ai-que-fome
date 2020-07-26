@@ -13,8 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolationException;
@@ -58,10 +60,14 @@ public class CustomerServiceTest {
     @Test
     public void whenListAll_thenReturnCorrectData () {
 
-        when(customerRepository.findAll()).
-                thenReturn(asList(customer1, customer2));
+        Sort sort = Sort.by(Sort.Order.desc("name"));
+        Pageable pageable = PageRequest.of(1, 5, sort);
 
-        List<CustomerDTO> customerDTOList = customerService.listAll();
+        Page<Customer> pagedStudents = new PageImpl(asList(customer1, customer2));
+
+        when(customerRepository.findAll(isA(Pageable.class))).thenReturn(pagedStudents);
+
+        List<CustomerDTO> customerDTOList = customerService.listAll(pageable);
 
         assertEquals(2, customerDTOList.size());
     }

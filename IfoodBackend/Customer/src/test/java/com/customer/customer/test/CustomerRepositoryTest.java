@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.validation.ConstraintViolationException;
@@ -27,6 +29,13 @@ public class CustomerRepositoryTest {
     private final Address addressOne = new Address("Rua Jasmim", 123L, "SP",
             "Campinas", "Mansoes Sto Antonio", "Brasil", "12345678",
             null, false, "", "");
+
+    @Test
+    public void readsFirstPageCorrectly() {
+
+        Page<Customer> customers  = customerRepository.findAll(PageRequest.of(0, 10));
+        assertThat(customers.isFirst()).isTrue();
+    }
 
     @Test
     public void whenFindByNameIgnoreCaseContaining_thenIgnoreCase () {
@@ -63,7 +72,7 @@ public class CustomerRepositoryTest {
                 () -> customerRepository.save(new Customer("joaozinho", "",
                         "marcos.teste@email.com", "018931231283", asList(addressOne))));
 
-        assertTrue(exception.getMessage().contains("The field 'cellphone' is mandatory"));
+        assertTrue(exception.getMessage().contains("The field 'phone' is mandatory"));
     }
 
     @Test

@@ -6,6 +6,7 @@ import com.customer.customer.endpoint.model.entity.Customer;
 import com.customer.customer.endpoint.model.mapper.CustomerMapper;
 import com.customer.customer.endpoint.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
@@ -23,8 +24,8 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerMapper customerMapper;
 
     @Override
-    public List<CustomerDTO> listAll () {
-        return customerRepository.findAll()
+    public List<CustomerDTO> listAll (Pageable pageable) {
+        return customerRepository.findAll(pageable)
                 .stream()
                 .map(customerMapper::customerToCustomerDTO)
                 .collect(Collectors.toList());
