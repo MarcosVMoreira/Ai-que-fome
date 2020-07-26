@@ -1,6 +1,6 @@
 package com.customer.customer.endpoint.error;
 
-public class ResourceNotFoundDetails extends ErrorDetails {
+public class ValidationErrorDetails extends ErrorDetails {
 
     public static final class Builder {
         private String title;
@@ -41,14 +41,14 @@ public class ResourceNotFoundDetails extends ErrorDetails {
             return this;
         }
 
-        public ResourceNotFoundDetails build () {
-            ResourceNotFoundDetails resourceNotFoundDetails = new ResourceNotFoundDetails();
-            resourceNotFoundDetails.setStatus(status);
-            resourceNotFoundDetails.setDetail(detail);
-            resourceNotFoundDetails.setTimestamp(timestamp);
-            resourceNotFoundDetails.setDeveloperMessage(developerMessage);
-            resourceNotFoundDetails.setTitle(title);
-            return resourceNotFoundDetails;
+        public ValidationErrorDetails build () {
+            ValidationErrorDetails validationErrorDetails = new ValidationErrorDetails();
+            validationErrorDetails.setStatus(status);
+            validationErrorDetails.setDetail(detail);
+            validationErrorDetails.setTimestamp(timestamp);
+            validationErrorDetails.setDeveloperMessage(developerMessage);
+            validationErrorDetails.setTitle(title);
+            return validationErrorDetails;
         }
     }
 }

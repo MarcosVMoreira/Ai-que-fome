@@ -35,8 +35,8 @@ public class Address {
     private String country;
 
     @NotEmpty(message = "The field 'postalCode' is mandatory")
-    @Size(max = 8, message = "The field 'postalCode' must have size 8")
-    @Size(min = 8, message = "The field 'postalCode' must have size 8")
+    @Size(max = 8, message = "Wrong size for field 'postalCode'")
+    @Size(min = 8, message = "Wrong size for field 'postalCode'")
     private String postalCode;
 
     private List<String> coordinates;

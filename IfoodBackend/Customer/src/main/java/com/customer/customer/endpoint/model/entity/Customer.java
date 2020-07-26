@@ -24,8 +24,8 @@ public class Customer {
     @NotEmpty(message = "The field 'name' is mandatory")
     private String name;
 
-    @NotEmpty(message = "The field 'cellphone' is mandatory")
-    @Size(max = 11)
+    @NotEmpty(message = "The field 'phone' is mandatory")
+    @Size(max = 11, message = "Wrong size for field 'phone'")
     private String phone;
 
     @NotEmpty(message = "The field 'email' is mandatory")
