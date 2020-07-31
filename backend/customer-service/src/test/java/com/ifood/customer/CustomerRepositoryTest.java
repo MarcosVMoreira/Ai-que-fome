@@ -1,8 +1,8 @@
 package com.ifood.customer;
 
-import com.ifood.customer.endpoint.model.entity.Address;
-import com.ifood.customer.endpoint.model.entity.Customer;
-import com.ifood.customer.endpoint.repository.CustomerRepository;
+import com.ifood.core.entity.Address;
+import com.ifood.core.entity.Customer;
+import com.ifood.core.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.ifood.customer.message.producer;
 
 
-import com.ifood.customer.endpoint.model.entity.Address;
-import com.ifood.customer.endpoint.model.entity.Customer;
+import com.ifood.core.entity.Address;
+import com.ifood.core.entity.Customer;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;

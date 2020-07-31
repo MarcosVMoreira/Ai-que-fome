@@ -1,10 +1,11 @@
 package com.ifood.customer.endpoint.service;
 
+import com.ifood.core.entity.Customer;
+import com.ifood.core.repository.CustomerRepository;
 import com.ifood.customer.endpoint.error.ResourceNotFoundException;
 import com.ifood.customer.endpoint.model.DTO.CustomerDTO;
-import com.ifood.customer.endpoint.model.entity.Customer;
 import com.ifood.customer.endpoint.model.mapper.CustomerMapper;
-import com.ifood.customer.endpoint.repository.CustomerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO getCustomerById (String id) {
         verifyByIdIfCustomerExists(id);
         return customerMapper.customerToCustomerDTO(customerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found for given ID: "+id)));
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found for given ID: " + id)));
     }
 
     @Override

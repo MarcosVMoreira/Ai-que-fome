@@ -15,12 +15,12 @@ import java.util.List;
 public class CustomerConfiguration implements WebMvcConfigurer {
 
     @Bean
-    public ValidatingMongoEventListener validatingMongoEventListener() {
+    public ValidatingMongoEventListener validatingMongoEventListener () {
         return new ValidatingMongoEventListener(validator());
     }
 
     @Bean
-    public LocalValidatorFactoryBean validator() {
+    public LocalValidatorFactoryBean validator () {
         return new LocalValidatorFactoryBean();
     }
 

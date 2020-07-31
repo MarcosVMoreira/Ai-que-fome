@@ -22,6 +22,8 @@
 
     <modules>
         <module>customer-service</module>
+        <module>core-service</module>
+        <module>auth-service</module>
     </modules>
 
     <dependencies>

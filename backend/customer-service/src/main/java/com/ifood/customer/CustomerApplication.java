@@ -2,10 +2,14 @@ package com.ifood.customer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
 @ComponentScan("com.ifood.customer")
+@EntityScan({"com.ifood.core.entity"})
+@EnableMongoRepositories({"com.ifood.core.repository"})
 public class CustomerApplication {
 
     public static void main (String[] args) {

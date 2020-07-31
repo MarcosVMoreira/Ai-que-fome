@@ -58,13 +58,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
         ErrorDetails errorDetails =
                 ErrorDetails.Builder
-                .newBuilder()
-                .timestamp(new Date().getTime())
-                .status(status.value())
-                .title("Internal Exception")
-                .detail(ex.getMessage())
-                .developerMessage(ex.getClass().getName())
-                .build();
+                        .newBuilder()
+                        .timestamp(new Date().getTime())
+                        .status(status.value())
+                        .title("Internal Exception")
+                        .detail(ex.getMessage())
+                        .developerMessage(ex.getClass().getName())
+                        .build();
 
         return new ResponseEntity<>(errorDetails, headers, status);
     }

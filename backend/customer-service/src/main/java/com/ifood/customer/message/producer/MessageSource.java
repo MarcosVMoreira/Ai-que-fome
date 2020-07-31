@@ -6,21 +6,21 @@ import org.springframework.messaging.MessageChannel;
 public interface MessageSource {
 
     @Output("output-save-customer")
-    MessageChannel sendMessageToSaveCustomerChannel();
+    MessageChannel sendMessageToSaveCustomerChannel ();
 
     @Output("output-update-customer")
-    MessageChannel sendMessageToUpdateCustomerChannel();
+    MessageChannel sendMessageToUpdateCustomerChannel ();
 
     @Output("output-delete-customer")
-    MessageChannel sendMessageToDeleteCustomerChannel();
+    MessageChannel sendMessageToDeleteCustomerChannel ();
 
     @Output("output-save-address")
-    MessageChannel sendMessageToSaveAddressChannel();
+    MessageChannel sendMessageToSaveAddressChannel ();
 
     @Output("output-update-address")
-    MessageChannel sendMessageToUpdateAddressChannel();
+    MessageChannel sendMessageToUpdateAddressChannel ();
 
     @Output("output-delete-address")
-    MessageChannel sendMessageToDeleteAddressChannel();
+    MessageChannel sendMessageToDeleteAddressChannel ();
 
 }

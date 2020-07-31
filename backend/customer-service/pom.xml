@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>customer-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>customer-service</name>
     <description>Customer microservice</description>
 
@@ -20,6 +20,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.ifood</groupId>
+            <artifactId>core-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>org.mapstruct</groupId>

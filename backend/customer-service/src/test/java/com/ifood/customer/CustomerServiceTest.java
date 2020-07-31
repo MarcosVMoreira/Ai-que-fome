@@ -1,18 +1,20 @@
 package com.ifood.customer;
 
+import com.ifood.core.entity.Address;
+import com.ifood.core.entity.Customer;
+import com.ifood.core.repository.CustomerRepository;
 import com.ifood.customer.endpoint.model.DTO.CustomerDTO;
-import com.ifood.customer.endpoint.model.entity.Address;
-import com.ifood.customer.endpoint.model.entity.Customer;
 import com.ifood.customer.endpoint.error.ResourceNotFoundException;
 import com.ifood.customer.endpoint.model.mapper.CustomerMapper;
-import com.ifood.customer.endpoint.repository.CustomerRepository;
 import com.ifood.customer.endpoint.service.CustomerServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.domain.*;
 
