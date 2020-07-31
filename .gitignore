@@ -58,3 +58,9 @@ IfoodBackend/Customer/.mvn/wrapper/MavenWrapperDownloader.java
 IfoodBackend/Customer/.mvn/wrapper/maven-wrapper.properties
 
 IfoodBackend/Customer/.mvn/wrapper/maven-wrapper.jar
+
+backend/auth-service/.mvn/wrapper/maven-wrapper.jar
+
+backend/auth-service/.mvn/wrapper/maven-wrapper.properties
+
+backend/auth-service/.mvn/wrapper/MavenWrapperDownloader.java
