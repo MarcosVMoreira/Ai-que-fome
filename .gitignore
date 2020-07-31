@@ -64,3 +64,15 @@ backend/auth-service/.mvn/wrapper/maven-wrapper.jar
 backend/auth-service/.mvn/wrapper/maven-wrapper.properties
 
 backend/auth-service/.mvn/wrapper/MavenWrapperDownloader.java
+
+backend/gateway-service/.mvn/wrapper/maven-wrapper.properties
+
+backend/discovery-service/.mvn/wrapper/maven-wrapper.properties
+
+backend/discovery-service/.mvn/wrapper/maven-wrapper.jar
+
+backend/gateway-service/.mvn/wrapper/maven-wrapper.jar
+
+backend/discovery-service/.mvn/wrapper/MavenWrapperDownloader.java
+
+backend/gateway-service/.mvn/wrapper/MavenWrapperDownloader.java
