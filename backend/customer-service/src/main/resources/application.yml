@@ -4,6 +4,9 @@ server:
 eureka:
   instance:
     prefer-ip-address: true
+    instance-id: ${spring.application.name}-${random.int}
+    #para, quando rodar mais de uma instancia desse servico, conseguirmos diferir uma da outra no painel do eureka
+    #hostname: localhost
   client:
     service-url:
       defaultZone: http://localhost:8081/eureka/
@@ -15,8 +18,8 @@ spring:
     name: customer
   data:
     mongodb:
-      uri: mongodb+srv://urer:password@url/test?retryWrites=true&w=majority
-
+      uri: ${MONGOURI}
+        
   cloud:
     stream:
       bindings:
