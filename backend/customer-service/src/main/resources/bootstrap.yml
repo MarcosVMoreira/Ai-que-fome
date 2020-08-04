@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: customer
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        max-attempts: 20
+        max-interval: 15000
+        initial-interval: 10000
+      discovery:
+        enabled: true
+        service-id: configuration
+  data:
+    mongodb:
+      uri: ${MONGOURI}
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: customer-${random.int}
+  client:
+    service-url:
+      defaultZone: http://localhost:8081/eureka/
+    fetch-registry: true
+    register-with-eureka: true
