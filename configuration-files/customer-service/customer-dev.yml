@@ -1,148 +1,128 @@
-server:
-  port: 8082
 
-eureka:
-  instance:
-    prefer-ip-address: true
-    instance-id: ${spring.application.name}-${random.int}
-    #para, quando rodar mais de uma instancia desse servico, conseguirmos diferir uma da outra no painel do eureka
-    #hostname: localhost
-  client:
-    service-url:
-      defaultZone: http://localhost:8081/eureka/
-    fetch-registry: true
-    register-with-eureka: true
-
-spring:
-  application:
-    name: customer
-  data:
-    mongodb:
-      uri: ${MONGOURI}
         
-  cloud:
-    stream:
-      bindings:
-        #customer outputs
-        output-save-customer:
-          destination: customer-channel
-          group: save-customer
-        output-update-customer:
-          destination: customer-channel
-          group: update-customer
-        output-delete-customer:
-          destination: customer-channel
-          group: delete-customer
-        #customer inputs
-        input-save-customer:
-          destination: customer-channel
-          group: save-customer-queue
-        input-update-customer:
-          destination: customer-channel
-          group: update-customer-queue
-        input-delete-customer:
-          destination: customer-channel
-          group: delete-customer-queue
-        #address outputs
-        output-save-address:
-          destination: customer-channel
-          group: save-address
-        output-update-address:
-          destination: customer-channel
-          group: update-address
-        output-delete-address:
-          destination: customer-channel
-          group: delete-address
-        #address inputs
-        input-save-address:
-          destination: customer-channel
-          group: save-address-queue
-        input-update-address:
-          destination: customer-channel
-          group: update-address-queue
-        input-delete-address:
-          destination: customer-channel
-          group: delete-address-queue
-      rabbit:
-        bindings:
-          #customer outputs
-          output-save-customer:
-            producer:
-              bindingRoutingKey: saveCustomerBinding
-              routingKeyExpression: '"saveCustomerBinding"'
-          output-update-customer:
-            producer:
-              bindingRoutingKey: updateCustomerBinding
-              routingKeyExpression: '"updateCustomerBinding"'
-          output-delete-customer:
-            producer:
-              bindingRoutingKey: deleteCustomerBinding
-              routingKeyExpression: '"deleteCustomerBinding"'
-          #customer inputs
-          input-save-customer:
-            consumer:
-              bindingRoutingKey: saveCustomerBinding
-              routingKeyExpression: '"saveCustomerBinding"'
-              acknowledgeMode: AUTO
-              declareExchange: false
-              bindQueue: false
-              queueNameGroupOnly: true
-          input-update-customer:
-            consumer:
-              bindingRoutingKey: updateCustomerBinding
-              routingKeyExpression: '"updateCustomerBinding"'
-              acknowledgeMode: AUTO
-              declareExchange: false
-              bindQueue: false
-              queueNameGroupOnly: true
-          input-delete-customer:
-            consumer:
-              bindingRoutingKey: deleteCustomerBinding
-              routingKeyExpression: '"deleteCustomerBinding"'
-              acknowledgeMode: AUTO
-              declareExchange: false
-              bindQueue: false
-              queueNameGroupOnly: true
-          #address outputs
-          output-save-address:
-            producer:
-              bindingRoutingKey: saveAddressBinding
-              routingKeyExpression: '"saveAddressBinding"'
-          output-update-address:
-            producer:
-              bindingRoutingKey: updateAddressBinding
-              routingKeyExpression: '"updateAddressBinding"'
-          output-delete-address:
-            producer:
-              bindingRoutingKey: deleteAddressBinding
-              routingKeyExpression: '"deleteAddressBinding"'
-          #address inputs
-          input-save-address:
-            consumer:
-              bindingRoutingKey: saveAddressBinding
-              routingKeyExpression: '"saveAddressBinding"'
-              acknowledgeMode: AUTO
-              declareExchange: false
-              bindQueue: false
-              queueNameGroupOnly: true
-          input-update-address:
-            consumer:
-              bindingRoutingKey: updateAddressBinding
-              routingKeyExpression: '"updateAddressBinding"'
-              acknowledgeMode: AUTO
-              declareExchange: false
-              bindQueue: false
-              queueNameGroupOnly: true
-          input-delete-address:
-            consumer:
-              bindingRoutingKey: deleteAddressBinding
-              routingKeyExpression: '"deleteAddressBinding"'
-              acknowledgeMode: AUTO
-              declareExchange: false
-              bindQueue: false
-              queueNameGroupOnly: true
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+  # cloud:
+  #   stream:
+  #     bindings:
+  #       #customer outputs
+  #       output-save-customer:
+  #         destination: customer-channel
+  #         group: save-customer
+  #       output-update-customer:
+  #         destination: customer-channel
+  #         group: update-customer
+  #       output-delete-customer:
+  #         destination: customer-channel
+  #         group: delete-customer
+  #       #customer inputs
+  #       input-save-customer:
+  #         destination: customer-channel
+  #         group: save-customer-queue
+  #       input-update-customer:
+  #         destination: customer-channel
+  #         group: update-customer-queue
+  #       input-delete-customer:
+  #         destination: customer-channel
+  #         group: delete-customer-queue
+  #       #address outputs
+  #       output-save-address:
+  #         destination: customer-channel
+  #         group: save-address
+  #       output-update-address:
+  #         destination: customer-channel
+  #         group: update-address
+  #       output-delete-address:
+  #         destination: customer-channel
+  #         group: delete-address
+  #       #address inputs
+  #       input-save-address:
+  #         destination: customer-channel
+  #         group: save-address-queue
+  #       input-update-address:
+  #         destination: customer-channel
+  #         group: update-address-queue
+  #       input-delete-address:
+  #         destination: customer-channel
+  #         group: delete-address-queue
+  #     rabbit:
+  #       bindings:
+  #         #customer outputs
+  #         output-save-customer:
+  #           producer:
+  #             bindingRoutingKey: saveCustomerBinding
+  #             routingKeyExpression: '"saveCustomerBinding"'
+  #         output-update-customer:
+  #           producer:
+  #             bindingRoutingKey: updateCustomerBinding
+  #             routingKeyExpression: '"updateCustomerBinding"'
+  #         output-delete-customer:
+  #           producer:
+  #             bindingRoutingKey: deleteCustomerBinding
+  #             routingKeyExpression: '"deleteCustomerBinding"'
+  #         #customer inputs
+  #         input-save-customer:
+  #           consumer:
+  #             bindingRoutingKey: saveCustomerBinding
+  #             routingKeyExpression: '"saveCustomerBinding"'
+  #             acknowledgeMode: AUTO
+  #             declareExchange: false
+  #             bindQueue: false
+  #             queueNameGroupOnly: true
+  #         input-update-customer:
+  #           consumer:
+  #             bindingRoutingKey: updateCustomerBinding
+  #             routingKeyExpression: '"updateCustomerBinding"'
+  #             acknowledgeMode: AUTO
+  #             declareExchange: false
+  #             bindQueue: false
+  #             queueNameGroupOnly: true
+  #         input-delete-customer:
+  #           consumer:
+  #             bindingRoutingKey: deleteCustomerBinding
+  #             routingKeyExpression: '"deleteCustomerBinding"'
+  #             acknowledgeMode: AUTO
+  #             declareExchange: false
+  #             bindQueue: false
+  #             queueNameGroupOnly: true
+  #         #address outputs
+  #         output-save-address:
+  #           producer:
+  #             bindingRoutingKey: saveAddressBinding
+  #             routingKeyExpression: '"saveAddressBinding"'
+  #         output-update-address:
+  #           producer:
+  #             bindingRoutingKey: updateAddressBinding
+  #             routingKeyExpression: '"updateAddressBinding"'
+  #         output-delete-address:
+  #           producer:
+  #             bindingRoutingKey: deleteAddressBinding
+  #             routingKeyExpression: '"deleteAddressBinding"'
+  #         #address inputs
+  #         input-save-address:
+  #           consumer:
+  #             bindingRoutingKey: saveAddressBinding
+  #             routingKeyExpression: '"saveAddressBinding"'
+  #             acknowledgeMode: AUTO
+  #             declareExchange: false
+  #             bindQueue: false
+  #             queueNameGroupOnly: true
+  #         input-update-address:
+  #           consumer:
+  #             bindingRoutingKey: updateAddressBinding
+  #             routingKeyExpression: '"updateAddressBinding"'
+  #             acknowledgeMode: AUTO
+  #             declareExchange: false
+  #             bindQueue: false
+  #             queueNameGroupOnly: true
+  #         input-delete-address:
+  #           consumer:
+  #             bindingRoutingKey: deleteAddressBinding
+  #             routingKeyExpression: '"deleteAddressBinding"'
+  #             acknowledgeMode: AUTO
+  #             declareExchange: false
+  #             bindQueue: false
+  #             queueNameGroupOnly: true
+  # rabbitmq:
+  #   host: localhost
+  #   port: 5672
+  #   username: guest
+  #   password: guest

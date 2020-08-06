@@ -19,6 +19,7 @@
         <java.version>11</java.version>
         <org.lombok.version>1.18.12</org.lombok.version>
         <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
+        <config-client.version>2.2.0.RELEASE</config-client.version>
     </properties>
 
     <modules>
@@ -28,10 +29,10 @@
     </modules>
 
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

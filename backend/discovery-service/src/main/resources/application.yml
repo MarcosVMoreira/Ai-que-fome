@@ -1,9 +1,8 @@
 spring:
   application:
-    name: registry
+    name: discovery
 server:
   port: 8081
-
 eureka:
   client:
     register-with-eureka: false
