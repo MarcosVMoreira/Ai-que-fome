@@ -1,13 +1,5 @@
-@import '~antd/dist/antd.css';
-
 body {
+  font-family: 'Roboto';
   margin: 0;
-  font-family: -apple-system, 'Roboto', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  padding: 0;
 }

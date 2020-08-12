@@ -3,56 +3,22 @@
   height: 100vh;
 
   &_header {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-
     &--logo {
-      width: 110px;
-      margin: 10px 0 0 25px;
+      width: 100px;
+      margin: 0 20px;
     }
   }
 
   &_body {
-    display: grid;
-    height: 100%;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-
-    &--image {
-      grid-column: 1;
-    }
-
     &--card {
-      grid-column: 2;
-      text-align: center;
-
-      &_container {
-        width: 510px;
-        padding: 36px 50px;
-        border-radius: 8px;
-        box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.05),
-          0px 4px 16px rgba(0, 0, 0, 0.06);
+      &_content {
+        padding: 50px !important;
       }
 
-      &_title {
-        font-size: 2.5em;
-        line-height: 50px;
-        font-weight: bold;
-        color: #414143;
-      }
-
-      &_subtitle {
-        font-size: 1.5em;
-        color: #717171;
-      }
-
-      &_facebook {
-        background-color: #33508e;
-        color: #fff;
-        font-weight: bold;
-        font-size: 1.2em;
-        border-radius: 4px;
+      &_actions {
+        &--button {
+          margin: 10px !important;
+        }
       }
     }
   }

@@ -4,7 +4,9 @@ module.exports = {
     es2020: true,
   },
   extends: [
+    'react-app',
     'eslint:recommended',
+    'plugin:jsx-a11y/recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
     'prettier',
@@ -17,7 +19,7 @@ module.exports = {
     ecmaVersion: 11,
     sourceType: 'module',
   },
-  plugins: ['react', 'prettier'],
+  plugins: ['react', 'jsx-a11y', 'prettier'],
   settings: {
     react: {
       version: 'detect',

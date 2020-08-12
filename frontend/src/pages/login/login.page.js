@@ -1,7 +1,12 @@
 import React from 'react';
 
-import { Card, Button } from 'antd';
-import { FacebookFilled } from '@ant-design/icons';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import { Typography, Button } from '@material-ui/core';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import MailIcon from '@material-ui/icons/Mail';
 
 import logo from '../../assets/icons/logo.png';
 
@@ -10,35 +15,57 @@ import './login.page.scss';
 const LoginPage = () => {
   return (
     <div className="container">
-      <section className="container_header">
-        <div className="container_header--logo">
-          <img src={logo} alt="ifood_logo" className="container_header--logo" />
-        </div>
-      </section>
+      <Grid container justify="center">
+        <Grid item sm={12} className="container_header">
+          <img src={logo} className="container_header--logo" />
+        </Grid>
 
-      <section className="container_body">
-        <div className="container_body--image">Image!</div>
-        <div className="container_body--card">
-          <Card className="container_body--card_container">
-            <p className="container_body--card_title">
-              Falta pouco para matar sua fome!
-            </p>
+        <Grid container justify="space-around" alignItems="center" spacing={3}>
+          <Grid item>Imagem!a</Grid>
 
-            <p className="container_body--card_subtitle">
-              Como deseja continuar?
-            </p>
+          <Grid item>
+            <Card className="container_body--card">
+              <CardContent className="container_body--card_content">
+                <Typography variant="h4" color="textPrimary" align="center">
+                  Falta pouco para matar sua fome!
+                </Typography>
 
-            <Button
-              icon={<FacebookFilled />}
-              block
-              size="large"
-              className="container_body--card_facebook"
-            >
-              Continuar com Facebook
-            </Button>
-          </Card>
-        </div>
-      </section>
+                <Typography variant="h5" color="textSecondary" align="center">
+                  Como deseja continuar?
+                </Typography>
+              </CardContent>
+
+              <CardActions className="container_body--card_actions">
+                <Grid container justify="center">
+                  <Grid xs={12} sm={8}>
+                    <Button
+                      size="large"
+                      color="primary"
+                      variant="contained"
+                      fullWidth
+                      startIcon={<FacebookIcon />}
+                      className="container_body--card_actions--button"
+                    >
+                      Continuar com Facebook
+                    </Button>
+                  </Grid>
+                  <Grid xs={12} sm={8}>
+                    <Button
+                      size="large"
+                      variant="contained"
+                      fullWidth
+                      startIcon={<MailIcon />}
+                      className="container_body--card_actions--button"
+                    >
+                      Email
+                    </Button>
+                  </Grid>
+                </Grid>
+              </CardActions>
+            </Card>
+          </Grid>
+        </Grid>
+      </Grid>
     </div>
   );
 };
