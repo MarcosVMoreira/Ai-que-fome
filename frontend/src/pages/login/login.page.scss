@@ -1,25 +1,72 @@
 .container {
-  background-color: #fdedee;
-  height: 100vh;
-
-  &_header {
-    &--logo {
-      width: 100px;
-      margin: 0 20px;
-    }
-  }
+  background: url('../../assets/images/background.webp') no-repeat center;
+  background-size: cover;
 
   &_body {
+    height: 100vh;
+    justify-content: flex-end;
+    align-items: center;
+
     &--card {
+      max-width: 100vw;
+      width: 500px;
+      box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.05),
+        0px 4px 16px rgba(0, 0, 0, 0.06) !important;
+      padding: 30px 0px;
+
+      &_header {
+        display: flex;
+        justify-content: center;
+
+        &--logo {
+          width: 150px;
+          margin: 20px;
+        }
+      }
+
       &_content {
-        padding: 50px !important;
+        &--title {
+          font-size: 1.8em;
+          font-weight: 500;
+          text-align: center;
+        }
+
+        &--subtitle {
+          font-size: 1.3em;
+          color: #8e8e8e;
+          margin: 16px 0;
+        }
+
+        &--input {
+          width: 340px;
+        }
       }
 
       &_actions {
         &--button {
-          margin: 10px !important;
+          font-size: 1.3em !important;
+          height: 56px;
+          width: 340px;
         }
       }
+    }
+  }
+}
+
+// Button Icon Size
+.MuiSvgIcon-root {
+  font-size: 2.5em !important;
+}
+
+// Changes the background on mobile
+@media (max-width: 600px) {
+  .container {
+    background: url('../../assets/images/background-portrait.webp') no-repeat
+      center;
+    background-size: cover;
+
+    &_body {
+      align-items: flex-start;
     }
   }
 }
