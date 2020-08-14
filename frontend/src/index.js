@@ -1,11 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
+
+import customTheme from './assets/themes/theme.json';
 import Routes from './routes/routes';
+
+import './index.css';
+
+const theme = createMuiTheme(customTheme);
 
 ReactDOM.render(
   <React.StrictMode>
-    <Routes />
+    <MuiThemeProvider theme={theme}>
+      <Routes />
+    </MuiThemeProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 );
