@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>com.ifood</groupId>
-            <artifactId>core-service</artifactId>
+            <artifactId>core-</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
