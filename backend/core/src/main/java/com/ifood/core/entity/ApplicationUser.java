@@ -3,6 +3,7 @@ package com.ifood.core.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -30,9 +31,11 @@ public class ApplicationUser {
     private String customerId;
 
     @NotEmpty(message =  "The field 'loginCode' is mandatory")
+    @ToString.Exclude
     private String loginCode;
 
     public ApplicationUser (@NotNull ApplicationUser applicationUser) {
+        this.id = applicationUser.getId();
         this.email = applicationUser.getEmail();
         this.role = applicationUser.getRole();
         this.customerId = applicationUser.getCustomerId();
@@ -42,3 +45,4 @@ public class ApplicationUser {
 
 
 }
+

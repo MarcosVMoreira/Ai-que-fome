@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class JwtConfiguration {
 
-    private String loginUrl = "/login/**";
+    private String loginUrl = "/login**";
     private int expiration = 3600;
     private String privateKey = "USDYnKc92pK31U4ELk8Av7M1K9JApkXG";
     private String type = "encrypted";

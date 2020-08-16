@@ -3,8 +3,6 @@ spring:
     name: gateway
 server:
   port: 8080
-  servlet:
-    context-path: /gateway
 
 eureka:
   instance:
@@ -17,3 +15,18 @@ eureka:
 
 zuul:
   sensitive-headers: Cookie
+
+#increase gateway time to timeout
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+ribbon:
+  ReadTimeout: 60000
+  connection-timeout: 3000
+  eureka:
+    enabled: true
