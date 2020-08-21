@@ -16,7 +16,7 @@ Atualmente, essas são as tecnologias que já foram utilizadas no backend, assim
 ⬜️ AWS EC2  
 ⬜️ Redis  
 
-Além disso, serão ou já foram usadas as seguintes *deisgn patterns* e técnicas:
+Além disso, serão ou já foram usadas as seguintes *design patterns* e técnicas:
 
 ✅ DTO   
 ✅ TDD   
@@ -30,7 +30,7 @@ Além disso, serão ou já foram usadas as seguintes *deisgn patterns* e técnic
 São utilizadas as seguintes ferramentas para desenvolvimento:
 - IntelliJ IDEA
 - Postman
-- Gitkraken
+- GitKraken
 - Robo 3T
 - Trello
 
