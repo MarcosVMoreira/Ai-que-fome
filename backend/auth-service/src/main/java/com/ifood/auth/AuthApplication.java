@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableConfigurationProperties(value = JwtConfiguration.class)
 @EntityScan({"com.ifood.core.entity"})
 @EnableMongoRepositories({"com.ifood.core.repository"})
+@ComponentScan("com.ifood")
 public class AuthApplication {
 
     public static void main (String[] args) {

@@ -3,6 +3,7 @@ package com.ifood.auth.security.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ifood.core.entity.ApplicationUser;
 import com.ifood.core.property.JwtConfiguration;
+import com.ifood.token.security.token.creator.TokenCreator;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.DirectEncrypter;
 import com.nimbusds.jose.crypto.RSASSASigner;
@@ -46,6 +47,9 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     @Autowired
     private JwtConfiguration jwtConfiguration;
 
+    @Autowired
+    private TokenCreator tokenCreator;
+
     @Override
     @SneakyThrows
     public Authentication attemptAuthentication (HttpServletRequest request, HttpServletResponse response) {
@@ -70,9 +74,9 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     protected void successfulAuthentication (HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication auth) throws IOException, ServletException {
         log.info("Authentication was successful for the user '{}', generating JWE token", auth.getName());
 
-        SignedJWT signedJWT = createSignedJWT(auth);
+        SignedJWT signedJWT = tokenCreator.createSignedJWT(auth);
 
-        String encryptToken = encryptToken(signedJWT);
+        String encryptToken = tokenCreator.encryptToken(signedJWT);
 
         log.info("Token generated successfully, adding it to the response header.");
 
@@ -83,72 +87,6 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
     }
 
-    @SneakyThrows
-    private SignedJWT createSignedJWT (Authentication auth) {
-        log.info("Starting to create the signed JWT");
-        ApplicationUser applicationUser = (ApplicationUser) auth.getPrincipal();
-        JWTClaimsSet jwtClaimSet = createJWTClaimSet(auth, applicationUser);
-        KeyPair rsaKeys = generateKeyPair();
-
-        log.info("Building JWK from RSA Keys");
-
-        JWK jwk = new RSAKey.Builder((RSAPublicKey) rsaKeys.getPublic()).keyID(UUID.randomUUID().toString()).build();
-
-        SignedJWT signedJWT = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.RS256)
-                .jwk(jwk)
-                .type(JOSEObjectType.JWT)
-                .build(), jwtClaimSet);
-
-        log.info("Signing the token with private RSA Key");
-
-        RSASSASigner signer = new RSASSASigner(rsaKeys.getPrivate());
-
-        signedJWT.sign(signer);
-
-        log.info("Serialized token '{}'", signedJWT.serialize());
-
-        return signedJWT;
-
-    }
-
-    private JWTClaimsSet createJWTClaimSet (Authentication auth, ApplicationUser applicationUser) {
-        log.info("Creating the JwtClaimSet Object for '{}'", applicationUser);
-        return new JWTClaimsSet.Builder()
-                .subject(applicationUser.getEmail())
-                .claim("authorities", auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(toList()))
-                .issuer("www.ifoodclone.com")
-                .issueTime(new Date())
-                .expirationTime(new Date(System.currentTimeMillis() + jwtConfiguration.getExpiration() * 1000))
-                .build();
-    }
-
-    @SneakyThrows
-    private KeyPair generateKeyPair() {
-        log.info("Generating RSA 2048 bits Keys");
-        KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-
-        generator.initialize(2048);
-
-        return generator.genKeyPair();
-    }
-
-    private String encryptToken (SignedJWT signedJWT) throws JOSEException {
-        log.info("Starting the encryptToken method");
-
-        DirectEncrypter directEncrypter = new DirectEncrypter(jwtConfiguration.getPrivateKey().getBytes());
-
-        JWEObject jweObject = new JWEObject(new JWEHeader.Builder(JWEAlgorithm.DIR, EncryptionMethod.A128CBC_HS256)
-                .contentType("JWT")
-                .build(), new Payload(signedJWT));
-
-        log.info("Encrypting token with system's private key.");
-
-        jweObject.encrypt(directEncrypter);
-
-        log.info("Token encrypted");
-
-        return jweObject.serialize();
-    }
 
 }
 
