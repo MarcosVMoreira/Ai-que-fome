@@ -16,6 +16,9 @@ eureka:
 zuul:
   sensitive-headers: Cookie
 
+jwt:
+  config:
+    login-url: /auth/login
 #increase gateway time to timeout
 hystrix:
   command:

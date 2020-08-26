@@ -63,7 +63,11 @@ public class TokenCreator {
         log.info("Creating the JwtClaimSet Object for '{}'", applicationUser);
         return new JWTClaimsSet.Builder()
                 .subject(applicationUser.getEmail())
-                .claim("authorities", auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(toList()))
+                .claim("authorities", auth.getAuthorities()
+                        .stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(toList()))
+                .claim("userId", applicationUser.getId())
                 .issuer("www.ifoodclone.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(System.currentTimeMillis() + jwtConfiguration.getExpiration() * 1000))

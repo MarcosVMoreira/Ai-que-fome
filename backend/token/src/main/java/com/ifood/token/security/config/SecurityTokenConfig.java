@@ -30,6 +30,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(jwtConfiguration.getLoginUrl()).permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                // substituir /admin/** pela url que eu desejar que seja acessada apenas por admin
                 .anyRequest().authenticated();
     }
 
