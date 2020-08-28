@@ -29,7 +29,7 @@ public class SecurityContextUtil {
                 throw new JOSEException("Username missing from JWT");
             }
             List<String> authorities = claims.getStringListClaim("authorities");
-            ApplicationUser applicationUser = new ApplicationUser()
+            ApplicationUser applicationUser = ApplicationUser
                     .builder()
                     .id(claims.getStringClaim("userId"))
                     .email(email)

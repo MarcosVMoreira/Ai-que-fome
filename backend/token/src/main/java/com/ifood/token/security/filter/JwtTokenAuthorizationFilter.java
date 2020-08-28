@@ -28,11 +28,13 @@ public class JwtTokenAuthorizationFilter extends OncePerRequestFilter {
     protected TokenConverter tokenConverter;
 
     @Override
+    @SuppressWarnings("Duplicates")
     protected void doFilterInternal (@NonNull HttpServletRequest httpServletRequest, @NonNull HttpServletResponse httpServletResponse, @NonNull  FilterChain filterChain) throws ServletException, IOException {
         String header = httpServletRequest.getHeader(jwtConfiguration.getHeader().getName());
 
         if (header == null || !header.startsWith(jwtConfiguration.getHeader().getPrefix())) {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
+            return;
         }
 
         String token = header.replace(jwtConfiguration.getHeader().getPrefix(), "").trim();

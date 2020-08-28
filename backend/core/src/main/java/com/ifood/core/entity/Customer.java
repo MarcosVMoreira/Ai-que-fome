@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.Valid;
@@ -30,6 +31,7 @@ public class Customer {
 
     @NotEmpty(message = "The field 'email' is mandatory")
     @Email(message = "The email must be valid")
+    @Indexed(unique=true)
     private String email;
 
     @NotEmpty(message = "The field 'taxPayerIdentificationNumber' is mandatory")

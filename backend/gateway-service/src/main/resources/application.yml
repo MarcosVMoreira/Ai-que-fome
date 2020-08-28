@@ -19,17 +19,9 @@ zuul:
 jwt:
   config:
     login-url: /auth/login
-#increase gateway time to timeout
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 60000
+    type: signed
 
 ribbon:
-  ReadTimeout: 60000
-  connection-timeout: 3000
-  eureka:
-    enabled: true
+  ReadTimeout: 10000
+  ConnectTimeouit: 10000
+

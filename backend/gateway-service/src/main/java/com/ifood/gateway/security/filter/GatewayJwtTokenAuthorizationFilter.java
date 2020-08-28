@@ -29,6 +29,7 @@ public class GatewayJwtTokenAuthorizationFilter extends JwtTokenAuthorizationFil
 
         if (header == null || !header.startsWith(jwtConfiguration.getHeader().getPrefix())) {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
+            return;
         }
 
         String token = header.replace(jwtConfiguration.getHeader().getPrefix(), "").trim();

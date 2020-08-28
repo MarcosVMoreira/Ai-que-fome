@@ -17,6 +17,9 @@ eureka:
       defaultZone: http://localhost:8081/eureka/
     register-with-eureka: true
 
+jwt:
+  config:
+    type: signed
 
 #  cloud:
 #    stream:

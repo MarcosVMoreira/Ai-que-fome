@@ -1,7 +1,9 @@
 package com.ifood.core.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
@@ -13,6 +15,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApplicationUser {
 
     @Id
@@ -20,9 +23,11 @@ public class ApplicationUser {
 
     @NotEmpty(message = "The field 'email' is mandatory")
     @Email(message = "The email must be valid")
+    @Indexed(unique=true)
     private String email;
 
     @NotEmpty(message = "The field 'role' is mandatory")
+    @Builder.Default
     private String role = "USER";
 
     @NotEmpty(message = "The field 'customerId' is mandatory")
