@@ -21,7 +21,7 @@
         <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
         <config-client.version>2.2.0.RELEASE</config-client.version>
         <nimbus-jose.version>8.19</nimbus-jose.version>
-
+        <swagger.version>2.9.2</swagger.version>
     </properties>
 
     <modules>
@@ -32,11 +32,22 @@
     </modules>
 
     <dependencies>
-
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
             <version>${nimbus-jose.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
 
         <dependency>

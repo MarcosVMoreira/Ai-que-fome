@@ -21,6 +21,9 @@ jwt:
   config:
     type: signed
 
+security:
+  ignored: /swagger-resources/**
+
 #  cloud:
 #    stream:
 #      bindings:

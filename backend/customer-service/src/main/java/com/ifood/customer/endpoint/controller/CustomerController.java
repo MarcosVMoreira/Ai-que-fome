@@ -3,6 +3,10 @@ package com.ifood.customer.endpoint.controller;
 import com.ifood.customer.endpoint.error.ResourceNotFoundException;
 import com.ifood.customer.endpoint.model.DTO.CustomerDTO;
 import com.ifood.customer.endpoint.service.CustomerService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("customers")
+@Api(value = "Endpoints to manage customer")
 public class CustomerController {
 
     @Autowired
@@ -23,12 +28,28 @@ public class CustomerController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "List all registered customers", response = CustomerDTO[].class, produces = "application/json")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
+                    value = "Results page you want to retrieve (0..N)"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+                    value = "Number of records per page."),
+            @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
+                    value = "Sorting criteria in the format: property(asc|desc). " +
+                            "Default sort order is ascending. " +
+                            "Multiple sort criteria are supported.")
+    })
     public Page<CustomerDTO> listAll (Pageable pageable) {
         return new PageImpl<>(customerService.listAll(pageable));
     }
 
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Return customer by given id", response = CustomerDTO.class, produces = "application/json")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", dataType = "string", paramType = "query",
+                    value = "Customer ID.")
+    })
     public CustomerDTO getCustomerById (@PathVariable String id) {
         verifyIfCustomerExistsById(id);
         return customerService.getCustomerById(id);
@@ -36,6 +57,11 @@ public class CustomerController {
 
     @GetMapping("byName/{name}")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Return customer by given name", response = CustomerDTO.class, produces = "application/json")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name", dataType = "string", paramType = "query",
+                    value = "Customer name.")
+    })
     public List<CustomerDTO> getCustomerByName (@PathVariable String name) {
         verifyIfCustomerExistsByName(name);
         return customerService.findCustomerByName(name);
@@ -44,6 +70,8 @@ public class CustomerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
+    @ApiOperation(value = "Create new user.", response = CustomerDTO.class,
+            produces="application/json", consumes="application/json")
     public CustomerDTO save (@Valid @RequestBody CustomerDTO customerDTO) {
         return customerService.save(customerDTO);
     }
