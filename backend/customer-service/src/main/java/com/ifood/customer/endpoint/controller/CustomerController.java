@@ -3,10 +3,7 @@ package com.ifood.customer.endpoint.controller;
 import com.ifood.customer.endpoint.error.ResourceNotFoundException;
 import com.ifood.customer.endpoint.model.DTO.CustomerDTO;
 import com.ifood.customer.endpoint.service.CustomerService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -39,6 +36,14 @@ public class CustomerController {
                             "Default sort order is ascending. " +
                             "Multiple sort criteria are supported.")
     })
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Customers successful found."),
+            @ApiResponse(code = 401, message = "Unable to complete authentication process. There may be " +
+                    "an error with given token."),
+            @ApiResponse(code = 403, message = "You have no authorization for this type of" +
+                    " requisition."),
+            @ApiResponse(code = 404, message = "Customer not found."),
+    })
     public Page<CustomerDTO> listAll (Pageable pageable) {
         return new PageImpl<>(customerService.listAll(pageable));
     }
@@ -50,7 +55,16 @@ public class CustomerController {
             @ApiImplicitParam(name = "id", dataType = "string", paramType = "query",
                     value = "Customer ID.")
     })
-    public CustomerDTO getCustomerById (@PathVariable String id) {
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Customer successful found."),
+            @ApiResponse(code = 401, message = "Unable to complete authentication process. There may be " +
+                    "an error with given token."),
+            @ApiResponse(code = 403, message = "You have no authorization for this type of" +
+                    " requisition."),
+            @ApiResponse(code = 404, message = "Customer not found."),
+    })
+    public CustomerDTO getCustomerById (@ApiParam(
+            value = "ID from the customer to be retrieved.")  @PathVariable String id) {
         verifyIfCustomerExistsById(id);
         return customerService.getCustomerById(id);
     }
@@ -62,7 +76,16 @@ public class CustomerController {
             @ApiImplicitParam(name = "name", dataType = "string", paramType = "query",
                     value = "Customer name.")
     })
-    public List<CustomerDTO> getCustomerByName (@PathVariable String name) {
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Customer successful found."),
+            @ApiResponse(code = 401, message = "Unable to complete authentication process. There may be " +
+                    "an error with given token."),
+            @ApiResponse(code = 403, message = "You have no authorization for this type of" +
+                    " requisition."),
+            @ApiResponse(code = 404, message = "Customer not found for given name."),
+    })
+    public List<CustomerDTO> getCustomerByName (@ApiParam(
+            value = "Name from the customer to be retrieved.") @PathVariable String name) {
         verifyIfCustomerExistsByName(name);
         return customerService.findCustomerByName(name);
     }
@@ -72,14 +95,34 @@ public class CustomerController {
     @Transactional
     @ApiOperation(value = "Create new user.", response = CustomerDTO.class,
             produces="application/json", consumes="application/json")
-    public CustomerDTO save (@Valid @RequestBody CustomerDTO customerDTO) {
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Customer successful created."),
+            @ApiResponse(code = 401, message = "Unable to complete authentication process. There may be " +
+                    "an error with given token."),
+            @ApiResponse(code = 403, message = "You have no authorization for this type of" +
+                    " requisition."),
+    })
+    public CustomerDTO save (@ApiParam(
+            value = "New user data structured in JSON format.") @Valid @RequestBody CustomerDTO customerDTO) {
         return customerService.save(customerDTO);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @Transactional
-    public CustomerDTO update (@Valid @RequestBody CustomerDTO customerDTO) {
+    @ApiOperation(value = "Update existing user.", response = CustomerDTO.class,
+            produces="application/json", consumes="application/json")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Customer successful updated."),
+            @ApiResponse(code = 401, message = "Unable to complete authentication process. There may be " +
+                    "an error with given token."),
+            @ApiResponse(code = 403, message = "You have no authorization for this type of" +
+                    " requisition."),
+            @ApiResponse(code = 404, message = "Customer not found for given ID."),
+    })
+    public CustomerDTO update (@ApiParam(
+            value = "Already existing user with edited values structured in JSON format.")
+                                   @Valid @RequestBody CustomerDTO customerDTO) {
         verifyIfCustomerExistsById(customerDTO.getId());
         return customerService.update(customerDTO);
     }
@@ -87,7 +130,17 @@ public class CustomerController {
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    public void delete (@PathVariable String id) {
+    @ApiOperation(value = "Delete existing user.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Customer successful deleted."),
+            @ApiResponse(code = 401, message = "Unable to complete authentication process. There may be " +
+                    "an error with given token."),
+            @ApiResponse(code = 403, message = "You have no authorization for this type of" +
+                    " requisition."),
+    })
+    public void delete (@ApiParam(
+            value = "ID from customer that you want to delete." ,
+            example = "5f1af2a61c43ab69623fc49e") @PathVariable String id) {
         verifyIfCustomerExistsById(id);
         customerService.delete(id);
     }

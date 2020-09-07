@@ -26,7 +26,8 @@ public class UserInfoController {
             produces = "application/json")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", dataType = "String", paramType = "header",
-                    value = "Token obtained from /auth/login. Use HTTP \"Authorization\" header.")
+                    value = "Token obtained from /auth/login. Use HTTP \"Authorization\" header, including" +
+                            " \"Bearer\" keyword.")
     })
     public ApplicationUserDTO getUserInfo(Principal principal) {
         return applicationUserMapper.apllicationUserToApplicationUserDTO(
