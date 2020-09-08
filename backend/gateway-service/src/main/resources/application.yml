@@ -3,8 +3,6 @@ spring:
     name: gateway
 server:
   port: 8080
-  servlet:
-    context-path: /gateway
 
 eureka:
   instance:
@@ -17,3 +15,13 @@ eureka:
 
 zuul:
   sensitive-headers: Cookie
+
+jwt:
+  config:
+    login-url: /auth/login
+    type: signed
+
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeouit: 10000
+

@@ -1,0 +1,6 @@
+Gateway: 8080
+Discovery: 8081
+Customer: 8082
+Auth: 8083
+
+
