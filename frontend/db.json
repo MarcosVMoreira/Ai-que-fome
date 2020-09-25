@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "email": "otavio2@otavio.com",
+      "password": "$2a$10$gQXuEL11fp3y0v1yHByEC.twq4s5X5/widx0C3YaeRM7mXqyuQNce",
+      "id": 1
+    },
+    {
+      "email": "otavio@otavio.com",
+      "password": "$2a$10$RIpfxdeExKpTsk16Q05uAOisxg1cdT9sEaHTAOuVVxyf.wrYPP9Hy",
+      "id": 2
+    }
+  ]
+}

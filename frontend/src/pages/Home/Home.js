@@ -1,7 +1,5 @@
 import React from 'react';
 
-const HomePage = () => {
+export const Home = () => {
   return <div>Hello iFood!</div>;
 };
-
-export default HomePage;
