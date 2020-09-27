@@ -1,7 +1,7 @@
-package com.ifood.auth.endpoint.Mapper;
+package com.ifood.auth.endpoint.model.mapper;
 
-import com.ifood.auth.endpoint.DTO.ApplicationUserDTO;
-import com.ifood.core.entity.ApplicationUser;
+import com.ifood.auth.endpoint.model.dto.ApplicationUserDTO;
+import com.ifood.token.security.entity.ApplicationUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

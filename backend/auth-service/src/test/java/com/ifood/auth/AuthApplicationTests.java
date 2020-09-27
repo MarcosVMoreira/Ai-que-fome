@@ -1,7 +1,6 @@
 package com.ifood.auth;
 
-import com.ifood.core.entity.ApplicationUser;
-import com.ifood.core.repository.ApplicationUserRepository;
+import com.ifood.auth.endpoint.repository.ApplicationUserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

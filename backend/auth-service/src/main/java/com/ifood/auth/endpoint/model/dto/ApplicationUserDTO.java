@@ -1,4 +1,4 @@
-package com.ifood.auth.endpoint.DTO;
+package com.ifood.auth.endpoint.model.dto;
 
 import lombok.Data;
 

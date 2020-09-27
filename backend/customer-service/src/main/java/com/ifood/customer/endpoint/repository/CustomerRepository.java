@@ -1,7 +1,7 @@
-package com.ifood.core.repository;
+package com.ifood.customer.endpoint.repository;
 
 
-import com.ifood.core.entity.Customer;
+import com.ifood.customer.endpoint.model.entity.Customer;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

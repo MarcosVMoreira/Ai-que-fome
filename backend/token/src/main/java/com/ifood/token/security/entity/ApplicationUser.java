@@ -1,4 +1,4 @@
-package com.ifood.core.entity;
+package com.ifood.token.security.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;

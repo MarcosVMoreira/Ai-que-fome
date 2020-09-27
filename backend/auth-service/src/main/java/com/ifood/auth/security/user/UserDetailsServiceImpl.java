@@ -1,7 +1,7 @@
 package com.ifood.auth.security.user;
 
-import com.ifood.core.entity.ApplicationUser;
-import com.ifood.core.repository.ApplicationUserRepository;
+import com.ifood.auth.endpoint.repository.ApplicationUserRepository;
+import com.ifood.token.security.entity.ApplicationUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

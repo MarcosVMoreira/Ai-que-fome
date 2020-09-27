@@ -1,8 +1,8 @@
 package com.ifood.auth.endpoint.controller;
 
-import com.ifood.auth.endpoint.DTO.ApplicationUserDTO;
-import com.ifood.auth.endpoint.Mapper.ApplicationUserMapper;
-import com.ifood.core.entity.ApplicationUser;
+import com.ifood.auth.endpoint.model.dto.ApplicationUserDTO;
+import com.ifood.auth.endpoint.model.mapper.ApplicationUserMapper;
+import com.ifood.token.security.entity.ApplicationUser;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
