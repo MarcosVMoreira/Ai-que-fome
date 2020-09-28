@@ -1,15 +1,12 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../Axios';
 
-const authEndpoint = 'localhost:8080/login';
-
 export const authEmailStart = () => ({
   type: actionTypes.AUTH_EMAIL_START,
 });
 
-export const authEmailSuccess = payload => ({
+export const authEmailSuccess = () => ({
   type: actionTypes.AUTH_EMAIL_SUCCESS,
-  payload,
 });
 
 export const authEmailFail = payload => ({
@@ -27,37 +24,50 @@ export const authEmail = payload => {
     };
 
     axios
-      .post('', authEmailData)
-      .then(res => {
-        console.log(res);
-        dispatch(authEmailSuccess(res.data));
+      .post('login', authEmailData)
+      .then(() => {
+        dispatch(authEmailSuccess());
       })
       .catch(err => {
-        console.log(err);
-        dispatch(authEmailFail({ error: err }));
+        dispatch(authEmailFail({ error: err.response.status }));
       });
   };
 };
 
-// export const authCheckState = () => {
-//   return dispatch => {
-//     const token = localStorage.getItem('token');
+export const authPasswordStart = () => ({
+  type: actionTypes.AUTH_PASSWORD_START,
+});
 
-//     if (!token) {
-//       dispatch(authLogout());
-//     } else {
-//       const expirationDate = new Date(localStorage.getItem('expirationDate'));
+export const authPasswordSuccess = payload => ({
+  type: actionTypes.AUTH_PASSWORD_SUCCESS,
+  payload,
+});
 
-//       if (expirationDate > new Date()) {
-//         const userId = localStorage.getItem('userId');
-//         const remainingTime =
-//           (expirationDate.getTime() - new Date().getTime()) / 1000;
+export const authPasswordFail = payload => ({
+  type: actionTypes.AUTH_PASSWORD_FAIL,
+  payload,
+});
 
-//         dispatch(authSuccess({ idToken: token, localId: userId }));
-//         dispatch(authTimeout({ expiresIn: remainingTime }));
-//       } else {
-//         dispatch(authLogout());
-//       }
-//     }
-//   };
-// };
+export const authPassword = payload => {
+  return dispatch => {
+    dispatch(authPasswordStart());
+
+    const authData = {
+      email: payload.email,
+      password: payload.password,
+    };
+
+    axios
+      .post('login', authData)
+      .then(res => {
+        dispatch(authPasswordSuccess(res.data));
+      })
+      .catch(err => {
+        dispatch(authPasswordFail({ error: err.response.status }));
+      });
+  };
+};
+
+export const authReset = () => ({
+  type: actionTypes.AUTH_RESET,
+});

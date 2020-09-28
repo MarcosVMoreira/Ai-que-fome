@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 
-import { Routes } from './routes/Routes';
+import { rootReducer } from './store/reducers/index';
+import { Routes } from './routes/routes';
 import customTheme from './assets/themes/theme.json';
-import authReducer from './store/reducers/auth';
 
 import './index.scss';
 
@@ -18,8 +18,6 @@ const composeEnhancers =
   process.env.NODE_ENV === 'development'
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
     : null;
-
-const rootReducer = combineReducers({ auth: authReducer });
 
 const store = createStore(
   rootReducer,

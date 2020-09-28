@@ -1,1 +1,1 @@
-export { authEmail } from './auth';
+export { authEmail, authPassword, authReset } from './auth';

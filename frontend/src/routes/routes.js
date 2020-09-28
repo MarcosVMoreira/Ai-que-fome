@@ -9,8 +9,9 @@ export const Routes = () => {
     <BrowserRouter>
       <Switch>
         <Route path="/login" component={Login} />
-        <Route path="/" exact component={Home} />
-        <Redirect to="/" />
+        <Route path="/home" component={Home} />
+        <Route path="/signup" component={Home} />
+        <Redirect to="/login" />
       </Switch>
     </BrowserRouter>
   );
