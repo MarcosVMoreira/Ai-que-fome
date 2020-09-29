@@ -4,7 +4,6 @@ import com.ifood.customer.endpoint.model.entity.Address;
 import com.ifood.customer.endpoint.model.entity.Customer;
 import com.ifood.customer.endpoint.repository.CustomerRepository;
 import com.ifood.customer.endpoint.model.dto.CustomerDTO;
-import com.ifood.customer.endpoint.error.ResourceNotFoundException;
 import com.ifood.customer.endpoint.model.mapper.CustomerMapper;
 import com.ifood.customer.endpoint.service.CustomerServiceImpl;
 import org.junit.jupiter.api.Test;

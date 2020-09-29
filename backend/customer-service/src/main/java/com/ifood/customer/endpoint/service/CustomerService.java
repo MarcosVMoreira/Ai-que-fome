@@ -14,16 +14,12 @@ public interface CustomerService {
 
     CustomerDTO getCustomerById (@PathVariable("id") String id);
 
-    List<CustomerDTO> findCustomerByName (@PathVariable String name);
+    CustomerDTO findCustomerByEmail (@PathVariable String email);
 
     CustomerDTO save (@Valid @RequestBody CustomerDTO customer);
 
     void delete (@PathVariable String id);
 
-    CustomerDTO update (@RequestBody CustomerDTO customer);
-
-    void verifyByIdIfCustomerExists (String id);
-
-    void verifyByNameIfCustomerExists (String name);
+    CustomerDTO update (CustomerDTO customerDTO, String id);
 
 }
