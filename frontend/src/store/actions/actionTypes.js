@@ -7,3 +7,9 @@ export const AUTH_PASSWORD_SUCCESS = 'AUTH_PASSWORD_SUCCESS';
 export const AUTH_PASSWORD_FAIL = 'AUTH_PASSWORD_FAIL';
 
 export const AUTH_RESET = 'AUTH_RESET';
+
+export const SIGNUP_START = 'SIGNUP_START';
+export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
+export const SIGNUP_FAIL = 'SIGNUP_FAIL';
+
+export const SIGNUP_RESET = 'SIGNUP_RESET';

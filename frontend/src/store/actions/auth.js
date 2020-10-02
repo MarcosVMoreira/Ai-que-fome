@@ -29,7 +29,9 @@ export const authEmail = payload => {
         dispatch(authEmailSuccess());
       })
       .catch(err => {
-        dispatch(authEmailFail({ error: err.response.status }));
+        dispatch(
+          authEmailFail({ error: err.response.status, email: payload.email }),
+        );
       });
   };
 };

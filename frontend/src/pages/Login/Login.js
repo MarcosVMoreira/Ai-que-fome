@@ -12,14 +12,15 @@ import {
   CircularProgress,
   InputAdornment,
   IconButton,
+  Snackbar,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-
-import logo from '../../assets/icons/logo.webp';
 
 import classes from './Login.module.scss';
 import { validateEmail, validatePassword } from '../../helpers/validation';
 import * as actions from '../../store/actions/index';
+import { Logo } from '../../components/UI/Logo/Logo';
+import { Toast } from '../../components/UI/Toast/Toast';
 
 export const Login = () => {
   /* React State Hooks */
@@ -33,6 +34,7 @@ export const Login = () => {
   const authenticated = useSelector(state => state.auth.authenticated);
   const error = useSelector(state => state.auth.error);
   const loading = useSelector(state => state.auth.loading);
+  const success = useSelector(state => state.signUp.success);
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
@@ -44,6 +46,9 @@ export const Login = () => {
   };
   const onReset = () => {
     return dispatch(actions.authReset());
+  };
+  const onSignUpReset = () => {
+    return dispatch(actions.signUpReset());
   };
 
   /* Functions */
@@ -80,6 +85,10 @@ export const Login = () => {
         ? onAuthPassword(email, password)
         : setInvalidField(true);
     }
+  };
+
+  const handleToastClose = () => {
+    onSignUpReset();
   };
 
   // If registered is false then no email has been entered yet, therefore, show email for login
@@ -152,20 +161,22 @@ export const Login = () => {
   return (
     <div className={classes.container}>
       {redirect}
+      <Snackbar
+        open={success}
+        autoHideDuration={2000}
+        onClose={handleToastClose}
+      >
+        <Toast onClose={handleToastClose} severity="success">
+          Cadastrado com sucesso!
+        </Toast>
+      </Snackbar>
 
       <Grid container className={classes.container_body}>
         <Grid item xs={12} sm={5}>
           <Card className={classes.card}>
             <form name="form" onSubmit={handleSubmit}>
               <CardContent>
-                <Grid item className={classes.card_header}>
-                  <img
-                    src={logo}
-                    alt="ifood clone logo"
-                    className={classes.card_header__logo}
-                    onClick={handleReset}
-                  />
-                </Grid>
+                <Logo handleReset={handleReset} />
 
                 <Grid container item justify="center">
                   <span className={classes.card_title}>
@@ -183,6 +194,7 @@ export const Login = () => {
                     size="large"
                     color="primary"
                     variant="contained"
+                    disabled={loading}
                     className={classes.card_actions__button}
                   >
                     {loading ? (

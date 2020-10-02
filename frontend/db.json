@@ -1,13 +1,19 @@
 {
   "users": [
     {
-      "email": "otavio2@otavio.com",
-      "password": "$2a$10$gQXuEL11fp3y0v1yHByEC.twq4s5X5/widx0C3YaeRM7mXqyuQNce",
+      "email": "otavio@otavio.com",
+      "password": "$2a$10$H2zOqvTzL.0P939yJmpTJOxnc9/cAJsjkkcYOviKqqZ61aJh6ss1O",
+      "name": "otavio@otavio.com",
+      "phone": "(11) 11111-1111",
+      "document": "111.111.111-11",
       "id": 1
     },
     {
-      "email": "otavio@otavio.com",
-      "password": "$2a$10$RIpfxdeExKpTsk16Q05uAOisxg1cdT9sEaHTAOuVVxyf.wrYPP9Hy",
+      "email": "otavio@otavio.coma",
+      "password": "$2a$10$1UotdGRiBq84WoL1IUjgyO/f9OlacgJ.tnNpWZw3PQJ.v2TRA84iG",
+      "name": "otavio@otavio.coma",
+      "phone": "(11) 11111-1111",
+      "document": "111.111.111-11",
       "id": 2
     }
   ]

@@ -6,6 +6,7 @@ const initialState = {
   token: null,
   registered: false,
   authenticated: false,
+  signUpMail: null,
 };
 
 const authEmailStart = state => ({
@@ -24,6 +25,7 @@ const authEmailFail = (state, payload) => ({
   ...state,
   error: payload.error,
   loading: false,
+  signUpMail: payload.email,
 });
 
 const authPasswordStart = state => ({

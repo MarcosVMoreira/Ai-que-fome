@@ -13,45 +13,6 @@ import { rootReducer } from '../../store/reducers/index';
 
 configure({ adapter: new Adapter() });
 
-describe('<Login />', () => {
-  const initialState = {
-    auth: {
-      error: null,
-      loading: false,
-      token: null,
-      registered: true,
-      authenticated: false,
-    },
-  };
-  let mount;
-
-  beforeEach(() => {
-    mount = createMount();
-  });
-
-  afterEach(() => {
-    mount.cleanUp();
-  });
-
-  it('should reset page on logo click', () => {
-    const mockStore = createStore(rootReducer, { ...initialState });
-
-    const wrapper = mount(
-      <Provider store={mockStore}>
-        <Login />
-      </Provider>,
-    );
-
-    expect(wrapper.find(TextField).find({ label: 'Senha' }).exists()).toBe(
-      true,
-    );
-    wrapper.find('img').simulate('click');
-    expect(wrapper.find(TextField).find({ label: 'Email' }).exists()).toBe(
-      true,
-    );
-  });
-});
-
 describe('<Login /> Email', () => {
   let mount;
 
