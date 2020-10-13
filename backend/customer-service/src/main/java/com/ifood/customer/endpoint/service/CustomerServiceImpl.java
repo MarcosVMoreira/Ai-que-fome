@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -30,16 +31,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     private CustomerMapper customerMapper;
 
-    public CustomerServiceImpl (CustomerMapper customerMapper) {
+    @Autowired
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+        this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
     }
 
-    public CustomerServiceImpl (CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }
-
     @Override
-    public List<CustomerDTO> listAll (Pageable pageable) {
+    public List<CustomerDTO> listAll(Pageable pageable) {
         logger.debug("Recuperando da base de dados todos os clientes...");
         return customerRepository.findAll(pageable)
                 .stream()
@@ -48,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO getCustomerById (String id) {
+    public CustomerDTO getCustomerById(String id) {
         logger.debug("Recuperando da base de dados todos registros utilizando o id {}", id);
         return customerRepository.findById(id)
                 .map(customerMapper::customerToCustomerDTO)
@@ -56,20 +55,20 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO findCustomerByEmail (String email) {
+    public CustomerDTO findCustomerByEmail(String email) {
         return customerMapper.customerToCustomerDTO
                 (customerRepository.findByEmailIgnoreCaseContaining(email)
-                .orElseThrow(NotFoundException::new));
+                        .orElseThrow(NotFoundException::new));
     }
 
     @Override
-    public CustomerDTO save (@Valid CustomerDTO customerDTO) {
+    public CustomerDTO save(@Valid CustomerDTO customerDTO) {
 
         Optional<Customer> entity = customerRepository.findByEmailIgnoreCaseContaining(customerDTO.getEmail());
 
         if (entity.isPresent()) {
             logger.info("Email {} já existe na base de dados.", customerDTO.getEmail());
-            throw new UnprocessableEntityException("422.000");
+            throw new UnprocessableEntityException("422.001");
         }
 
         Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
@@ -77,7 +76,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void delete (String id) {
+    public void delete(String id) {
         Optional<Customer> entity = customerRepository.findById(id);
 
         if (entity.isPresent()) {
@@ -86,8 +85,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO update (CustomerDTO customerDTO, String id) {
+    public CustomerDTO update(CustomerDTO customerDTO, String id) {
 
+        //Lógica:
+        //Se existe o id passado, então é possível fazer o update do elemento.
+        //Considerando esse elemento existente, se for passado um email
+        //que seja igual ao email de outra conta (comparo através dos ids), eu lanço Unprocessable
         Customer customer = customerRepository
                 .findById(id)
                 .orElseThrow(NotFoundException::new);
@@ -95,8 +98,8 @@ public class CustomerServiceImpl implements CustomerService {
         Optional<Customer> verifyingEmail =
                 customerRepository.findByEmailIgnoreCaseContaining(customerDTO.getEmail());
 
-        if (verifyingEmail.isPresent()) {
-            throw new UnprocessableEntityException("422.00");
+        if (verifyingEmail.isPresent() && !verifyingEmail.get().getId().equals(id)) {
+            throw new UnprocessableEntityException("422.001");
         }
 
         customer.setEmail(customerDTO.getEmail());

@@ -1,5 +1,6 @@
 package com.ifood.auth.security.user;
 
+import com.ifood.auth.endpoint.error.NotFoundException;
 import com.ifood.auth.endpoint.repository.ApplicationUserRepository;
 import com.ifood.token.security.entity.ApplicationUser;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername (String username) {
         log.info("Searching in database for user by username '{}'", username);
-        ApplicationUser applicationUser = applicationUserRepository.findByEmail(username);
+        ApplicationUser applicationUser = applicationUserRepository.findByEmail(username).orElseThrow(NotFoundException::new);
         log.info("ApplicationUser found '{}'", applicationUser);
 
         if (applicationUser == null) {

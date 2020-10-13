@@ -1,5 +1,6 @@
 package com.ifood.customer;
 
+import com.ifood.customer.endpoint.error.NotFoundException;
 import com.ifood.customer.endpoint.model.entity.Address;
 import com.ifood.customer.endpoint.model.entity.Customer;
 import com.ifood.customer.endpoint.repository.CustomerRepository;
@@ -38,21 +39,18 @@ public class CustomerRepositoryTest {
     }
 
     @Test
-    public void whenFindByNameIgnoreCaseContaining_thenIgnoreCase () {
-
+    public void whenFindByEmailIgnoreCaseContaining_thenIgnoreCase () {
 
         Customer customer1 = new Customer("joaozinho", "37991234567",
                 "marcos.teste@email.com", "018931231283", asList(addressOne));
 
-        Customer customer2 = new Customer("Joaozinho", "37991234342",
-                "marcosdois.teste@email.com", "01883342836", asList(addressOne));
-
         this.customerRepository.save(customer1);
-        this.customerRepository.save(customer2);
 
-        List<Customer> customerList = customerRepository.findByNameIgnoreCaseContaining("joaozinho");
+        Customer foundCustomer =
+                customerRepository.findByEmailIgnoreCaseContaining("Marcos.Teste@email.com")
+                .orElseThrow(NotFoundException::new);
 
-        assertThat(customerList.size()).isEqualTo(2);
+        assertThat(foundCustomer).isNotNull();
     }
 
     @Test

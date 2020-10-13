@@ -5,9 +5,11 @@ import com.ifood.token.security.entity.ApplicationUser;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ApplicationUserRepository extends PagingAndSortingRepository<ApplicationUser, String> {
 
-    ApplicationUser findByEmail (String email);
+    Optional<ApplicationUser> findByEmail (String email);
 
 }

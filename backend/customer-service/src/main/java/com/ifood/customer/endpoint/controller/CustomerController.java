@@ -36,9 +36,9 @@ public class CustomerController {
         return customerServiceImpl.getCustomerById(id);
     }
 
-    @GetMapping("byEmail/{name}")
+    @GetMapping("email/{email}")
     @ResponseStatus(HttpStatus.OK)
-    public CustomerDTO getCustomerByName (@PathVariable String email) {
+    public CustomerDTO getCustomerByEmail (@PathVariable String email) {
         return customerServiceImpl.findCustomerByEmail(email);
     }
 
