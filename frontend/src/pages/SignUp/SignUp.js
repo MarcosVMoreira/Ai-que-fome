@@ -77,7 +77,6 @@ export const SignUp = props => {
   const handleSubmit = event => {
     event.preventDefault();
     setSubmitted(true);
-
     Object.keys(valid).reduce((sum, value) => sum && valid[value], true) &&
       onSignUp(form);
   };

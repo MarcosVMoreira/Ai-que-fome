@@ -20,7 +20,7 @@ export const signUp = payload => {
 
     const signUpData = {
       email: payload.email,
-      name: payload.email,
+      name: payload.name,
       phone: payload.phone,
       document: payload.document,
       password: '12345',
