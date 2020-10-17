@@ -116,15 +116,14 @@ describe('<SignUp />', () => {
 
   it('should show invalid phone if input has less than 15 chars', () => {
     const mockStore = createStore(rootReducer);
-
     const wrapper = mount(
       <Provider store={mockStore}>
         <SignUp />
       </Provider>,
     );
 
-    wrapper.find(TextField).at(2).props().value = '(11) 11111-111';
-    expect(wrapper.find(TextField).at(2).props().value).toBe('(11) 11111-111');
+    wrapper.find(TextField).at(3).props().value = '(11) 11111-111';
+    expect(wrapper.find(TextField).at(3).props().value).toBe('(11) 11111-111');
 
     wrapper.find(Button).simulate('submit');
     expect(wrapper.find(TextField).at(3).props().helperText).toBe(
@@ -132,58 +131,3 @@ describe('<SignUp />', () => {
     );
   });
 });
-
-// describe('<SignUp /> Password', () => {
-//   const initialState = {
-//     auth: {
-//       error: null,
-//       loading: false,
-//       token: null,
-//       registered: true,
-//       authenticated: false,
-//     },
-//   };
-//   let mount;
-
-//   beforeEach(() => {
-//     mount = createMount();
-//   });
-
-//   afterEach(() => {
-//     mount.cleanUp();
-//   });
-
-//   it('should render password input on user entered valid email', () => {
-//     const mockStore = createStore(rootReducer, { ...initialState });
-
-//     const wrapper = mount(
-//       <Provider store={mockStore}>
-//         <SignUp />
-//       </Provider>,
-//     );
-
-//     expect(wrapper.find(TextField).find({ label: 'Email' }).exists()).toBe(
-//       false,
-//     );
-//     expect(wrapper.find(TextField).find({ label: 'Senha' }).exists()).toBe(
-//       true,
-//     );
-//   });
-
-//   it('should show invalid password if input empty or less than 5 chars', () => {
-//     const mockStore = createStore(rootReducer, { ...initialState });
-//     const wrapper = mount(
-//       <Provider store={mockStore}>
-//         <SignUp />
-//       </Provider>,
-//     );
-
-//     expect(
-//       wrapper.find(TextField).find({ helperText: 'Senha inválida!' }).exists(),
-//     ).toBe(false);
-//     wrapper.find(Button).simulate('submit');
-//     expect(
-//       wrapper.find(TextField).find({ helperText: 'Senha inválida!' }).exists(),
-//     ).toBe(true);
-//   });
-// });
