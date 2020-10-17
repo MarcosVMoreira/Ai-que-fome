@@ -18,18 +18,15 @@ export const authEmail = payload => {
   return dispatch => {
     dispatch(authEmailStart());
 
-    const authEmailData = {
-      email: payload.email,
-      password: '12345',
-    };
-
     axios
-      .post('login', authEmailData)
+      .get(`/auth/user/token/${payload.email}`)
       .then(() => {
         dispatch(authEmailSuccess());
       })
       .catch(err => {
-        dispatch(authEmailFail({ error: err.response.status }));
+        dispatch(
+          authEmailFail({ error: err.response.status, email: payload.email }),
+        );
       });
   };
 };
@@ -54,11 +51,11 @@ export const authPassword = payload => {
 
     const authData = {
       email: payload.email,
-      password: payload.password,
+      loginCode: payload.password,
     };
 
     axios
-      .post('login', authData)
+      .post('/auth/login', authData)
       .then(res => {
         dispatch(authPasswordSuccess(res.data));
       })
@@ -70,4 +67,8 @@ export const authPassword = payload => {
 
 export const authReset = () => ({
   type: actionTypes.AUTH_RESET,
+});
+
+export const errorReset = () => ({
+  type: actionTypes.ERROR_RESET,
 });

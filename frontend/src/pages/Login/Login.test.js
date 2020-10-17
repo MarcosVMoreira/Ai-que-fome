@@ -13,45 +13,6 @@ import { rootReducer } from '../../store/reducers/index';
 
 configure({ adapter: new Adapter() });
 
-describe('<Login />', () => {
-  const initialState = {
-    auth: {
-      error: null,
-      loading: false,
-      token: null,
-      registered: true,
-      authenticated: false,
-    },
-  };
-  let mount;
-
-  beforeEach(() => {
-    mount = createMount();
-  });
-
-  afterEach(() => {
-    mount.cleanUp();
-  });
-
-  it('should reset page on logo click', () => {
-    const mockStore = createStore(rootReducer, { ...initialState });
-
-    const wrapper = mount(
-      <Provider store={mockStore}>
-        <Login />
-      </Provider>,
-    );
-
-    expect(wrapper.find(TextField).find({ label: 'Senha' }).exists()).toBe(
-      true,
-    );
-    wrapper.find('img').simulate('click');
-    expect(wrapper.find(TextField).find({ label: 'Email' }).exists()).toBe(
-      true,
-    );
-  });
-});
-
 describe('<Login /> Email', () => {
   let mount;
 
@@ -66,19 +27,15 @@ describe('<Login /> Email', () => {
 
   it('should render email input on first load', () => {
     const mockStore = createStore(rootReducer);
-
     const wrapper = mount(
       <Provider store={mockStore}>
         <Login />
       </Provider>,
     );
+    const textField = wrapper.find(TextField);
 
-    expect(wrapper.find(TextField).find({ label: 'Email' }).exists()).toBe(
-      true,
-    );
-    expect(wrapper.find(TextField).find({ label: 'Senha' }).exists()).toBe(
-      false,
-    );
+    expect(textField.find({ label: 'Email' }).exists()).toBe(true);
+    expect(textField.find({ label: 'Senha' }).exists()).toBe(false);
   });
 
   it('should show invalid email if input empty', () => {
@@ -90,17 +47,14 @@ describe('<Login /> Email', () => {
       </Provider>,
     );
 
-    expect(
-      wrapper.find(TextField).find({ helperText: 'Email inválido!' }).exists(),
-    ).toBe(false);
+    expect(wrapper.find(TextField).props().helperText).toBe(false);
     wrapper.find(Button).simulate('submit');
-    expect(
-      wrapper.find(TextField).find({ helperText: 'Email inválido!' }).exists(),
-    ).toBe(true);
+    expect(wrapper.find(TextField).props().helperText).toBe('Email inválido!');
   });
 
   it('should show invalid email if input has invalid email', () => {
     const mockStore = createStore(rootReducer);
+
     const wrapper = mount(
       <Provider store={mockStore}>
         <Login />
@@ -109,13 +63,10 @@ describe('<Login /> Email', () => {
 
     wrapper.find(TextField).props().value = 'otavio@otavio';
     expect(wrapper.find(TextField).props().value).toBe('otavio@otavio');
-    expect(
-      wrapper.find(TextField).find({ helperText: 'Email inválido!' }).exists(),
-    ).toBe(false);
+    expect(wrapper.find(TextField).props().helperText).toBe(false);
+
     wrapper.find(Button).simulate('submit');
-    expect(
-      wrapper.find(TextField).find({ helperText: 'Email inválido!' }).exists(),
-    ).toBe(true);
+    expect(wrapper.find(TextField).props().helperText).toBe('Email inválido!');
   });
 });
 
@@ -148,28 +99,22 @@ describe('<Login /> Password', () => {
       </Provider>,
     );
 
-    expect(wrapper.find(TextField).find({ label: 'Email' }).exists()).toBe(
-      false,
-    );
-    expect(wrapper.find(TextField).find({ label: 'Senha' }).exists()).toBe(
-      true,
-    );
+    const textField = wrapper.find(TextField);
+    expect(textField.find({ label: 'Email' }).exists()).toBe(false);
+    expect(textField.find({ label: 'Senha' }).exists()).toBe(true);
   });
 
   it('should show invalid password if input empty or less than 5 chars', () => {
     const mockStore = createStore(rootReducer, { ...initialState });
+
     const wrapper = mount(
       <Provider store={mockStore}>
         <Login />
       </Provider>,
     );
 
-    expect(
-      wrapper.find(TextField).find({ helperText: 'Senha inválida!' }).exists(),
-    ).toBe(false);
+    expect(wrapper.find(TextField).props().helperText).toBe(false);
     wrapper.find(Button).simulate('submit');
-    expect(
-      wrapper.find(TextField).find({ helperText: 'Senha inválida!' }).exists(),
-    ).toBe(true);
+    expect(wrapper.find(TextField).props().helperText).toBe('Senha inválida!');
   });
 });

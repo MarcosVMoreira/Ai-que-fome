@@ -6,6 +6,7 @@ const initialState = {
   token: null,
   registered: false,
   authenticated: false,
+  signUpMail: null,
 };
 
 const authEmailStart = state => ({
@@ -24,6 +25,7 @@ const authEmailFail = (state, payload) => ({
   ...state,
   error: payload.error,
   loading: false,
+  signUpMail: payload.email,
 });
 
 const authPasswordStart = state => ({
@@ -49,6 +51,11 @@ const authReset = () => ({
   ...initialState,
 });
 
+const errorReset = state => ({
+  ...state,
+  error: null,
+});
+
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case actionTypes.AUTH_EMAIL_START:
@@ -65,6 +72,8 @@ const reducer = (state = initialState, { type, payload }) => {
       return authPasswordFail(state, payload);
     case actionTypes.AUTH_RESET:
       return authReset();
+    case actionTypes.ERROR_RESET:
+      return errorReset(state);
     default:
       return state;
   }
