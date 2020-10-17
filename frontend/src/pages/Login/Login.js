@@ -50,6 +50,9 @@ export const Login = () => {
   const onSignUpReset = () => {
     return dispatch(actions.signUpReset());
   };
+  const onErrorReset = () => {
+    return dispatch(actions.errorReset());
+  };
 
   /* Functions */
   // Changes the "email" state value when user types
@@ -87,8 +90,15 @@ export const Login = () => {
     }
   };
 
+  // Closes the toast after a successful signup
   const handleToastClose = () => {
     onSignUpReset();
+  };
+
+  // We have to set error to null to avoid infinite re-renders
+  const handleWrongPassword = () => {
+    onErrorReset();
+    setInvalidField(true);
   };
 
   // If registered is false then no email has been entered yet, therefore, show email for login
@@ -151,10 +161,10 @@ export const Login = () => {
       ));
 
   let redirect;
-  // If we get a 400 error, it means the user doesn't have an account, redirect to signup!
-  error === 400 && (redirect = <Redirect to="/signup" />);
+  // If we get a 404 error, it means the user doesn't have an account, redirect to signup!
+  error === 404 && (redirect = <Redirect to="/signup" />);
   // If we get a 401 error, it means the password entered by the user is incorrect
-  error === 401 && setInvalidField(true);
+  error === 401 && handleWrongPassword();
   // If user is authenticated redirects to home!
   authenticated && (redirect = <Redirect to="/home" />);
 

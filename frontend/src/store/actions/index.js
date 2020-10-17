@@ -1,2 +1,2 @@
-export { authEmail, authPassword, authReset } from './auth';
+export { authEmail, authPassword, authReset, errorReset } from './auth';
 export { signUp, signUpReset } from './signup';

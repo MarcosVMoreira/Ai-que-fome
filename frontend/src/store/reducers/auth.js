@@ -51,6 +51,11 @@ const authReset = () => ({
   ...initialState,
 });
 
+const errorReset = state => ({
+  ...state,
+  error: null,
+});
+
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case actionTypes.AUTH_EMAIL_START:
@@ -67,6 +72,8 @@ const reducer = (state = initialState, { type, payload }) => {
       return authPasswordFail(state, payload);
     case actionTypes.AUTH_RESET:
       return authReset();
+    case actionTypes.ERROR_RESET:
+      return errorReset(state);
     default:
       return state;
   }

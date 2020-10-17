@@ -1,6 +1,8 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../Axios';
 
+import { unmask } from '../../helpers/unmask';
+
 export const signUpStart = () => ({
   type: actionTypes.SIGNUP_START,
 });
@@ -21,14 +23,14 @@ export const signUp = payload => {
     const signUpData = {
       email: payload.email,
       name: payload.name,
-      phone: payload.phone,
-      document: payload.document,
-      password: '12345',
+      phone: unmask(payload.phone),
+      taxPayerIdentificationNumber: unmask(payload.document),
     };
 
     axios
-      .post('signup', signUpData)
-      .then(() => {
+      .post('/customer/customers/', signUpData)
+      .then(res => {
+        console.log(res);
         dispatch(signUpSuccess());
       })
       .catch(err => {

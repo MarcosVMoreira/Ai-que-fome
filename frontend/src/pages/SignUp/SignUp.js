@@ -35,6 +35,9 @@ export const SignUp = props => {
   const onSignUp = form => {
     return dispatch(actions.signUp(form));
   };
+  const onErrorReset = () => {
+    return dispatch(actions.errorReset());
+  };
 
   /* React State Hooks (if the user tried to Login using a non-existing mail
     we initialize the form with the attempted mail) */
@@ -70,7 +73,10 @@ export const SignUp = props => {
   }, [form]);
 
   // On Logo click redirect to login page
-  const handleReset = () => props.history.push('/login');
+  const handleReset = () => {
+    onErrorReset();
+    props.history.push('/login');
+  };
 
   // On submit we first check if there are any invalid fields, if any we show the
   // invalid fields with their respective errors, otherwise we proceed to register the new user
