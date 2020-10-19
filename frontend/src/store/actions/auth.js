@@ -59,6 +59,7 @@ export const authPassword = payload => {
       .then(res => {
         const token = res.headers.authorization.replace('Bearer ', '');
         localStorage.setItem('IFOOD_token', token);
+        localStorage.setItem('IFOOD_email', payload.email);
 
         dispatch(authPasswordSuccess({ token: token }));
       })
