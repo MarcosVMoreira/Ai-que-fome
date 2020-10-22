@@ -2,16 +2,16 @@ package com.ifood.customer.endpoint.controller;
 
 import com.ifood.customer.endpoint.model.dto.CustomerDTO;
 import com.ifood.customer.endpoint.service.CustomerServiceImpl;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("customers")
@@ -44,8 +44,11 @@ public class CustomerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CustomerDTO save (@Valid @RequestBody CustomerDTO customerDTO) {
-        return customerServiceImpl.save(customerDTO);
+    public ResponseEntity<Void> save (@Valid @RequestBody CustomerDTO customerDTO,
+                                      UriComponentsBuilder componentsBuilder) {
+        CustomerDTO customer = customerServiceImpl.save(customerDTO);
+        return ResponseEntity.created(componentsBuilder.path("customer/customers/{id}").
+                buildAndExpand(customer.getId()).toUri()).build();
     }
 
     @PutMapping("{id}")

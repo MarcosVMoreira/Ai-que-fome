@@ -1,5 +1,6 @@
 package com.ifood.customer.endpoint.service;
 
+import com.ifood.customer.endpoint.error.BadRequestException;
 import com.ifood.customer.endpoint.error.NotFoundException;
 import com.ifood.customer.endpoint.error.UnprocessableEntityException;
 import com.ifood.customer.endpoint.model.dto.CustomerDTO;
@@ -13,8 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerDTO> listAll(Pageable pageable) {
-        logger.debug("Recuperando da base de dados todos os clientes...");
+        logger.info("Recuperando da base de dados todos os clientes...");
         return customerRepository.findAll(pageable)
                 .stream()
                 .map(customerMapper::customerToCustomerDTO)
@@ -48,7 +53,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO getCustomerById(String id) {
-        logger.debug("Recuperando da base de dados todos registros utilizando o id {}", id);
+        logger.info("Recuperando da base de dados todos registros utilizando o id {}", id);
         return customerRepository.findById(id)
                 .map(customerMapper::customerToCustomerDTO)
                 .orElseThrow(NotFoundException::new);
@@ -63,15 +68,22 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO save(@Valid CustomerDTO customerDTO) {
+        logger.info("Criando nova entrada na base de dados...");
 
-        Optional<Customer> entity = customerRepository.findByEmailIgnoreCaseContaining(customerDTO.getEmail());
+        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
+
+        if(!Optional.ofNullable(customer.getEmail()).isPresent() ||
+        customer.getEmail().isEmpty()) {
+            throw new BadRequestException("400.000");
+        }
+
+        Optional<Customer> entity = customerRepository.findByEmailIgnoreCaseContaining(customer.getEmail());
 
         if (entity.isPresent()) {
-            logger.info("Email {} já existe na base de dados.", customerDTO.getEmail());
+            logger.info("Email {} já existe na base de dados.", customer.getEmail());
             throw new UnprocessableEntityException("422.001");
         }
 
-        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
         return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
     }
 
@@ -91,24 +103,31 @@ public class CustomerServiceImpl implements CustomerService {
         //Se existe o id passado, então é possível fazer o update do elemento.
         //Considerando esse elemento existente, se for passado um email
         //que seja igual ao email de outra conta (comparo através dos ids), eu lanço Unprocessable
-        Customer customer = customerRepository
+
+        Customer customerFromRequest = customerMapper.customerDTOToCustomer(customerDTO);
+
+        if(!Optional.ofNullable(customerFromRequest.getEmail()).isPresent() ||
+                customerFromRequest.getEmail().isEmpty()) {
+            throw new BadRequestException("400.000");
+        }
+
+        Customer customerFromDatabase = customerRepository
                 .findById(id)
                 .orElseThrow(NotFoundException::new);
 
         Optional<Customer> verifyingEmail =
-                customerRepository.findByEmailIgnoreCaseContaining(customerDTO.getEmail());
+                customerRepository.findByEmailIgnoreCaseContaining(customerFromRequest.getEmail());
 
         if (verifyingEmail.isPresent() && !verifyingEmail.get().getId().equals(id)) {
             throw new UnprocessableEntityException("422.001");
         }
 
-        customer.setEmail(customerDTO.getEmail());
-        customer.setAddresses(customerDTO.getAddresses());
-        customer.setName(customerDTO.getName());
-        customer.setPhone(customerDTO.getPhone());
-        customer.setTaxPayerIdentificationNumber(customerDTO.getTaxPayerIdentificationNumber());
+        customerFromDatabase.setEmail(customerFromRequest.getEmail());
+        customerFromDatabase.setAddresses(customerFromRequest.getAddresses());
+        customerFromDatabase.setName(customerFromRequest.getName());
+        customerFromDatabase.setPhone(customerFromRequest.getPhone());
+        customerFromDatabase.setTaxPayerIdentificationNumber(customerFromRequest.getTaxPayerIdentificationNumber());
 
-        return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+        return customerMapper.customerToCustomerDTO(customerRepository.save(customerFromDatabase));
     }
-
 }
