@@ -12,8 +12,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @SpringBootApplication
 @EnableEurekaClient
 @EnableConfigurationProperties(value = JwtConfiguration.class)
-@EntityScan({"com.ifood.core.entity"})
-@EnableMongoRepositories({"com.ifood.core.repository"})
+@EnableMongoRepositories({"com.ifood.auth.endpoint.repository"})
+@EntityScan({"com.ifood.token.security.entity"})
 @ComponentScan("com.ifood")
 public class AuthApplication {
 

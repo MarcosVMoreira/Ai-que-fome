@@ -1,11 +1,12 @@
-package com.ifood.customer.endpoint.handler;
+package com.ifood.customer.endpoint.controller;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.ifood.customer.endpoint.error.NotFoundException;
 import com.ifood.customer.endpoint.error.RestException;
+import com.ifood.customer.endpoint.error.UnprocessableEntityException;
 import com.ifood.customer.endpoint.model.dto.ErrorResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -18,11 +19,9 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Collection;
@@ -33,11 +32,27 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 @RequiredArgsConstructor
-public class RestExceptionHandler {
+public class ControllerAdvice {
 
     private final MessageSource messageSource;
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Object> handleNotFoundException (NotFoundException exception) {
+        return new ResponseEntity<>(Collections.singletonList(ErrorResponseDTO.builder()
+                .code("404.001")
+                .message(getMessage("404.001", exception.getMessage())).build()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolationException
+            (final ConstraintViolationException cve) {
+        String msg = cve.getMessage();
+        return new ResponseEntity<>(Collections.singletonList(ErrorResponseDTO.builder()
+                .code("400.000")
+                .message(getMessage("400.000", cve.getMessage())).build()), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResponseEntity<Error> mediaTypeNotFoundException (final HttpMediaTypeNotSupportedException e) {
@@ -51,8 +66,8 @@ public class RestExceptionHandler {
             String field = cause.getPathReference().split("\\[\"")[1].replace("\"]", "");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Collections.singletonList(ErrorResponseDTO.builder()
-                            .code("400.001")
-                            .message(getMessage("400.001", field))
+                            .code("400.000")
+                            .message(getMessage("400.000", field))
                             .build()));
         }
         return defaultBadRequestError();
@@ -64,16 +79,6 @@ public class RestExceptionHandler {
         return defaultBadRequestError();
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<List<ErrorResponseDTO>> handleConstraintViolationException
-            (final ConstraintViolationException cve) {
-        List<ErrorResponseDTO> errors = cve.getConstraintViolations().stream()
-                .map(constraint -> new ErrorResponseDTO(constraint.getMessageTemplate(),
-                        getMessage(constraint.getMessageTemplate(),
-                                ((PathImpl) constraint.getPropertyPath()).getLeafNode().getName())))
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<ErrorResponseDTO>> handleMethodArgumentNotValidException (
@@ -103,8 +108,8 @@ public class RestExceptionHandler {
     public ResponseEntity<List<ErrorResponseDTO>> methodArgumentTypeMismatchException
             (final MethodArgumentTypeMismatchException e) {
         return new ResponseEntity<>(Collections.singletonList(ErrorResponseDTO.builder()
-                .code("400.001")
-                .message(getMessage("400.001", e.getName())).build()), HttpStatus.BAD_REQUEST);
+                .code("400.000")
+                .message(getMessage("400.000", e.getName())).build()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RestException.class)

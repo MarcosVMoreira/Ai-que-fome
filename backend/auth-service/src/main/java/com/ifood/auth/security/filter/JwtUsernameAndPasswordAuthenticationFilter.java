@@ -1,8 +1,8 @@
 package com.ifood.auth.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ifood.core.entity.ApplicationUser;
 import com.ifood.core.property.JwtConfiguration;
+import com.ifood.token.security.entity.ApplicationUser;
 import com.ifood.token.security.token.creator.TokenCreator;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.AllArgsConstructor;
@@ -16,10 +16,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 import static java.util.Collections.emptyList;
 

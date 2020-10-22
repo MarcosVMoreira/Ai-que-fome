@@ -1,6 +1,6 @@
-package com.ifood.customer.endpoint.model.DTO;
+package com.ifood.customer.endpoint.model.dto;
 
-import com.ifood.core.entity.Address;
+import com.ifood.customer.endpoint.model.entity.Address;
 import lombok.Data;
 
 import java.util.List;

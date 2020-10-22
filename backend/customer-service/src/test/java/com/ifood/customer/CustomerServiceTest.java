@@ -1,31 +1,36 @@
 package com.ifood.customer;
 
-import com.ifood.core.entity.Address;
-import com.ifood.core.entity.Customer;
-import com.ifood.core.repository.CustomerRepository;
-import com.ifood.customer.endpoint.model.DTO.CustomerDTO;
-import com.ifood.customer.endpoint.error.ResourceNotFoundException;
+import com.ifood.customer.endpoint.error.NotFoundException;
+import com.ifood.customer.endpoint.model.dto.CustomerDTO;
+import com.ifood.customer.endpoint.model.entity.Address;
+import com.ifood.customer.endpoint.model.entity.Customer;
 import com.ifood.customer.endpoint.model.mapper.CustomerMapper;
+import com.ifood.customer.endpoint.repository.CustomerRepository;
 import com.ifood.customer.endpoint.service.CustomerServiceImpl;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.isA;
+import static org.mockito.Mockito.when;
 
 
 @DataMongoTest
@@ -56,7 +61,7 @@ public class CustomerServiceTest {
             "maria.teste@email.com", "01891234567", asList(addressTwo));
 
     @Test
-    public void whenListAll_thenReturnCorrectData () {
+    public void whenListAll_thenReturnCorrectData() {
 
         Sort sort = Sort.by(Sort.Order.desc("name"));
         Pageable pageable = PageRequest.of(1, 5, sort);
@@ -82,38 +87,18 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void whenFindCustomerByName_thenReturnCustomer() {
+    public void whenFindCustomerByEmail_thenReturnCustomer() {
 
-        Customer customer3 = new Customer("customer3Id", "mariazinha", "35987123459",
-                "mariazinha.teste@email.com", "018673238477", asList(addressOne));
+        Optional<Customer> customer = Optional.of(new Customer("customerId", "mariazinha", "35987123459",
+                "mariazinha.teste@email.com", "018673238477", asList(addressOne)));
 
-        when(customerRepository.findByNameIgnoreCaseContaining(anyString())).
-                thenReturn(asList(customer2, customer3));
+        when(customerRepository.findByEmailIgnoreCaseContaining("mariazinha.teste@email.com")).
+                thenReturn(customer);
 
-        List<CustomerDTO> customerDTOList = customerService.findCustomerByName("mariazinha");
+        CustomerDTO customerResponseDTO =
+                customerService.findCustomerByEmail("mariazinha.teste@email.com");
 
-        assertEquals(2, customerDTOList.size());
-    }
-
-    @Test
-    public void whenDeleteUsingWrongId_thenReturnResourceNotFoundException () {
-        String id = "abc";
-
-        Exception exception = assertThrows(
-                ResourceNotFoundException.class,
-                () -> customerService.delete(id));
-
-        assertTrue(exception.getMessage().contains("Customer not found for ID: "+id));
-    }
-
-    @Test
-    public void whenUpdateUsingWrongId_thenReturnResourceNotFoundException () {
-
-        Exception exception = assertThrows(
-                ResourceNotFoundException.class,
-                () -> customerService.update(customerMapper.customerToCustomerDTO(customer1)));
-
-        assertTrue(exception.getMessage().contains("Customer not found for ID: "+customer1.getId()));
+        assertThat(customerResponseDTO).isNotNull();
     }
 
     @Test
@@ -125,9 +110,4 @@ public class CustomerServiceTest {
 
         assertEquals(customerDTO.getName(), customer1.getName());
     }
-
-
-
-
 }
-

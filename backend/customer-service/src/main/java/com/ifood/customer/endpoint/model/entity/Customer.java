@@ -1,4 +1,4 @@
-package com.ifood.core.entity;
+package com.ifood.customer.endpoint.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

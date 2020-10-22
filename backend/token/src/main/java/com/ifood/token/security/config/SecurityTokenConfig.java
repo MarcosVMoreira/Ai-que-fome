@@ -35,7 +35,8 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                         "/**/webjars/springfox-swagger-ui/**",
                         "/**/v2/api-docs/**").permitAll()
                 // substituir /admin/** pela url que eu desejar que seja acessada apenas por admin
-                .antMatchers("/auth/user/**").hasAnyRole("ADMIN", "USER")
+//                .antMatchers("/auth/user/info").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/auth/user/token/**").permitAll()
                 .anyRequest().authenticated();
     }
 

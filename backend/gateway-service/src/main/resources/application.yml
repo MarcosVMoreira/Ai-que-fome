@@ -15,7 +15,7 @@ eureka:
 
 zuul:
   sensitive-headers: Cookie
-
+  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
 jwt:
   config:
     login-url: /auth/login

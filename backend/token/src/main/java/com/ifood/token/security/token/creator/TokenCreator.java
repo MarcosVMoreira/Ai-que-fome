@@ -1,7 +1,7 @@
 package com.ifood.token.security.token.creator;
 
-import com.ifood.core.entity.ApplicationUser;
 import com.ifood.core.property.JwtConfiguration;
+import com.ifood.token.security.entity.ApplicationUser;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.DirectEncrypter;
 import com.nimbusds.jose.crypto.RSASSASigner;

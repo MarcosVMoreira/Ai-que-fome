@@ -1,7 +1,7 @@
 package com.ifood.customer.endpoint.model.mapper;
 
-import com.ifood.core.entity.Customer;
-import com.ifood.customer.endpoint.model.DTO.CustomerDTO;
+import com.ifood.customer.endpoint.model.entity.Customer;
+import com.ifood.customer.endpoint.model.dto.CustomerDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
