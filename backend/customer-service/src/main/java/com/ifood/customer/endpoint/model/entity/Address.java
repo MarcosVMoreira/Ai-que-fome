@@ -2,7 +2,7 @@ package com.ifood.customer.endpoint.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
@@ -13,8 +13,9 @@ import java.util.List;
 @Data
 @Document
 @AllArgsConstructor
-@NoArgsConstructor
 public class Address {
+
+    private String id;
 
     @NotEmpty(message = "The field 'streetName' is mandatory")
     private String streetName;
@@ -46,5 +47,24 @@ public class Address {
     private String complement;
 
     private String refPoint;
+
+    public Address () {
+        id = new ObjectId().toString();
+    }
+
+    public Address (@NotEmpty(message = "The field 'streetName' is mandatory") String streetName, @NotNull(message = "The field 'streetNumber' is mandatory") Long streetNumber, @NotEmpty(message = "The field 'district' is mandatory") String district, @NotEmpty(message = "The field 'city' is mandatory") String city, @NotEmpty(message = "The field 'neighborhood' is mandatory") String neighborhood, @NotEmpty(message = "The field 'country' is mandatory") String country, @NotEmpty(message = "The field 'postalCode' is mandatory") @Size(max = 8, message = "Wrong size for field 'postalCode'") @Size(min = 8, message = "Wrong size for field 'postalCode'") String postalCode, List<String> coordinates, boolean favorite, String complement, String refPoint) {
+        this.id = id;
+        this.streetName = streetName;
+        this.streetNumber = streetNumber;
+        this.district = district;
+        this.city = city;
+        this.neighborhood = neighborhood;
+        this.country = country;
+        this.postalCode = postalCode;
+        this.coordinates = coordinates;
+        this.favorite = favorite;
+        this.complement = complement;
+        this.refPoint = refPoint;
+    }
 
 }
