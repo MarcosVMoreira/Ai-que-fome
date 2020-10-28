@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
@@ -38,9 +39,10 @@ public class CustomerServiceImpl implements CustomerService {
     private AddressMapper addressMapper;
 
     @Autowired
-    public CustomerServiceImpl (CustomerRepository customerRepository, CustomerMapper customerMapper) {
+    public CustomerServiceImpl (CustomerRepository customerRepository, CustomerMapper customerMapper, AddressMapper addressMapper) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
+        this.addressMapper = addressMapper;
     }
 
     @Override
@@ -212,6 +214,4 @@ public class CustomerServiceImpl implements CustomerService {
             customerRepository.save(customer.get());
         }
     }
-
-
 }

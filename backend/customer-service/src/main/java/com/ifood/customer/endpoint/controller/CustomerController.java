@@ -81,4 +81,18 @@ public class CustomerController {
         return customerServiceImpl.getAddressById(customerId, addressId);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{customerId}/address/{addressId}")
+    public CustomerDTO updateAddress (@PathVariable String customerId,
+                                  @PathVariable String addressId,
+                                     @Valid @RequestBody AddressDTO addressDTO) {
+        return customerServiceImpl.updateAddress(customerId, addressId, addressDTO);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{customerId}/address/{addressId}")
+    public void deleteAddress (@PathVariable String customerId,
+                               @PathVariable String addressId) {
+        customerServiceImpl.deleteAddress(customerId, addressId);
+    }
 }

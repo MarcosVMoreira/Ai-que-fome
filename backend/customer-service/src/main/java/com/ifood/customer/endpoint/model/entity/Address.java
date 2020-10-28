@@ -53,7 +53,6 @@ public class Address {
     }
 
     public Address (@NotEmpty(message = "The field 'streetName' is mandatory") String streetName, @NotNull(message = "The field 'streetNumber' is mandatory") Long streetNumber, @NotEmpty(message = "The field 'district' is mandatory") String district, @NotEmpty(message = "The field 'city' is mandatory") String city, @NotEmpty(message = "The field 'neighborhood' is mandatory") String neighborhood, @NotEmpty(message = "The field 'country' is mandatory") String country, @NotEmpty(message = "The field 'postalCode' is mandatory") @Size(max = 8, message = "Wrong size for field 'postalCode'") @Size(min = 8, message = "Wrong size for field 'postalCode'") String postalCode, List<String> coordinates, boolean favorite, String complement, String refPoint) {
-        this.id = id;
         this.streetName = streetName;
         this.streetNumber = streetNumber;
         this.district = district;
@@ -67,4 +66,13 @@ public class Address {
         this.refPoint = refPoint;
     }
 
+    public Address (@NotEmpty(message = "The field 'streetName' is mandatory") String streetName, @NotNull(message = "The field 'streetNumber' is mandatory") Long streetNumber, @NotEmpty(message = "The field 'district' is mandatory") String district, @NotEmpty(message = "The field 'city' is mandatory") String city, @NotEmpty(message = "The field 'neighborhood' is mandatory") String neighborhood, @NotEmpty(message = "The field 'country' is mandatory") String country, @NotEmpty(message = "The field 'postalCode' is mandatory") @Size(max = 8, message = "Wrong size for field 'postalCode'") @Size(min = 8, message = "Wrong size for field 'postalCode'") String postalCode) {
+        this.streetName = streetName;
+        this.streetNumber = streetNumber;
+        this.district = district;
+        this.city = city;
+        this.neighborhood = neighborhood;
+        this.country = country;
+        this.postalCode = postalCode;
+    }
 }
