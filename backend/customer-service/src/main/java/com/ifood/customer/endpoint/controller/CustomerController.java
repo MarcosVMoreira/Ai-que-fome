@@ -1,5 +1,6 @@
 package com.ifood.customer.endpoint.controller;
 
+import com.ifood.customer.endpoint.model.dto.AddressDTO;
 import com.ifood.customer.endpoint.model.dto.CustomerDTO;
 import com.ifood.customer.endpoint.service.CustomerServiceImpl;
 import io.swagger.annotations.Api;
@@ -61,6 +62,23 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete (@PathVariable String id) {
         customerServiceImpl.delete(id);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{customerId}/address/")
+    public ResponseEntity<Void> saveAddress (@PathVariable String customerId,
+                                             @Valid @RequestBody AddressDTO addressDTO,
+                                      UriComponentsBuilder componentsBuilder) {
+        CustomerDTO customer = customerServiceImpl.saveAddress(customerId, addressDTO);
+        return ResponseEntity.created(componentsBuilder.path("customer/customers/{id}").
+                buildAndExpand(customer.getId()).toUri()).build();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{customerId}/address/{addressId}")
+    public AddressDTO getAddress (@PathVariable String customerId,
+                                            @PathVariable String addressId) {
+        return customerServiceImpl.getAddressById(customerId, addressId);
     }
 
 }
