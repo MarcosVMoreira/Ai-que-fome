@@ -1,32 +1,29 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  CircularProgress,
   Dialog,
   DialogContent,
   Grid,
   Hidden,
   IconButton,
   InputBase,
-  Menu,
-  MenuItem,
   Slide,
   withWidth,
 } from '@material-ui/core';
 import {
   BookmarkBorderRounded,
   CloseRounded,
-  MoreVertRounded,
+  LocationOn,
   Search,
 } from '@material-ui/icons';
 
+import PlacesAutocomplete from 'react-places-autocomplete';
+
 import * as actions from '../../store/actions/index';
 import classes from './AddressModal.module.scss';
+import { AddressCard } from '../UI/Card/Card';
+import { Spinner } from '../UI/Spinner/Spinner';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
@@ -34,10 +31,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export const AddressModal = withWidth()(props => {
   const [searchAddress, setSearchAddress] = useState('');
-  const [addressError, setAddressError] = useState({ show: false, ended: 0 });
-  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [userAddressError, setUserAddressError] = useState({
+    show: false,
+    ended: 0,
+  });
 
-  const addresses = useSelector(state => state.customer.addresses);
+  const userAddresses = useSelector(state => state.customer.addresses);
   const error = useSelector(state => state.customer.error);
   const loading = useSelector(state => state.customer.loading);
 
@@ -48,44 +47,46 @@ export const AddressModal = withWidth()(props => {
   );
 
   useEffect(() => {
-    setAddressError({ show: false, ended: 0 });
+    setSearchAddress('');
+    setUserAddressError({ show: false, ended: 0 });
     onCustomerAddress();
   }, [props.address, onCustomerAddress]);
 
-  const handleSearchAddress = event => setSearchAddress(event.target.value);
+  const handleSearchAddress = address => {
+    setSearchAddress(address);
+  };
+
+  const handleSelect = address => {
+    console.log(address);
+  };
 
   const handleExit = () => {
-    setAddressError(false);
+    setSearchAddress('');
+    setUserAddressError(false);
 
     if (!props.address) {
-      setAddressError({ show: true, ended: 1 });
+      setUserAddressError({ show: true, ended: 1 });
     } else {
       props.handleModal(false);
     }
   };
 
-  const handleOpenMenu = event => {
-    setMenuAnchor(event.currentTarget);
-  };
+  const handleNewAddress = () => {};
 
-  const handleCloseMenu = () => {
-    setMenuAnchor(null);
-  };
-
-  let userAddressError;
+  let errorBlock;
   error === 401 &&
-    (userAddressError = (
+    (errorBlock = (
       <div className={classes.modal_subtitle}>
         Erro ao obter os endereços, tente novamente mais tarde
       </div>
     ));
 
-  addressError.show &&
-    (userAddressError = (
+  userAddressError.show &&
+    (errorBlock = (
       <div
         className={classes.modal_subtitle}
-        shake={addressError.ended}
-        onAnimationEnd={() => setAddressError({ show: true, ended: 0 })}
+        shake={userAddressError.ended}
+        onAnimationEnd={() => setUserAddressError({ show: true, ended: 0 })}
       >
         Defina ao menos um endereço de entrega!
       </div>
@@ -103,6 +104,7 @@ export const AddressModal = withWidth()(props => {
       fullWidth
       fullScreen={props.width === 'xs'}
       maxWidth={'sm'}
+      className={classes.modal}
     >
       <Hidden smUp>
         <Grid container justify="flex-start">
@@ -117,82 +119,86 @@ export const AddressModal = withWidth()(props => {
           Onde você quer receber seu pedido?
         </div>
       </Grid>
+
       <Grid container justify="center" item sm={12}>
-        {userAddressError}
+        {errorBlock}
       </Grid>
 
       <DialogContent>
-        <InputBase
-          className={classes.modal_input}
-          name="search"
-          placeholder="Buscar endereço"
+        <PlacesAutocomplete
           value={searchAddress}
           onChange={handleSearchAddress}
-          startAdornment={<Search className={classes.modal_input__icon} />}
-        />
+          onSelect={handleSelect}
+          debounce={1000}
+          searchOptions={{
+            // eslint-disable-next-line
+            location: new google.maps.LatLng(-21, -46),
+            radius: 2000,
+            types: ['address'],
+          }}
+        >
+          {({ getInputProps, suggestions, loading }) => (
+            <Fragment>
+              <InputBase
+                name="search"
+                startAdornment={
+                  <Search className={classes.modal_input__icon} />
+                }
+                {...getInputProps({
+                  placeholder: 'Buscar endereço',
+                  className: `${classes.modal_input}`,
+                })}
+              />
 
-        {loading ? (
-          <Grid container justify="center">
-            <Box mx="auto" mb={2}>
-              <CircularProgress />
-            </Box>
-          </Grid>
-        ) : (
-          addresses.map((address, index) => (
-            <Card
-              key={index}
-              variant="outlined"
-              className={`${classes.modal_card} ${
-                props.address?.streetName === address.streetName &&
-                classes.modal_card__selected
-              }`}
-            >
-              <CardActionArea onClick={() => props.handleAddress(address)}>
-                <CardContent className={classes.modal_actions}>
-                  <Grid container alignItems="center">
-                    <Grid item xs={2} sm={1}>
-                      <BookmarkBorderRounded />
-                    </Grid>
+              {loading ? (
+                <Spinner />
+              ) : (
+                suggestions.map(({ formattedSuggestion, placeId }) => {
+                  const main = formattedSuggestion.mainText.split(',');
+                  const secondary = formattedSuggestion.secondaryText.split(
+                    /[/,,-]+/,
+                  );
 
-                    <Grid item xs={10} sm={11} container direction="column">
-                      <Grid>
-                        <span className={classes.modal_card__title}>
-                          {address.streetName}, {address.streetNumber}
-                        </span>
-                      </Grid>
-                      <Grid>
-                        <span className={classes.modal_card__subtitle}>
-                          {address.complement ? `${address.complement},` : ''}
-                          {address.neighborhood}, {address.city} -{' '}
-                          {address.district}
-                        </span>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </CardActionArea>
+                  return (
+                    <Fragment key={placeId}>
+                      <AddressCard
+                        address={{
+                          streetName: main[0].trim(),
+                          streetNumber: main[1]?.trim(),
+                          neighborhood: secondary[0].trim(),
+                          city: secondary[1]?.trim(),
+                          district: secondary[2]?.trim(),
+                        }}
+                        handleClick={handleNewAddress}
+                        menu={false}
+                      >
+                        <LocationOn />
+                      </AddressCard>
+                    </Fragment>
+                  );
+                })
+              )}
+            </Fragment>
+          )}
+        </PlacesAutocomplete>
 
-              <IconButton onClick={handleOpenMenu}>
-                <MoreVertRounded />
-              </IconButton>
-
-              <Menu
-                anchorEl={menuAnchor}
-                keepMounted
-                open={Boolean(menuAnchor)}
-                onClose={handleCloseMenu}
-              >
-                <MenuItem onClick={() => props.handleEditAddress(index)}>
-                  Editar
-                </MenuItem>
-
-                <MenuItem onClick={() => props.handleRemoveAddress(index)}>
-                  Excluir
-                </MenuItem>
-              </Menu>
-            </Card>
-          ))
-        )}
+        {!searchAddress &&
+          (loading ? (
+            <Spinner />
+          ) : (
+            userAddresses.map((address, index) => (
+              <Fragment key={index}>
+                <AddressCard
+                  address={address}
+                  handleClick={() => props.handleAddress(address)}
+                  menu={true}
+                  selected={props.address}
+                >
+                  <BookmarkBorderRounded />
+                </AddressCard>
+              </Fragment>
+            ))
+          ))}
       </DialogContent>
     </Dialog>
   );

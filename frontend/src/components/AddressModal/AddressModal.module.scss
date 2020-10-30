@@ -43,7 +43,7 @@
   &_input {
     width: 100%;
     padding: 8px;
-    margin: 8px 0 32px 0;
+    margin: 8px 0;
     border-radius: 24px;
     background-color: #e0e0e0;
     font-size: 0.875rem;
@@ -57,35 +57,31 @@
     }
   }
 
-  &_card {
+  &_suggestions {
+    padding: 32px;
+    border: 1px solid black;
     display: flex;
-    align-items: center;
-    margin: 10px 0;
+    flex-direction: column;
 
-    &:last-child {
-      margin-bottom: 32px;
-    }
-
-    &:hover {
-      color: #3e3e3e;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05),
-        0px 4px 16px rgba(0, 0, 0, 0.08);
-      border-color: transparent;
-      background-color: #fff !important;
-    }
-
-    &__title {
-      font-size: 1.25em;
-      color: #444;
+    &_main {
+      font-size: 0.9em;
       font-weight: 700;
     }
 
-    &__subtitle {
-      color: #888;
+    &_secondary {
+      font-size: 0.8em;
+      font-weight: 100;
+      color: #aaa;
     }
+  }
 
-    &__selected {
-      border-color: rgba(234, 29, 44, 1) !important;
+  &_skeleton {
+    margin-bottom: 10px;
+    border-radius: 4px;
+    height: 68px !important;
+
+    &:last-child {
+      margin-bottom: 32px;
     }
   }
 }
