@@ -1,5 +1,6 @@
 package com.ifood.customer.endpoint.controller;
 
+import com.ifood.customer.endpoint.model.dto.AddressDTO;
 import com.ifood.customer.endpoint.model.dto.CustomerDTO;
 import com.ifood.customer.endpoint.service.CustomerServiceImpl;
 import io.swagger.annotations.Api;
@@ -63,4 +64,35 @@ public class CustomerController {
         customerServiceImpl.delete(id);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{customerId}/address/")
+    public ResponseEntity<Void> saveAddress (@PathVariable String customerId,
+                                             @Valid @RequestBody AddressDTO addressDTO,
+                                      UriComponentsBuilder componentsBuilder) {
+        CustomerDTO customer = customerServiceImpl.saveAddress(customerId, addressDTO);
+        return ResponseEntity.created(componentsBuilder.path("customer/customers/{id}").
+                buildAndExpand(customer.getId()).toUri()).build();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{customerId}/address/{addressId}")
+    public AddressDTO getAddress (@PathVariable String customerId,
+                                            @PathVariable String addressId) {
+        return customerServiceImpl.getAddressById(customerId, addressId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{customerId}/address/{addressId}")
+    public CustomerDTO updateAddress (@PathVariable String customerId,
+                                  @PathVariable String addressId,
+                                     @Valid @RequestBody AddressDTO addressDTO) {
+        return customerServiceImpl.updateAddress(customerId, addressId, addressDTO);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{customerId}/address/{addressId}")
+    public void deleteAddress (@PathVariable String customerId,
+                               @PathVariable String addressId) {
+        customerServiceImpl.deleteAddress(customerId, addressId);
+    }
 }

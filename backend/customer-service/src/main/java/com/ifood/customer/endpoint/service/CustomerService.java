@@ -1,6 +1,8 @@
 package com.ifood.customer.endpoint.service;
 
+import com.ifood.customer.endpoint.model.dto.AddressDTO;
 import com.ifood.customer.endpoint.model.dto.CustomerDTO;
+import com.ifood.customer.endpoint.model.entity.Address;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,4 +24,13 @@ public interface CustomerService {
 
     CustomerDTO update (CustomerDTO customerDTO, String id);
 
+    CustomerDTO saveAddress (String idCustomer, @Valid @RequestBody AddressDTO address);
+
+    List<AddressDTO> listAllAddress (String idCustomer);
+
+    AddressDTO getAddressById (String idCustomer, String idAddress);
+
+    CustomerDTO updateAddress (String idCustomer, String idAddress, @Valid @RequestBody AddressDTO address);
+
+    void deleteAddress (String idCustomer, String idAddress);
 }
