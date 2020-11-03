@@ -17,9 +17,9 @@
 }
 
 .modal {
+  margin-top: 8px;
+
   &_title {
-    margin-top: 16px;
-    font-size: 1.25rem;
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
     font-weight: 500;
     line-height: 1.6;
@@ -40,38 +40,11 @@
     animation: shake 0.5s 1;
   }
 
-  &_input {
-    width: 100%;
-    padding: 8px;
-    margin: 8px 0;
-    border-radius: 24px;
-    background-color: #e0e0e0;
-    font-size: 0.875rem;
-    font-weight: 500;
-    line-height: 1.75;
-    letter-spacing: 0.02857em;
+  &_addresses {
+    margin: 10px 0;
 
-    &__icon {
-      color: rgba(0, 0, 0, 0.54);
-      margin: 0 10px;
-    }
-  }
-
-  &_suggestions {
-    padding: 32px;
-    border: 1px solid black;
-    display: flex;
-    flex-direction: column;
-
-    &_main {
-      font-size: 0.9em;
-      font-weight: 700;
-    }
-
-    &_secondary {
-      font-size: 0.8em;
-      font-weight: 100;
-      color: #aaa;
+    &:last-child {
+      margin-bottom: 32px;
     }
   }
 

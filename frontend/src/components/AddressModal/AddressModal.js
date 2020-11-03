@@ -7,30 +7,32 @@ import {
   Grid,
   Hidden,
   IconButton,
-  InputBase,
   Slide,
   withWidth,
 } from '@material-ui/core';
 import {
   BookmarkBorderRounded,
   CloseRounded,
-  LocationOn,
-  Search,
+  KeyboardArrowLeftRounded,
 } from '@material-ui/icons';
-
-import PlacesAutocomplete from 'react-places-autocomplete';
 
 import * as actions from '../../store/actions/index';
 import classes from './AddressModal.module.scss';
-import { AddressCard } from '../UI/Card/Card';
 import { Spinner } from '../UI/Spinner/Spinner';
+import { AddressCard } from '../UI/Card/Card';
+import { AddressSearch } from '../AddressSearch/AddressSearch';
+import { AddressForm } from '../AddressForm/AddressForm';
+import { geocodeByPlaceId } from 'react-places-autocomplete';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
 export const AddressModal = withWidth()(props => {
-  const [searchAddress, setSearchAddress] = useState('');
+  const [searchAddress, setSearchAddress] = useState({
+    value: '',
+    submitted: false,
+  });
   const [userAddressError, setUserAddressError] = useState({
     show: false,
     ended: 0,
@@ -47,21 +49,23 @@ export const AddressModal = withWidth()(props => {
   );
 
   useEffect(() => {
-    setSearchAddress('');
+    setSearchAddress({ value: '', submitted: false });
     setUserAddressError({ show: false, ended: 0 });
     onCustomerAddress();
   }, [props.address, onCustomerAddress]);
 
   const handleSearchAddress = address => {
-    setSearchAddress(address);
+    setSearchAddress({ value: address, submitted: false });
   };
 
-  const handleSelect = address => {
-    console.log(address);
+  const handleSelect = (address, placeId) => {
+    geocodeByPlaceId(placeId).then(res =>
+      setSearchAddress({ value: res[0], submitted: true }),
+    );
   };
 
   const handleExit = () => {
-    setSearchAddress('');
+    setSearchAddress({ value: '', submitted: false });
     setUserAddressError(false);
 
     if (!props.address) {
@@ -71,7 +75,9 @@ export const AddressModal = withWidth()(props => {
     }
   };
 
-  const handleNewAddress = () => {};
+  const handleReset = () => {
+    setSearchAddress({ value: '', submitted: false });
+  };
 
   let errorBlock;
   error === 401 &&
@@ -92,6 +98,54 @@ export const AddressModal = withWidth()(props => {
       </div>
     ));
 
+  let contentBlock;
+  !searchAddress.value &&
+    !searchAddress.submitted &&
+    (contentBlock = (
+      <Fragment>
+        <AddressSearch
+          searchAddress={searchAddress.value}
+          handleSearchAddress={handleSearchAddress}
+          handleSelect={handleSelect}
+        />
+        {loading ? (
+          <Spinner />
+        ) : (
+          userAddresses.map(address => (
+            <div className={classes.modal_addresses} key={address.id}>
+              <AddressCard
+                address={address}
+                handleClick={() => props.handleAddress(address)}
+                menu={true}
+                selected={props.address}
+              >
+                <BookmarkBorderRounded />
+              </AddressCard>
+            </div>
+          ))
+        )}
+      </Fragment>
+    ));
+
+  searchAddress.value &&
+    !searchAddress.submitted &&
+    (contentBlock = (
+      <AddressSearch
+        searchAddress={searchAddress.value}
+        handleSearchAddress={handleSearchAddress}
+        handleSelect={handleSelect}
+      />
+    ));
+
+  searchAddress.value &&
+    searchAddress.submitted &&
+    (contentBlock = (
+      <AddressForm
+        address={searchAddress.value}
+        handleClick={address => props.handleAddress(address)}
+      />
+    ));
+
   return (
     <Dialog
       open={props.modal}
@@ -104,102 +158,34 @@ export const AddressModal = withWidth()(props => {
       fullWidth
       fullScreen={props.width === 'xs'}
       maxWidth={'sm'}
-      className={classes.modal}
     >
-      <Hidden smUp>
-        <Grid container justify="flex-start">
-          <IconButton onClick={handleExit}>
-            <CloseRounded />
-          </IconButton>
+      <Grid container alignItems="center" className={classes.modal}>
+        <Grid item xs>
+          {searchAddress.submitted && (
+            <IconButton onClick={handleReset}>
+              <KeyboardArrowLeftRounded />
+            </IconButton>
+          )}
         </Grid>
-      </Hidden>
 
-      <Grid container justify="center" item sm={12}>
-        <div className={classes.modal_title}>
+        <Grid item xs={8} className={classes.modal_title}>
           Onde você quer receber seu pedido?
-        </div>
+        </Grid>
+
+        <Grid item xs>
+          <Hidden smUp>
+            <IconButton onClick={handleExit}>
+              <CloseRounded />
+            </IconButton>
+          </Hidden>
+        </Grid>
       </Grid>
 
       <Grid container justify="center" item sm={12}>
         {errorBlock}
       </Grid>
 
-      <DialogContent>
-        <PlacesAutocomplete
-          value={searchAddress}
-          onChange={handleSearchAddress}
-          onSelect={handleSelect}
-          debounce={1000}
-          searchOptions={{
-            // eslint-disable-next-line
-            location: new google.maps.LatLng(-21, -46),
-            radius: 2000,
-            types: ['address'],
-          }}
-        >
-          {({ getInputProps, suggestions, loading }) => (
-            <Fragment>
-              <InputBase
-                name="search"
-                startAdornment={
-                  <Search className={classes.modal_input__icon} />
-                }
-                {...getInputProps({
-                  placeholder: 'Buscar endereço',
-                  className: `${classes.modal_input}`,
-                })}
-              />
-
-              {loading ? (
-                <Spinner />
-              ) : (
-                suggestions.map(({ formattedSuggestion, placeId }) => {
-                  const main = formattedSuggestion.mainText.split(',');
-                  const secondary = formattedSuggestion.secondaryText.split(
-                    /[/,,-]+/,
-                  );
-
-                  return (
-                    <Fragment key={placeId}>
-                      <AddressCard
-                        address={{
-                          streetName: main[0].trim(),
-                          streetNumber: main[1]?.trim(),
-                          neighborhood: secondary[0].trim(),
-                          city: secondary[1]?.trim(),
-                          district: secondary[2]?.trim(),
-                        }}
-                        handleClick={handleNewAddress}
-                        menu={false}
-                      >
-                        <LocationOn />
-                      </AddressCard>
-                    </Fragment>
-                  );
-                })
-              )}
-            </Fragment>
-          )}
-        </PlacesAutocomplete>
-
-        {!searchAddress &&
-          (loading ? (
-            <Spinner />
-          ) : (
-            userAddresses.map((address, index) => (
-              <Fragment key={index}>
-                <AddressCard
-                  address={address}
-                  handleClick={() => props.handleAddress(address)}
-                  menu={true}
-                  selected={props.address}
-                >
-                  <BookmarkBorderRounded />
-                </AddressCard>
-              </Fragment>
-            ))
-          ))}
-      </DialogContent>
+      <DialogContent>{contentBlock}</DialogContent>
     </Dialog>
   );
 });

@@ -33,6 +33,7 @@ export const Home = () => {
   const handleSearch = event => setSearch(event.target.value);
 
   const handleAddress = address => {
+    console.log(address);
     localStorage.setItem('IFOOD_address', JSON.stringify(address));
     setModal(false);
     setAddress(address);

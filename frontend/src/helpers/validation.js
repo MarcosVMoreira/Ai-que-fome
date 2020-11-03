@@ -13,6 +13,11 @@ export const validateName = name => {
   return re.test(name.toLowerCase());
 };
 
+export const validateNumber = number => {
+  const re = /^\d+$/;
+  return re.test(number.toLowerCase());
+};
+
 export const validateDocument = document => {
   const re = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
   return re.test(document);

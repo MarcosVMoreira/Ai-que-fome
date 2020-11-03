@@ -58,10 +58,13 @@ export const authPassword = payload => {
       .post('/auth/login', authData)
       .then(res => {
         const token = res.headers.authorization.replace('Bearer ', '');
-        localStorage.setItem('IFOOD_token', token);
-        localStorage.setItem('IFOOD_email', payload.email);
+        axios.get(`/customer/customers/email/${payload.email}`).then(res => {
+          localStorage.setItem('IFOOD_token', token);
+          localStorage.setItem('IFOOD_email', payload.email);
+          localStorage.setItem('IFOOD_udid', res.data.id);
 
-        dispatch(authPasswordSuccess({ token: token }));
+          dispatch(authPasswordSuccess({ token: token }));
+        });
       })
       .catch(err => {
         dispatch(authPasswordFail({ error: err.response.status }));
