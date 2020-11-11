@@ -64,11 +64,13 @@ public class CustomerController {
         customerServiceImpl.delete(id);
     }
 
+    /****************** BEGIN ADDRESS ENDPOINTS ******************/
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{customerId}/address/")
     public ResponseEntity<Void> saveAddress (@PathVariable String customerId,
                                              @Valid @RequestBody AddressDTO addressDTO,
-                                      UriComponentsBuilder componentsBuilder) {
+                                             UriComponentsBuilder componentsBuilder) {
         CustomerDTO customer = customerServiceImpl.saveAddress(customerId, addressDTO);
         return ResponseEntity.created(componentsBuilder.path("customer/customers/{id}").
                 buildAndExpand(customer.getId()).toUri()).build();
@@ -77,15 +79,15 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{customerId}/address/{addressId}")
     public AddressDTO getAddress (@PathVariable String customerId,
-                                            @PathVariable String addressId) {
+                                  @PathVariable String addressId) {
         return customerServiceImpl.getAddressById(customerId, addressId);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{customerId}/address/{addressId}")
     public CustomerDTO updateAddress (@PathVariable String customerId,
-                                  @PathVariable String addressId,
-                                     @Valid @RequestBody AddressDTO addressDTO) {
+                                      @PathVariable String addressId,
+                                      @Valid @RequestBody AddressDTO addressDTO) {
         return customerServiceImpl.updateAddress(customerId, addressId, addressDTO);
     }
 
@@ -95,4 +97,8 @@ public class CustomerController {
                                @PathVariable String addressId) {
         customerServiceImpl.deleteAddress(customerId, addressId);
     }
+
+    /****************** END ADDRESS ENDPOINTS ******************/
+
+
 }
