@@ -135,14 +135,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO saveAddress (String customerId, @Valid AddressDTO address) {
+    public CustomerDTO saveAddress (String customerId, @Valid AddressDTO addressDTO) {
 
         Optional<Customer> customer = customerRepository.findById(customerId);
+
+        addressDTO.setId(new Address().getId());
 
         if (customer.isPresent()) {
             customer.get()
                     .getAddresses()
-                    .add(addressMapper.addressDTOToAddress(address));
+                    .add(addressMapper.addressDTOToAddress(addressDTO));
             return customerMapper.customerToCustomerDTO(customerRepository.save(customer.get()));
         }
 
