@@ -25,7 +25,6 @@ public class CustomerDTO {
     @NotEmpty(message = "422.002")
     private String taxPayerIdentificationNumber;
 
-    @NotEmpty(message = "422.002")
     private List<Address> addresses;
 
 }

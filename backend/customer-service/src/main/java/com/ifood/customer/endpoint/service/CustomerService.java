@@ -24,7 +24,7 @@ public interface CustomerService {
 
     CustomerDTO update (CustomerDTO customerDTO, String id);
 
-    CustomerDTO saveAddress (String idCustomer, @Valid @RequestBody AddressDTO address);
+    List<String> saveAddress (String idCustomer, @Valid @RequestBody AddressDTO address);
 
     List<AddressDTO> listAllAddress (String idCustomer);
 

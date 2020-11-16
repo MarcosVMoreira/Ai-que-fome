@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("customers")
@@ -69,9 +70,9 @@ public class CustomerController {
     public ResponseEntity<Void> saveAddress (@PathVariable String customerId,
                                              @Valid @RequestBody AddressDTO addressDTO,
                                       UriComponentsBuilder componentsBuilder) {
-        CustomerDTO customer = customerServiceImpl.saveAddress(customerId, addressDTO);
-        return ResponseEntity.created(componentsBuilder.path("customer/customers/{id}").
-                buildAndExpand(customer.getId()).toUri()).build();
+        List<String> list = customerServiceImpl.saveAddress(customerId, addressDTO);
+        return ResponseEntity.created(componentsBuilder.path("customer/customers/"+list.get(0)+"/address/{id}").
+                buildAndExpand(list.get(1)).toUri()).build();
     }
 
     @ResponseStatus(HttpStatus.OK)
