@@ -37,7 +37,7 @@ const authPasswordSuccess = (state, payload) => ({
   ...state,
   error: null,
   loading: false,
-  token: payload.accessToken,
+  token: payload.token,
   authenticated: true,
 });
 

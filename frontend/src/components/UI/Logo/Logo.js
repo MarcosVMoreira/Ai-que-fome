@@ -9,7 +9,7 @@ export const Logo = props => (
     <img
       src={logo}
       alt="ifood clone logo"
-      className={classes.logo}
+      className={props.header ? classes.toolbar : classes.logo}
       onClick={props.handleReset}
     />
   </Grid>

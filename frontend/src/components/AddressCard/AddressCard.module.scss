@@ -1,0 +1,26 @@
+.card {
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    color: #3e3e3e;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05),
+      0px 4px 16px rgba(0, 0, 0, 0.08);
+    border-color: transparent;
+    background-color: #fff !important;
+  }
+
+  &_title {
+    font-size: 1.25em;
+    color: #444;
+    font-weight: 700;
+  }
+
+  &_subtitle {
+    color: #888;
+  }
+
+  &_selected {
+    border-color: rgba(234, 29, 44, 1) !important;
+  }
+}

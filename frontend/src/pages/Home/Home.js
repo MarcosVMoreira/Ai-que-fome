@@ -1,5 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { Navbar } from '../../components/UI/Navbar/Navbar';
 
 export const Home = () => {
-  return <div>Hello iFood!</div>;
+  return (
+    <Fragment>
+      <div>
+        <Navbar />
+      </div>
+      <div>Home!</div>
+    </Fragment>
+  );
 };
