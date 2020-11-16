@@ -4,7 +4,6 @@ const initialState = {
   error: null,
   loading: false,
   addresses: [],
-  postalCode: null,
 };
 
 const customerAddressStart = state => ({
@@ -25,19 +24,52 @@ const customerAddressFail = (state, payload) => ({
   loading: false,
 });
 
-const viaCepStart = state => ({
+const customerNewAddressStart = state => ({
   ...state,
   loading: true,
 });
 
-const viaCepSuccess = (state, payload) => ({
+const customerNewAddressSuccess = state => ({
   ...state,
   error: null,
   loading: false,
-  postalCode: payload.postalCode,
 });
 
-const viaCepFail = (state, payload) => ({
+const customerNewAddressFail = (state, payload) => ({
+  ...state,
+  error: payload.error,
+  loading: false,
+});
+
+const customerEditAddressStart = state => ({
+  ...state,
+  loading: true,
+});
+
+const customerEditAddressSuccess = state => ({
+  ...state,
+  error: null,
+  loading: false,
+});
+
+const customerEditAddressFail = (state, payload) => ({
+  ...state,
+  error: payload.error,
+  loading: false,
+});
+
+const customerRemoveAddressStart = state => ({
+  ...state,
+  loading: true,
+});
+
+const customerRemoveAddressSuccess = state => ({
+  ...state,
+  error: null,
+  loading: false,
+});
+
+const customerRemoveAddressFail = (state, payload) => ({
   ...state,
   error: payload.error,
   loading: false,
@@ -51,12 +83,24 @@ const reducer = (state = initialState, { type, payload }) => {
       return customerAddressSuccess(state, payload);
     case actionTypes.CUSTOMER_ADDRESS_FAIL:
       return customerAddressFail(state, payload);
-    case actionTypes.VIACEP_START:
-      return viaCepStart(state);
-    case actionTypes.VIACEP_SUCCESS:
-      return viaCepSuccess(state, payload);
-    case actionTypes.VIACEP_FAIL:
-      return viaCepFail(state, payload);
+    case actionTypes.CUSTOMER_NEW_ADDRESS_START:
+      return customerNewAddressStart(state);
+    case actionTypes.CUSTOMER_NEW_ADDRESS_SUCCESS:
+      return customerNewAddressSuccess(state);
+    case actionTypes.CUSTOMER_NEW_ADDRESS_FAIL:
+      return customerNewAddressFail(state, payload);
+    case actionTypes.CUSTOMER_EDIT_ADDRESS_START:
+      return customerEditAddressStart(state);
+    case actionTypes.CUSTOMER_EDIT_ADDRESS_SUCCESS:
+      return customerEditAddressSuccess(state);
+    case actionTypes.CUSTOMER_EDIT_ADDRESS_FAIL:
+      return customerEditAddressFail(state, payload);
+    case actionTypes.CUSTOMER_REMOVE_ADDRESS_START:
+      return customerRemoveAddressStart(state);
+    case actionTypes.CUSTOMER_REMOVE_ADDRESS_SUCCESS:
+      return customerRemoveAddressSuccess(state);
+    case actionTypes.CUSTOMER_REMOVE_ADDRESS_FAIL:
+      return customerRemoveAddressFail(state, payload);
     default:
       return state;
   }

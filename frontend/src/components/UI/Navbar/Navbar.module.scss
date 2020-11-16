@@ -1,0 +1,37 @@
+.navbar {
+  &_input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 24px;
+    background-color: #e0e0e0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.75;
+    letter-spacing: 0.02857em;
+
+    &__icon {
+      color: rgba(0, 0, 0, 0.54);
+      margin: 0 10px;
+    }
+  }
+
+  &_modal {
+    width: 100% !important;
+  }
+
+  &_fab {
+    box-shadow: none !important;
+    color: rgba(0, 0, 0, 0.54) !important;
+
+    &__icon {
+      margin-right: 10px;
+    }
+
+    &__text {
+      width: 85%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

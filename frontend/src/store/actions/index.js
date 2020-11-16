@@ -6,4 +6,9 @@ export {
   authCheckState,
 } from './auth';
 export { signUp, signUpReset } from './signup';
-export { customerAddress, viaCep } from './customer';
+export {
+  customerAddress,
+  customerNewAddress,
+  customerEditAddress,
+  customerRemoveAddress,
+} from './customer';

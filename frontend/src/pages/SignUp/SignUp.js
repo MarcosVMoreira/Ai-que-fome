@@ -32,12 +32,8 @@ export const SignUp = props => {
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
-  const onSignUp = form => {
-    return dispatch(actions.signUp(form));
-  };
-  const onErrorReset = () => {
-    return dispatch(actions.errorReset());
-  };
+  const onSignUp = form => dispatch(actions.signUp(form));
+  const onErrorReset = () => dispatch(actions.errorReset());
 
   /* React State Hooks (if the user tried to Login using a non-existing mail
     we initialize the form with the attempted mail) */

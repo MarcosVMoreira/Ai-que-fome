@@ -19,7 +19,7 @@ import {
 import * as actions from '../../store/actions/index';
 import classes from './AddressModal.module.scss';
 import { Spinner } from '../UI/Spinner/Spinner';
-import { AddressCard } from '../UI/Card/Card';
+import { AddressCard } from '../AddressCard/AddressCard';
 import { AddressSearch } from '../AddressSearch/AddressSearch';
 import { AddressForm } from '../AddressForm/AddressForm';
 import { geocodeByPlaceId } from 'react-places-autocomplete';
@@ -36,7 +36,12 @@ export const AddressModal = withWidth()(props => {
   const [userAddressError, setUserAddressError] = useState({
     show: false,
     ended: 0,
+    message: null,
   });
+
+  const [editAddress, setEditAddress] = useState(null);
+
+  let errorBlock;
 
   const userAddresses = useSelector(state => state.customer.addresses);
   const error = useSelector(state => state.customer.error);
@@ -47,15 +52,27 @@ export const AddressModal = withWidth()(props => {
     () => dispatch(actions.customerAddress()),
     [dispatch],
   );
+  const onRemoveCustomerAddress = addressId =>
+    dispatch(actions.customerRemoveAddress(addressId));
 
   useEffect(() => {
     setSearchAddress({ value: '', submitted: false });
-    setUserAddressError({ show: false, ended: 0 });
+    setUserAddressError({ show: false, ended: 0, message: null });
     onCustomerAddress();
   }, [props.address, onCustomerAddress]);
 
   const handleSearchAddress = address => {
+    setUserAddressError({ show: false, ended: 0, message: null });
     setSearchAddress({ value: address, submitted: false });
+  };
+
+  const handleRemoveAddress = idAddress => {
+    onRemoveCustomerAddress(idAddress);
+  };
+
+  const handleEditAddress = address => {
+    setEditAddress(address);
+    handleSearchAddress(address.streetName);
   };
 
   const handleSelect = (address, placeId) => {
@@ -69,7 +86,11 @@ export const AddressModal = withWidth()(props => {
     setUserAddressError(false);
 
     if (!props.address) {
-      setUserAddressError({ show: true, ended: 1 });
+      setUserAddressError({
+        show: true,
+        ended: 1,
+        message: 'Defina ao menos um endereço de entrega!',
+      });
     } else {
       props.handleModal(false);
     }
@@ -79,7 +100,20 @@ export const AddressModal = withWidth()(props => {
     setSearchAddress({ value: '', submitted: false });
   };
 
-  let errorBlock;
+  const handleError = status => {
+    switch (status) {
+      case 'ZERO_RESULTS':
+        setUserAddressError({
+          show: true,
+          ended: 1,
+          message: 'Nenhum endereço encontrado.',
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
   error === 401 &&
     (errorBlock = (
       <div className={classes.modal_subtitle}>
@@ -92,9 +126,11 @@ export const AddressModal = withWidth()(props => {
       <div
         className={classes.modal_subtitle}
         shake={userAddressError.ended}
-        onAnimationEnd={() => setUserAddressError({ show: true, ended: 0 })}
+        onAnimationEnd={() =>
+          setUserAddressError({ ...userAddressError, show: true, ended: 0 })
+        }
       >
-        Defina ao menos um endereço de entrega!
+        {userAddressError.message}
       </div>
     ));
 
@@ -107,6 +143,7 @@ export const AddressModal = withWidth()(props => {
           searchAddress={searchAddress.value}
           handleSearchAddress={handleSearchAddress}
           handleSelect={handleSelect}
+          handleError={handleError}
         />
         {loading ? (
           <Spinner />
@@ -118,6 +155,8 @@ export const AddressModal = withWidth()(props => {
                 handleClick={() => props.handleAddress(address)}
                 menu={true}
                 selected={props.address}
+                handleEditAddress={id => handleEditAddress(id)}
+                handleRemoveAddress={id => handleRemoveAddress(id)}
               >
                 <BookmarkBorderRounded />
               </AddressCard>
@@ -134,6 +173,7 @@ export const AddressModal = withWidth()(props => {
         searchAddress={searchAddress.value}
         handleSearchAddress={handleSearchAddress}
         handleSelect={handleSelect}
+        handleError={handleError}
       />
     ));
 
@@ -142,7 +182,8 @@ export const AddressModal = withWidth()(props => {
     (contentBlock = (
       <AddressForm
         address={searchAddress.value}
-        handleClick={address => props.handleAddress(address)}
+        handleClick={() => setSearchAddress({ value: '', submitted: false })}
+        editAddressId={editAddress?.id}
       />
     ));
 

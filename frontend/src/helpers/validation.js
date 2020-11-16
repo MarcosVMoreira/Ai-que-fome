@@ -27,3 +27,8 @@ export const validatePhone = phone => {
   const re = /(\(?\d{2}\)?\s)?(\d{4,5}-\d{4})/;
   return re.test(phone.replace(/[ ]/g, ''));
 };
+
+export const validatePostalCode = postalCode => {
+  const re = /^[0-9]{5}-[0-9]{3}$/;
+  return re.test(postalCode);
+};

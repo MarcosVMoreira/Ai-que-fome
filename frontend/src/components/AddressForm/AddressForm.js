@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Grid, Button, TextField, CircularProgress } from '@material-ui/core';
+import InputMask from 'react-input-mask';
 
 import classes from './AddressForm.module.scss';
-import { validateNumber } from '../../helpers/validation';
+import { validateNumber, validatePostalCode } from '../../helpers/validation';
 import * as actions from '../../store/actions/index';
 
-export const AddressForm = ({ address, handleClick }) => {
+export const AddressForm = ({ address, handleClick, editAddressId }) => {
   const getLongInfo = field =>
     address.address_components.find(a => a.types.includes(field))?.long_name ||
     '';
@@ -19,7 +20,8 @@ export const AddressForm = ({ address, handleClick }) => {
   const [form, setForm] = useState({
     city: getLongInfo('administrative_area_level_2') || '',
     complement: '',
-    coordinates: '',
+    coordinates: null,
+    favorite: false,
     country: getLongInfo('country') || '',
     district: getShortInfo('administrative_area_level_1') || '',
     neighborhood: getLongInfo('sublocality') || '',
@@ -28,19 +30,18 @@ export const AddressForm = ({ address, handleClick }) => {
     streetName: getLongInfo('route') || '',
     streetNumber: getLongInfo('street_number') || '',
   });
-  const [valid, setValid] = useState({
-    streetNumber: true,
-  });
+  const [valid, setValid] = useState({ streetNumber: true, postalCode: true });
   const [submitted, setSubmitted] = useState(false);
 
-  const postalCode = useSelector(state => state.customer.postalCode);
-  const error = useSelector(state => state.customer.error);
+  // const error = useSelector(state => state.customer.error);
   const loading = useSelector(state => state.customer.loading);
 
   const dispatch = useDispatch();
-  const onViaCep = useCallback(address => dispatch(actions.viaCep(address)), [
-    dispatch,
-  ]);
+  const onNewCustomerAddress = form =>
+    dispatch(actions.customerNewAddress(form));
+
+  const onEditCustomerAddress = (form, addressId) =>
+    dispatch(actions.customerEditAddress(form, addressId));
 
   /* Functions */
   // Changes each field state value when user types
@@ -50,19 +51,12 @@ export const AddressForm = ({ address, handleClick }) => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleViaCep = () => {
-    if (valid.streetNumber) {
-      onViaCep({
-        city: form.city,
-        district: form.district,
-        streetName: form.streetName,
-      });
-    }
-  };
-
   // Each time the user changes any input value we check the validity of them all
   useEffect(() => {
-    setValid({ streetNumber: validateNumber(form.streetNumber) });
+    setValid({
+      streetNumber: validateNumber(form.streetNumber),
+      postalCode: validatePostalCode(form.postalCode),
+    });
   }, [form]);
 
   // On submit we first check if there are any invalid fields, if any we show the
@@ -70,11 +64,15 @@ export const AddressForm = ({ address, handleClick }) => {
   const handleSubmit = event => {
     event.preventDefault();
     setSubmitted(true);
-    // Object.keys(valid).reduce((sum, value) => sum && valid[value], true) &&
-    //   onNewCustomerAddress({
-    //     ...form,
-    //     postalCode: form.postalCode || postalCode,
-    //   });
+    if (Object.keys(valid).reduce((sum, value) => sum && valid[value], true)) {
+      if (editAddressId) {
+        onEditCustomerAddress(form, editAddressId);
+      } else {
+        onNewCustomerAddress(form);
+      }
+
+      handleClick(form);
+    }
   };
 
   return (
@@ -97,23 +95,57 @@ export const AddressForm = ({ address, handleClick }) => {
         </Grid>
 
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6}>
+            <InputMask
+              mask="99999-999"
+              value={form.postalCode}
+              onChange={handleChange}
+            >
+              {() => (
+                <TextField
+                  required
+                  fullWidth
+                  name="postalCode"
+                  label="CEP"
+                  variant="outlined"
+                  className={classes.card_input}
+                  error={!valid.postalCode && submitted}
+                  helperText={!valid.postalCode && submitted && 'CEP inválido!'}
+                />
+              )}
+            </InputMask>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
             <TextField
+              required
               name="streetNumber"
               label="Número"
               variant="outlined"
               value={form.streetNumber}
               error={!valid.streetNumber && submitted}
               onChange={handleChange}
-              onBlur={handleViaCep}
               fullWidth
               helperText={
                 !valid.streetNumber && submitted && 'Número inválido!'
               }
             />
           </Grid>
+        </Grid>
 
-          <Grid item xs={12} sm={8}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              name="refPoint"
+              label="Ponto de Referência"
+              variant="outlined"
+              value={form.refPoint}
+              fullWidth
+              onChange={handleChange}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
             <TextField
               name="complement"
               label="Complemento"
@@ -124,17 +156,6 @@ export const AddressForm = ({ address, handleClick }) => {
               helperText="Apartamento/Casa/Bloco"
             />
           </Grid>
-        </Grid>
-
-        <Grid item xs={12}>
-          <TextField
-            name="refPoint"
-            label="Ponto de Referência"
-            variant="outlined"
-            value={form.refPoint}
-            fullWidth
-            onChange={handleChange}
-          />
         </Grid>
 
         <Grid item xs={12}>

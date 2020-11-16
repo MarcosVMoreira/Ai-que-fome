@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { MoreVertRounded } from '@material-ui/icons';
 
-import classes from './Card.module.scss';
+import classes from './AddressCard.module.scss';
 
 export const AddressCard = props => {
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -28,7 +28,8 @@ export const AddressCard = props => {
     <Card
       variant="outlined"
       className={`${classes.card} ${
-        props.selected?.streetName === props.address?.streetName &&
+        props.selected &&
+        props.selected?.id === props.address.id &&
         classes.card_selected
       }`}
     >
@@ -70,11 +71,17 @@ export const AddressCard = props => {
             open={Boolean(menuAnchor)}
             onClose={handleCloseMenu}
           >
-            <MenuItem onClick={() => props.handleEditAddress(props.index)}>
+            <MenuItem
+              disabled={props.selected?.id === props.address?.id}
+              onClick={() => props.handleEditAddress(props.address)}
+            >
               Editar
             </MenuItem>
 
-            <MenuItem onClick={() => props.handleRemoveAddress(props.index)}>
+            <MenuItem
+              disabled={props.selected?.id === props.address?.id}
+              onClick={() => props.handleRemoveAddress(props.address.id)}
+            >
               Excluir
             </MenuItem>
           </Menu>

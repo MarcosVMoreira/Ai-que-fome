@@ -4,7 +4,7 @@ import PlacesAutocomplete from 'react-places-autocomplete';
 import { InputBase } from '@material-ui/core';
 import { LocationOn, Search } from '@material-ui/icons';
 
-import { AddressCard } from '../UI/Card/Card';
+import { AddressCard } from '../AddressCard/AddressCard';
 import { Spinner } from '../UI/Spinner/Spinner';
 
 import classes from './AddressSearch.module.scss';
@@ -15,6 +15,7 @@ export const AddressSearch = props => {
       value={props.searchAddress}
       onChange={props.handleSearchAddress}
       onSelect={props.handleSelect}
+      onError={props.handleError}
       ref={c => {
         if (!c) return;
         c.handleInputOnBlur = () => {};
