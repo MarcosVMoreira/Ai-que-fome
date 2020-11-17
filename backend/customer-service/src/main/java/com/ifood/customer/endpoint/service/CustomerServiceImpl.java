@@ -202,6 +202,8 @@ public class CustomerServiceImpl implements CustomerService {
                 .findAny()
                 .orElseThrow(NotFoundException::new);
 
+        address.setId(idAddress);
+
         List<Address> addresses = customer.get().getAddresses();
         addresses.removeIf(a -> a.getId().equals(idAddress));
         addresses.add(addressMapper.addressDTOToAddress(address));
