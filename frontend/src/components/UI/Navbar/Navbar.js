@@ -16,14 +16,16 @@ import {
   ExpandMoreRounded,
 } from '@material-ui/icons';
 
+import classes from './Navbar.module.scss';
 import { Logo } from '../Logo/Logo';
 import { AddressModal } from '../../AddressModal/AddressModal';
-import classes from './Navbar.module.scss';
+import { ProfilePopover } from '../../ProfilePopover/ProfilePopover';
 
 export const Navbar = () => {
   const [search, setSearch] = useState('');
   const [address, setAddress] = useState(null);
   const [modal, setModal] = useState(false);
+  const [popover, setPopover] = useState(null);
 
   useEffect(() => {
     const storedAddress = localStorage.getItem('IFOOD_address');
@@ -44,6 +46,8 @@ export const Navbar = () => {
   };
 
   const handleModal = event => setModal(event);
+
+  const handlePopover = event => setPopover(event.currentTarget);
 
   return (
     <AppBar position="static" color="secondary">
@@ -112,7 +116,11 @@ export const Navbar = () => {
               spacing={2}
             >
               <Grid item>
-                <Fab variant="extended" className={classes.navbar_fab}>
+                <Fab
+                  variant="extended"
+                  className={classes.navbar_fab}
+                  onClick={handlePopover}
+                >
                   <AccountCircleRounded className={classes.navbar_fab__icon} />
                   Meu Perfil
                 </Fab>
@@ -135,6 +143,8 @@ export const Navbar = () => {
         handleAddress={handleAddress}
         address={address}
       />
+
+      <ProfilePopover popover={popover} setPopover={setPopover} />
     </AppBar>
   );
 };

@@ -47,9 +47,11 @@ const authPasswordFail = (state, payload) => ({
   loading: false,
 });
 
-const authReset = () => ({
-  ...initialState,
-});
+const authReset = () => {
+  localStorage.clear();
+
+  return { ...initialState };
+};
 
 const errorReset = state => ({
   ...state,
