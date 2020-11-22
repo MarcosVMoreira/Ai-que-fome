@@ -13,6 +13,11 @@ export const validateName = name => {
   return re.test(name.toLowerCase());
 };
 
+export const validateNumber = number => {
+  const re = /^\d+$/;
+  return re.test(number.toLowerCase());
+};
+
 export const validateDocument = document => {
   const re = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
   return re.test(document);
@@ -21,4 +26,9 @@ export const validateDocument = document => {
 export const validatePhone = phone => {
   const re = /(\(?\d{2}\)?\s)?(\d{4,5}-\d{4})/;
   return re.test(phone.replace(/[ ]/g, ''));
+};
+
+export const validatePostalCode = postalCode => {
+  const re = /^[0-9]{5}-[0-9]{3}$/;
+  return re.test(postalCode);
 };
