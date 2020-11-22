@@ -10,6 +10,7 @@ import com.ifood.customer.endpoint.model.entity.Customer;
 import com.ifood.customer.endpoint.model.mapper.AddressMapper;
 import com.ifood.customer.endpoint.model.mapper.CustomerMapper;
 import com.ifood.customer.endpoint.repository.CustomerRepository;
+import com.ifood.customer.message.producer.CustomerMessageProducer;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -37,11 +38,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     private AddressMapper addressMapper;
 
+    private CustomerMessageProducer messageProducer;
+
     @Autowired
-    public CustomerServiceImpl (CustomerRepository customerRepository, CustomerMapper customerMapper, AddressMapper addressMapper) {
+    public CustomerServiceImpl (CustomerRepository customerRepository, CustomerMapper customerMapper, AddressMapper addressMapper, CustomerMessageProducer messageProducer) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
         this.addressMapper = addressMapper;
+        this.messageProducer = messageProducer;
     }
 
     @Override
@@ -85,6 +89,8 @@ public class CustomerServiceImpl implements CustomerService {
             logger.info("Email {} já existe na base de dados.", customer.getEmail());
             throw new UnprocessableEntityException("422.001");
         }
+
+        messageProducer.sendCustomerDataToRabbit(customer);
 
         return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
     }
