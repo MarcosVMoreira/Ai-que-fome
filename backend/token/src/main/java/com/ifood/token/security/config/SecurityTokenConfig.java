@@ -11,6 +11,9 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @AllArgsConstructor
@@ -21,9 +24,15 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure (HttpSecurity http) throws Exception {
+
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.applyPermitDefaultValues();
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setExposedHeaders(Collections.singletonList("Location"));
+
         http
                 .csrf().disable()
-                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+                .cors().configurationSource(request -> configuration)
                 .and()
                 .sessionManagement().sessionCreationPolicy(STATELESS)
                 .and()
