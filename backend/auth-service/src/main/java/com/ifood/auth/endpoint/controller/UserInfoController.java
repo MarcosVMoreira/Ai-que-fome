@@ -42,9 +42,6 @@ public class UserInfoController {
         applicationUserService.getToken(email);
     }
 
-
-    //TODO Criar aqui endpoint pra salvar usuário
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void save (String customerEmail,

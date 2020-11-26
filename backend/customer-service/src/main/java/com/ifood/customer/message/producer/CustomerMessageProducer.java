@@ -2,22 +2,33 @@ package com.ifood.customer.message.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ifood.customer.endpoint.model.entity.Customer;
-import com.ifood.customer.message.consumer.CustomerAMQPConfig;
+import com.ifood.customer.endpoint.model.dto.CustomerDTO;
+import com.ifood.customer.endpoint.model.entity.CustomerAsyncPayload;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomerMessageProducer {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void sendCustomerDataToRabbit (Customer customer) {
+    @Autowired
+    private static final String EXCHANGE_NAME = "customer-created";
+
+    public void sendCustomerDataToRabbit (CustomerDTO customer) {
         try {
-            String json = new ObjectMapper().writeValueAsString(customer);
-            rabbitTemplate.convertAndSend(CustomerAMQPConfig.EXCHANGE_NAME, "", json);
+            CustomerAsyncPayload payload = CustomerAsyncPayload.builder()
+                    .email(customer.getEmail())
+                    .id(customer.getId())
+                    .build();
+            String json = new ObjectMapper().writeValueAsString(payload);
+            rabbitTemplate.convertAndSend(EXCHANGE_NAME, "", json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

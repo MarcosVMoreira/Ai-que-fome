@@ -94,9 +94,11 @@ public class CustomerServiceImpl implements CustomerService {
             throw new UnprocessableEntityException("422.001");
         }
 
-        messageProducer.sendCustomerDataToRabbit(customer);
+        CustomerDTO createdCustomer = customerMapper.customerToCustomerDTO(customerRepository.save(customer));
 
-        return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+        messageProducer.sendCustomerDataToRabbit(createdCustomer);
+
+        return createdCustomer;
     }
 
     @Override
