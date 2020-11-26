@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -76,6 +77,9 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO save (@Valid CustomerDTO customerDTO) {
         logger.info("Criando nova entrada na base de dados...");
 
+        //verificacao antiga se o customerDTO veio com email.
+        //como agora faco essa verificacao no customerDTO usando validators
+        //isso aqui nao tem mais necessidade
         Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
 
         if (!Optional.ofNullable(customer.getEmail()).isPresent() ||
@@ -140,7 +144,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO saveAddress (String customerId, @Valid AddressDTO addressDTO) {
+    public List<String> saveAddress (String customerId, @Valid AddressDTO addressDTO) {
+
+        List<String> list = new ArrayList<>();
 
         Optional<Customer> customer = customerRepository.findById(customerId);
 
@@ -150,7 +156,13 @@ public class CustomerServiceImpl implements CustomerService {
             customer.get()
                     .getAddresses()
                     .add(addressMapper.addressDTOToAddress(addressDTO));
-            return customerMapper.customerToCustomerDTO(customerRepository.save(customer.get()));
+
+            customerRepository.save(customer.get());
+
+            list.add(customer.get().getId());
+            list.add(addressDTO.getId());
+
+            return list;
         }
 
         throw new NotFoundException();
@@ -197,6 +209,8 @@ public class CustomerServiceImpl implements CustomerService {
                 .filter(a -> idAddress.equals(a.getId()))
                 .findAny()
                 .orElseThrow(NotFoundException::new);
+
+        address.setId(idAddress);
 
         List<Address> addresses = customer.get().getAddresses();
         addresses.removeIf(a -> a.getId().equals(idAddress));

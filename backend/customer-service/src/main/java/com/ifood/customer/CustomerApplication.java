@@ -31,3 +31,4 @@ public class CustomerApplication implements ApplicationRunner {
         log.info("MS Customer successfully started!");
     }
 }
+

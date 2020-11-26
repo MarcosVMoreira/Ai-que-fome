@@ -10,6 +10,9 @@ public class CustomerConsumer {
     @RabbitListener(queues = CustomerAMQPConfig.QUEUE)
     public void consumer (Message message) {
         //TODO fazer req para
+
+        System.out.println("teste");
+
     }
 
 }

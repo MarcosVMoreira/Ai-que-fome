@@ -4,15 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ifood.customer.endpoint.model.entity.Customer;
 import com.ifood.customer.message.consumer.CustomerAMQPConfig;
-import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
-@Configuration
+@Service
 public class CustomerMessageProducer {
 
-    private final RabbitTemplate rabbitTemplate;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     public void sendCustomerDataToRabbit (Customer customer) {
         try {
