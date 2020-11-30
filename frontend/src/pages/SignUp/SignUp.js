@@ -34,6 +34,7 @@ export const SignUp = props => {
   const dispatch = useDispatch();
   const onSignUp = form => dispatch(actions.signUp(form));
   const onErrorReset = () => dispatch(actions.errorReset());
+  const onAuthReset = () => dispatch(actions.authReset());
 
   /* React State Hooks (if the user tried to Login using a non-existing mail
     we initialize the form with the attempted mail) */
@@ -80,6 +81,7 @@ export const SignUp = props => {
     event.preventDefault();
     setSubmitted(true);
     Object.keys(valid).reduce((sum, value) => sum && valid[value], true) &&
+      onAuthReset() &&
       onSignUp(form);
   };
 

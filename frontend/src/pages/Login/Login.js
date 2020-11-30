@@ -173,7 +173,7 @@ export const Login = () => {
       {redirect}
       <Snackbar
         open={success}
-        autoHideDuration={2000}
+        autoHideDuration={5000}
         onClose={handleToastClose}
       >
         <Toast onClose={handleToastClose} severity="success">

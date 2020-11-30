@@ -43,7 +43,7 @@ export const AddressModal = withWidth()(props => {
 
   let errorBlock;
 
-  const userAddresses = useSelector(state => state.customer.addresses);
+  const userAddresses = useSelector(state => state.customer.addresses) || [];
   const error = useSelector(state => state.customer.error);
   const loading = useSelector(state => state.customer.loading);
 
