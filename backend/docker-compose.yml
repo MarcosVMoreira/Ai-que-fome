@@ -1,25 +1,33 @@
 version: '3'
 services:
-  discovery:
-    image: discovery
-    ports:
-      - 8081:8081
+#  discovery:
+#    image: discovery
+#    ports:
+#      - 8081:8081
+#
+#  customer-service:
+#    image: customer
+#    environment:
+#      - "MONGOURI=${MONGOURI}"
+#      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8081/eureka"
+#    links:
+#      - discovery
+#      - gateway
+#
+#  gateway:
+#    image: gateway
+##    restart: on-failure
+#    ports:
+#      - 8080:8080
+#    links:
+#      - discovery
+#    environment:
+#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery:8081/eureka
 
-  customer-service:
-    image: customer
-    environment:
-      - "MONGOURI=${MONGOURI}"
-      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery:8081/eureka"
-    links:
-      - discovery
-      - gateway
-
-  gateway:
-    image: gateway
-#    restart: on-failure
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    hostname: rabbitmq
     ports:
-      - 8080:8080
-    links:
-      - discovery
-    environment:
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery:8081/eureka
+      - "15672:15672"
+      - "5672:5672"

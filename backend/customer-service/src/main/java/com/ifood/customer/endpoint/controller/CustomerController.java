@@ -2,8 +2,12 @@ package com.ifood.customer.endpoint.controller;
 
 import com.ifood.customer.endpoint.model.dto.AddressDTO;
 import com.ifood.customer.endpoint.model.dto.CustomerDTO;
+import com.ifood.customer.endpoint.model.entity.Customer;
 import com.ifood.customer.endpoint.service.CustomerServiceImpl;
+import com.ifood.customer.message.producer.ExchangeFactory;
+import com.ifood.customer.message.producer.CustomerMessageProducer;
 import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -65,6 +69,8 @@ public class CustomerController {
         customerServiceImpl.delete(id);
     }
 
+    /****************** BEGIN ADDRESS ENDPOINTS ******************/
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{customerId}/address/")
     public ResponseEntity<Void> saveAddress (@PathVariable String customerId,
@@ -78,15 +84,15 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{customerId}/address/{addressId}")
     public AddressDTO getAddress (@PathVariable String customerId,
-                                            @PathVariable String addressId) {
+                                  @PathVariable String addressId) {
         return customerServiceImpl.getAddressById(customerId, addressId);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{customerId}/address/{addressId}")
     public CustomerDTO updateAddress (@PathVariable String customerId,
-                                  @PathVariable String addressId,
-                                     @Valid @RequestBody AddressDTO addressDTO) {
+                                      @PathVariable String addressId,
+                                      @Valid @RequestBody AddressDTO addressDTO) {
         return customerServiceImpl.updateAddress(customerId, addressId, addressDTO);
     }
 
@@ -96,4 +102,8 @@ public class CustomerController {
                                @PathVariable String addressId) {
         customerServiceImpl.deleteAddress(customerId, addressId);
     }
+
+    /****************** END ADDRESS ENDPOINTS ******************/
+
+
 }

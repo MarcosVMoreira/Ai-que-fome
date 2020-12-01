@@ -12,4 +12,6 @@ public interface ApplicationUserRepository extends PagingAndSortingRepository<Ap
 
     Optional<ApplicationUser> findByEmail (String email);
 
+    Optional<ApplicationUser> findByEmailIgnoreCaseContaining (String email);
+
 }

@@ -1,12 +1,12 @@
 package com.ifood.customer;
 
-import com.ifood.customer.endpoint.error.NotFoundException;
 import com.ifood.customer.endpoint.model.dto.CustomerDTO;
 import com.ifood.customer.endpoint.model.entity.Address;
 import com.ifood.customer.endpoint.model.entity.Customer;
 import com.ifood.customer.endpoint.model.mapper.CustomerMapper;
 import com.ifood.customer.endpoint.repository.CustomerRepository;
 import com.ifood.customer.endpoint.service.CustomerServiceImpl;
+import com.ifood.customer.message.producer.CustomerMessageProducer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -26,15 +27,14 @@ import java.util.Optional;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.isA;
 import static org.mockito.Mockito.when;
 
 
-@DataMongoTest
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class CustomerServiceTest {
 
     @InjectMocks
@@ -42,6 +42,9 @@ public class CustomerServiceTest {
 
     @Mock
     private CustomerRepository customerRepository;
+
+    @Mock
+    private CustomerMessageProducer customerMessageProducer;
 
     @Spy
     CustomerMapper customerMapper = CustomerMapper.INSTANCE;
@@ -102,11 +105,13 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void whenSaveCustomer_thenPersistData() {
+    void whenSaveCustomer_thenPersistData() {
         when(customerRepository.save(any(Customer.class))).
                 thenReturn(customer1);
 
         CustomerDTO customerDTO = customerService.save(customerMapper.customerToCustomerDTO(customer1));
+
+        customerMessageProducer.sendCustomerDataToRabbit(customerDTO);
 
         assertEquals(customerDTO.getName(), customer1.getName());
     }

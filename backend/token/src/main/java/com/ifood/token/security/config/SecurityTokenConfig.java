@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.web.cors.CorsConfiguration;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,6 +25,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure (HttpSecurity http) throws Exception {
+
 
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.applyPermitDefaultValues();
@@ -50,7 +52,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure (WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/v2/api-docs/**");
         web.ignoring().antMatchers("/swagger.json");
         web.ignoring().antMatchers("/swagger-ui.html");

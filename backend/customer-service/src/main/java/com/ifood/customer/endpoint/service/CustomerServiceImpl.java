@@ -10,6 +10,7 @@ import com.ifood.customer.endpoint.model.entity.Customer;
 import com.ifood.customer.endpoint.model.mapper.AddressMapper;
 import com.ifood.customer.endpoint.model.mapper.CustomerMapper;
 import com.ifood.customer.endpoint.repository.CustomerRepository;
+import com.ifood.customer.message.producer.CustomerMessageProducer;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -19,11 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @Service
@@ -39,11 +37,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     private AddressMapper addressMapper;
 
+    private CustomerMessageProducer messageProducer;
+
     @Autowired
-    public CustomerServiceImpl (CustomerRepository customerRepository, CustomerMapper customerMapper, AddressMapper addressMapper) {
+    public CustomerServiceImpl (CustomerRepository customerRepository, CustomerMapper customerMapper, AddressMapper addressMapper, CustomerMessageProducer messageProducer) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
         this.addressMapper = addressMapper;
+        this.messageProducer = messageProducer;
     }
 
     @Override
@@ -74,6 +75,9 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO save (@Valid CustomerDTO customerDTO) {
         logger.info("Criando nova entrada na base de dados...");
 
+        //verificacao antiga se o customerDTO veio com email.
+        //como agora faco essa verificacao no customerDTO usando validators
+        //isso aqui nao tem mais necessidade
         Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
 
         if (!Optional.ofNullable(customer.getEmail()).isPresent() ||
@@ -88,7 +92,11 @@ public class CustomerServiceImpl implements CustomerService {
             throw new UnprocessableEntityException("422.001");
         }
 
-        return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+        CustomerDTO createdCustomer = customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+
+        messageProducer.sendCustomerDataToRabbit(createdCustomer);
+
+        return createdCustomer;
     }
 
     @Override
@@ -142,12 +150,17 @@ public class CustomerServiceImpl implements CustomerService {
 
         Optional<Customer> customer = customerRepository.findById(customerId);
 
-        addressDTO.setId(new Address().getId());
-
         if (customer.isPresent()) {
-            customer.get()
-                    .getAddresses()
-                    .add(addressMapper.addressDTOToAddress(addressDTO));
+
+            addressDTO.setId(new Address().getId());
+
+            Optional.ofNullable(customer.get().getAddresses())
+                    .ifPresent(a -> a.add(addressMapper.addressDTOToAddress(addressDTO)));
+
+            if (!Optional.ofNullable(customer.get().getAddresses()).isPresent()) {
+                customer.get()
+                        .setAddresses(Collections.singletonList(addressMapper.addressDTOToAddress(addressDTO)));
+            }
 
             customerRepository.save(customer.get());
 
