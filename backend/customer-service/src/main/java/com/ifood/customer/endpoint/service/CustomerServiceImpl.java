@@ -20,9 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -152,12 +150,17 @@ public class CustomerServiceImpl implements CustomerService {
 
         Optional<Customer> customer = customerRepository.findById(customerId);
 
-        addressDTO.setId(new Address().getId());
-
         if (customer.isPresent()) {
-            customer.get()
-                    .getAddresses()
-                    .add(addressMapper.addressDTOToAddress(addressDTO));
+
+            addressDTO.setId(new Address().getId());
+
+            Optional.ofNullable(customer.get().getAddresses())
+                    .ifPresent(a -> a.add(addressMapper.addressDTOToAddress(addressDTO)));
+
+            if (!Optional.ofNullable(customer.get().getAddresses()).isPresent()) {
+                customer.get()
+                        .setAddresses(Collections.singletonList(addressMapper.addressDTOToAddress(addressDTO)));
+            }
 
             customerRepository.save(customer.get());
 
