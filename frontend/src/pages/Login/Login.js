@@ -186,7 +186,7 @@ export const Login = () => {
           <Card className={classes.card}>
             <form name="form" onSubmit={handleSubmit}>
               <CardContent>
-                <Logo handleReset={handleReset} />
+                <Logo handleClick={handleReset} />
 
                 <Grid container item justify="center">
                   <span className={classes.card_title}>

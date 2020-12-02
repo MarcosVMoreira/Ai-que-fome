@@ -14,12 +14,16 @@ import { MoreVertRounded } from '@material-ui/icons';
 import classes from './AddressCard.module.scss';
 
 export const AddressCard = props => {
+  /* React State Hooks */
   const [menuAnchor, setMenuAnchor] = useState(null);
 
+  /* Functions */
+  // Opens the options menu (edit, remove) from the address
   const handleOpenMenu = event => {
     setMenuAnchor(event.currentTarget);
   };
 
+  // Closes the options menu from the address
   const handleCloseMenu = () => {
     setMenuAnchor(null);
   };
@@ -27,6 +31,7 @@ export const AddressCard = props => {
   return (
     <Card
       variant="outlined"
+      // If the Card is the selected one we outline it with a red line
       className={`${classes.card} ${
         props.selected &&
         props.selected?.id === props.address.id &&

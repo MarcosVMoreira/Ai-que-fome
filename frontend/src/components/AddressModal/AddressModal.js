@@ -15,6 +15,7 @@ import {
   CloseRounded,
   KeyboardArrowLeftRounded,
 } from '@material-ui/icons';
+import { geocodeByPlaceId } from 'react-places-autocomplete';
 
 import * as actions from '../../store/actions/index';
 import classes from './AddressModal.module.scss';
@@ -22,13 +23,13 @@ import { Spinner } from '../UI/Spinner/Spinner';
 import { AddressCard } from '../AddressCard/AddressCard';
 import { AddressSearch } from '../AddressSearch/AddressSearch';
 import { AddressForm } from '../AddressForm/AddressForm';
-import { geocodeByPlaceId } from 'react-places-autocomplete';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
 
 export const AddressModal = withWidth()(props => {
+  /* React State Hooks */
   const [searchAddress, setSearchAddress] = useState({
     value: '',
     submitted: false,
@@ -38,49 +39,60 @@ export const AddressModal = withWidth()(props => {
     ended: 0,
     message: null,
   });
-
   const [editAddress, setEditAddress] = useState(null);
-
   let errorBlock;
 
-  const userAddresses = useSelector(state => state.customer.addresses) || [];
+  /* Redux Selectors */
+  const customer = useSelector(state => state.customer.customer) || [];
   const error = useSelector(state => state.customer.error);
   const loading = useSelector(state => state.customer.loading);
 
+  /* Redux Dispatchers */
   const dispatch = useDispatch();
-  const onCustomerAddress = useCallback(
-    () => dispatch(actions.customerAddress()),
-    [dispatch],
-  );
+  const onCustomerData = useCallback(() => dispatch(actions.customerData()), [
+    dispatch,
+  ]);
   const onRemoveCustomerAddress = addressId =>
     dispatch(actions.customerRemoveAddress(addressId));
 
+  /* Functions */
+  // Loads user data (and it's addresses) each time the modal is opened
+  useEffect(() => {
+    onCustomerData();
+  }, [onCustomerData]);
+
+  // Resets errors and search each time the user selects an address
   useEffect(() => {
     setSearchAddress({ value: '', submitted: false });
     setUserAddressError({ show: false, ended: 0, message: null });
-    onCustomerAddress();
-  }, [props.address, onCustomerAddress]);
+  }, [props.address]);
 
+  // Sets address to search and resets errors (so they can be reassessed)
   const handleSearchAddress = address => {
     setUserAddressError({ show: false, ended: 0, message: null });
     setSearchAddress({ value: address, submitted: false });
   };
 
-  const handleRemoveAddress = idAddress => {
-    onRemoveCustomerAddress(idAddress);
+  // Remove the selected address
+  const handleRemoveAddress = addressId => {
+    onRemoveCustomerAddress(addressId);
   };
 
+  // Edit the selected address
   const handleEditAddress = address => {
     setEditAddress(address);
     handleSearchAddress(address.streetName);
   };
 
+  // Get selected address information
   const handleSelect = (address, placeId) => {
     geocodeByPlaceId(placeId).then(res =>
       setSearchAddress({ value: res[0], submitted: true }),
     );
   };
 
+  // On modal close we verify if the user has ate least one selected address,
+  // if there isn't show an error, otherwise, closes the modal
   const handleExit = () => {
     setSearchAddress({ value: '', submitted: false });
     setUserAddressError(false);
@@ -96,10 +108,12 @@ export const AddressModal = withWidth()(props => {
     }
   };
 
+  // Resets the address search value
   const handleReset = () => {
     setSearchAddress({ value: '', submitted: false });
   };
 
+  // Error handling
   const handleError = status => {
     switch (status) {
       case 'ZERO_RESULTS':
@@ -114,13 +128,15 @@ export const AddressModal = withWidth()(props => {
     }
   };
 
-  error === 401 &&
+  // If perhaps we can't find this user in db
+  error === 404 &&
     (errorBlock = (
       <div className={classes.modal_subtitle}>
         Erro ao obter os endereços, tente novamente mais tarde
       </div>
     ));
 
+  // Shake error animation
   userAddressError.show &&
     (errorBlock = (
       <div
@@ -134,6 +150,8 @@ export const AddressModal = withWidth()(props => {
       </div>
     ));
 
+  // We show the user it's addresses until he searches something, then we show
+  // the results, then, if he clicks on any result we redirect him to new address form
   let contentBlock;
   !searchAddress.value &&
     !searchAddress.submitted &&
@@ -148,7 +166,8 @@ export const AddressModal = withWidth()(props => {
         {loading ? (
           <Spinner />
         ) : (
-          userAddresses.map(address => (
+          customer.addresses &&
+          customer.addresses.map(address => (
             <div className={classes.modal_addresses} key={address.id}>
               <AddressCard
                 address={address}

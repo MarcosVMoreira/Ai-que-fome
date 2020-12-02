@@ -10,7 +10,7 @@ export const Logo = props => (
       src={logo}
       alt="ifood clone logo"
       className={props.header ? classes.toolbar : classes.logo}
-      onClick={props.handleReset}
+      onClick={props.handleClick}
     />
   </Grid>
 );
