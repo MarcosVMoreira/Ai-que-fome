@@ -3,22 +3,39 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   error: null,
   loading: false,
-  addresses: [],
+  customer: null,
 };
 
-const customerAddressStart = state => ({
+const customerDataStart = state => ({
   ...state,
   loading: true,
 });
 
-const customerAddressSuccess = (state, payload) => ({
+const customerDataSuccess = (state, payload) => ({
   ...state,
   error: null,
   loading: false,
-  addresses: payload.customer.addresses,
+  customer: payload.customer,
 });
 
-const customerAddressFail = (state, payload) => ({
+const customerDataFail = (state, payload) => ({
+  ...state,
+  error: payload.error,
+  loading: false,
+});
+
+const customerEditDataStart = state => ({
+  ...state,
+  loading: true,
+});
+
+const customerEditDataSuccess = state => ({
+  ...state,
+  error: null,
+  loading: false,
+});
+
+const customerEditDataFail = (state, payload) => ({
   ...state,
   error: payload.error,
   loading: false,
@@ -77,12 +94,18 @@ const customerRemoveAddressFail = (state, payload) => ({
 
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case actionTypes.CUSTOMER_ADDRESS_START:
-      return customerAddressStart(state);
-    case actionTypes.CUSTOMER_ADDRESS_SUCCESS:
-      return customerAddressSuccess(state, payload);
-    case actionTypes.CUSTOMER_ADDRESS_FAIL:
-      return customerAddressFail(state, payload);
+    case actionTypes.CUSTOMER_DATA_START:
+      return customerDataStart(state);
+    case actionTypes.CUSTOMER_DATA_SUCCESS:
+      return customerDataSuccess(state, payload);
+    case actionTypes.CUSTOMER_DATA_FAIL:
+      return customerDataFail(state, payload);
+    case actionTypes.CUSTOMER_EDIT_DATA_START:
+      return customerEditDataStart(state);
+    case actionTypes.CUSTOMER_EDIT_DATA_SUCCESS:
+      return customerEditDataSuccess(state);
+    case actionTypes.CUSTOMER_EDIT_DATA_FAIL:
+      return customerEditDataFail(state, payload);
     case actionTypes.CUSTOMER_NEW_ADDRESS_START:
       return customerNewAddressStart(state);
     case actionTypes.CUSTOMER_NEW_ADDRESS_SUCCESS:

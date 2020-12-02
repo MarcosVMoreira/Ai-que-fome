@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import {
@@ -24,22 +25,34 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export const ProfileModal = props => {
+export const ProfileModal = withRouter(props => {
+  /* React State Hooks */
   const [username, setUsername] = useState(null);
 
+  /* Redux Dispatchers */
   const dispatch = useDispatch();
   const onLogout = () => dispatch(actions.authReset());
 
+  /* Functions */
+  // Each time we open the modal, get the customer's name
   useEffect(() => {
     setUsername(localStorage.getItem('IFOOD_name'));
   }, []);
 
+  // Closes the modal
   const handleClose = () => {
     props.handleModal(false);
   };
 
+  // Customer Logout
   const handleLogout = () => {
     onLogout();
+  };
+
+  // Go to Customer Profile Page
+  const handleProfile = () => {
+    props.history.push('/profile');
+    props.handleModal(false);
   };
 
   return (
@@ -84,6 +97,7 @@ export const ProfileModal = props => {
             size="large"
             startIcon={<AccountCircleRounded />}
             endIcon={<ChevronRightRounded />}
+            onClick={handleProfile}
           >
             Minha Conta
           </Button>
@@ -104,4 +118,4 @@ export const ProfileModal = props => {
       </DialogContent>
     </Dialog>
   );
-};
+});

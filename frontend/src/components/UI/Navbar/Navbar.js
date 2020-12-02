@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { withRouter } from 'react-router-dom';
 
 import {
   AppBar,
@@ -21,7 +22,7 @@ import { Logo } from '../Logo/Logo';
 import { AddressModal } from '../../AddressModal/AddressModal';
 import { ProfilePopover } from '../../ProfilePopover/ProfilePopover';
 
-export const Navbar = () => {
+export const Navbar = withRouter(props => {
   const [search, setSearch] = useState('');
   const [address, setAddress] = useState(null);
   const [modal, setModal] = useState(false);
@@ -49,13 +50,15 @@ export const Navbar = () => {
 
   const handlePopover = event => setPopover(event.currentTarget);
 
+  const handleHome = () => props.history.push('/home');
+
   return (
-    <AppBar position="fixed" color="secondary">
+    <AppBar position="sticky" color="secondary">
       <Toolbar>
         <Grid container justify="center" alignItems="center" spacing={1}>
           <Hidden mdDown>
             <Grid item lg={2}>
-              <Logo header={true} />
+              <Logo header={true} handleClick={handleHome} />
             </Grid>
           </Hidden>
 
@@ -147,4 +150,4 @@ export const Navbar = () => {
       <ProfilePopover popover={popover} setPopover={setPopover} />
     </AppBar>
   );
-};
+});

@@ -2,38 +2,76 @@ import * as actionTypes from './actionTypes';
 import axios from '../../Axios';
 import { unmask } from '../../helpers/unmask';
 
-export const customerAddressStart = () => ({
-  type: actionTypes.CUSTOMER_ADDRESS_START,
+export const customerDataStart = () => ({
+  type: actionTypes.CUSTOMER_DATA_START,
 });
 
-export const customerAddressSuccess = payload => ({
-  type: actionTypes.CUSTOMER_ADDRESS_SUCCESS,
+export const customerDataSuccess = payload => ({
+  type: actionTypes.CUSTOMER_DATA_SUCCESS,
   payload,
 });
 
-export const customerAddressFail = payload => ({
-  type: actionTypes.CUSTOMER_ADDRESS_FAIL,
+export const customerDataFail = payload => ({
+  type: actionTypes.CUSTOMER_DATA_FAIL,
   payload,
 });
 
-export const customerAddress = () => {
+export const customerData = () => {
   return dispatch => {
-    dispatch(customerAddressStart());
+    dispatch(customerDataStart());
 
-    const customerMail = localStorage.getItem('IFOOD_email');
+    const customerId = localStorage.getItem('IFOOD_udid');
 
-    if (customerMail) {
+    if (customerId) {
       axios
-        .get(`/customer/customers/email/${customerMail}`)
+        .get(`/customer/customers/${customerId}`)
         .then(res => {
-          dispatch(customerAddressSuccess({ customer: res.data }));
+          dispatch(customerDataSuccess({ customer: res.data }));
         })
         .catch(err => {
-          dispatch(customerAddressFail({ error: err.response.status }));
+          dispatch(customerDataFail({ error: err.response.status }));
         });
     } else {
-      dispatch(customerAddressFail);
+      dispatch(customerDataFail);
     }
+  };
+};
+
+export const customerEditDataStart = () => ({
+  type: actionTypes.CUSTOMER_EDIT_DATA_START,
+});
+
+export const customerEditDataSuccess = () => ({
+  type: actionTypes.CUSTOMER_EDIT_DATA_SUCCESS,
+});
+
+export const customerEditDataFail = payload => ({
+  type: actionTypes.CUSTOMER_EDIT_DATA_FAIL,
+  payload,
+});
+
+export const customerEditData = customer => {
+  return dispatch => {
+    dispatch(customerEditDataStart());
+    const customerId = localStorage.getItem('IFOOD_udid');
+
+    const data = {
+      name: customer.name,
+      phone: unmask(customer.phone),
+      email: customer.email,
+      taxPayerIdentificationNumber: unmask(customer.document),
+      addresses: customer.addresses,
+    };
+
+    axios
+      .put(`/customer/customers/${customerId}`, data)
+      .then(() => {
+        dispatch(customerEditDataSuccess());
+        dispatch(customerData());
+      })
+      .catch(err => {
+        dispatch(customerEditDataFail({ error: err.response.status }));
+      });
   };
 };
 
@@ -53,7 +91,7 @@ export const customerNewAddressFail = payload => ({
 export const customerNewAddress = address => {
   return dispatch => {
     dispatch(customerNewAddressStart());
-    const userId = localStorage.getItem('IFOOD_udid');
+    const customerId = localStorage.getItem('IFOOD_udid');
 
     const newAddress = {
       ...address,
@@ -69,12 +107,10 @@ export const customerNewAddress = address => {
     };
 
     axios
-      .post(`/customer/customers/${userId}/address/`, newAddress)
-      .then(res => {
-        console.log(res.headers);
-
+      .post(`/customer/customers/${customerId}/address/`, newAddress)
+      .then(() => {
         dispatch(customerNewAddressSuccess());
-        dispatch(customerAddress());
+        dispatch(customerData());
       })
       .catch(err => {
         dispatch(customerNewAddressFail({ error: err.response.status }));
@@ -117,7 +153,7 @@ export const customerEditAddress = (address, addressId) => {
       .put(`/customer/customers/${userId}/address/${addressId}`, editAddress)
       .then(() => {
         dispatch(customerEditAddressSuccess());
-        dispatch(customerAddress());
+        dispatch(customerData());
       })
       .catch(err => {
         dispatch(customerEditAddressFail({ error: err.response.status }));
@@ -143,13 +179,11 @@ export const customerRemoveAddress = addressId => {
     dispatch(customerRemoveAddressStart());
     const userId = localStorage.getItem('IFOOD_udid');
 
-    console.log(userId, addressId);
-
     axios
       .delete(`/customer/customers/${userId}/address/${addressId}`)
       .then(() => {
         dispatch(customerRemoveAddressSuccess());
-        dispatch(customerAddress());
+        dispatch(customerData());
       })
       .catch(err => {
         dispatch(customerRemoveAddressFail({ error: err.response.status }));

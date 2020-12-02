@@ -7,7 +7,8 @@ export {
 } from './auth';
 export { signUp, signUpReset } from './signup';
 export {
-  customerAddress,
+  customerData,
+  customerEditData,
   customerNewAddress,
   customerEditAddress,
   customerRemoveAddress,
