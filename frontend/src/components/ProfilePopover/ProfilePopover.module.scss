@@ -1,0 +1,19 @@
+.popover {
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 300px;
+
+  &_title {
+    font-weight: 600;
+    font-size: 1.2em;
+    letter-spacing: -1px;
+    padding: 16px;
+  }
+
+  &_button {
+    width: 100%;
+    padding: 16px 32px !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+  }
+}

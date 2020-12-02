@@ -29,8 +29,7 @@ export const signUp = payload => {
 
     axios
       .post('/customer/customers/', signUpData)
-      .then(res => {
-        console.log(res);
+      .then(() => {
         dispatch(signUpSuccess());
       })
       .catch(err => {

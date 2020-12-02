@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { withRouter } from 'react-router-dom';
 
 import {
   AppBar,
@@ -16,14 +17,16 @@ import {
   ExpandMoreRounded,
 } from '@material-ui/icons';
 
+import classes from './Navbar.module.scss';
 import { Logo } from '../Logo/Logo';
 import { AddressModal } from '../../AddressModal/AddressModal';
-import classes from './Navbar.module.scss';
+import { ProfilePopover } from '../../ProfilePopover/ProfilePopover';
 
-export const Navbar = () => {
+export const Navbar = withRouter(props => {
   const [search, setSearch] = useState('');
   const [address, setAddress] = useState(null);
   const [modal, setModal] = useState(false);
+  const [popover, setPopover] = useState(null);
 
   useEffect(() => {
     const storedAddress = localStorage.getItem('IFOOD_address');
@@ -45,13 +48,17 @@ export const Navbar = () => {
 
   const handleModal = event => setModal(event);
 
+  const handlePopover = event => setPopover(event.currentTarget);
+
+  const handleHome = () => props.history.push('/home');
+
   return (
-    <AppBar position="static" color="secondary">
+    <AppBar position="sticky" color="secondary">
       <Toolbar>
         <Grid container justify="center" alignItems="center" spacing={1}>
           <Hidden mdDown>
             <Grid item lg={2}>
-              <Logo header={true} />
+              <Logo header={true} handleClick={handleHome} />
             </Grid>
           </Hidden>
 
@@ -112,7 +119,11 @@ export const Navbar = () => {
               spacing={2}
             >
               <Grid item>
-                <Fab variant="extended" className={classes.navbar_fab}>
+                <Fab
+                  variant="extended"
+                  className={classes.navbar_fab}
+                  onClick={handlePopover}
+                >
                   <AccountCircleRounded className={classes.navbar_fab__icon} />
                   Meu Perfil
                 </Fab>
@@ -135,6 +146,8 @@ export const Navbar = () => {
         handleAddress={handleAddress}
         address={address}
       />
+
+      <ProfilePopover popover={popover} setPopover={setPopover} />
     </AppBar>
   );
-};
+});

@@ -1,127 +1,150 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
+  Button,
   Card,
-  Grid,
   CardActions,
   CardContent,
-  Button,
-  TextField,
   CircularProgress,
+  Grid,
+  TextField,
 } from '@material-ui/core';
 import InputMask from 'react-input-mask';
 
-import classes from './SignUp.module.scss';
-import {
-  validateEmail,
-  validateDocument,
-  validatePhone,
-  validateName,
-} from '../../helpers/validation';
 import * as actions from '../../store/actions/index';
-import { Logo } from '../../components/UI/Logo/Logo';
-import { Redirect } from 'react-router-dom';
+import classes from './Profile.module.scss';
+import { Spinner } from '../../components/UI/Spinner/Spinner';
+import {
+  validateDocument,
+  validateName,
+  validatePhone,
+} from '../../helpers/validation';
 
-export const SignUp = props => {
+export const Profile = () => {
   /* Redux Selectors */
-  const signUpMail = useSelector(state => state.auth.signUpMail);
-  const error = useSelector(state => state.signUp.error);
-  const loading = useSelector(state => state.signUp.loading);
-  const success = useSelector(state => state.signUp.success);
+  const customer = useSelector(state => state.customer.customer) || [];
+  const error = useSelector(state => state.customer.error);
+  const loading = useSelector(state => state.customer.loading);
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
-  const onSignUp = form => dispatch(actions.signUp(form));
-  const onErrorReset = () => dispatch(actions.errorReset());
-  const onAuthReset = () => dispatch(actions.authReset());
+  const onCustomerData = useCallback(() => dispatch(actions.customerData()), [
+    dispatch,
+  ]);
+  const onCustomerEditData = customer =>
+    dispatch(actions.customerEditData(customer));
 
-  /* React State Hooks (if the user tried to Login using a non-existing mail
-    we initialize the form with the attempted mail) */
+  /* React State Hooks */
   const [form, setForm] = useState({
-    email: signUpMail || '',
+    email: '',
     name: '',
     phone: '',
     document: '',
+    addresses: [],
   });
   const [valid, setValid] = useState({
     email: true,
     name: true,
     phone: true,
     document: true,
+    addresses: true,
   });
   const [submitted, setSubmitted] = useState(false);
+  let errorBlock;
 
   /* Functions */
+  // Loads customer Data on page enter
+  useEffect(() => {
+    onCustomerData();
+  }, [onCustomerData]);
+
+  // Set customer data after successful load
+  useEffect(() => {
+    setForm({
+      email: customer.email || '',
+      name: customer.name || '',
+      phone: customer.phone || '',
+      document: customer.taxPayerIdentificationNumber || '',
+      addresses: customer.addresses || [],
+    });
+  }, [customer]);
+
+  // Each time the user changes any input value we check the validity of them all
+  useEffect(() => {
+    setValid({
+      email: true,
+      name: validateName(form.name),
+      phone: validatePhone(form.phone),
+      document: validateDocument(form.document),
+      addresses: true,
+    });
+  }, [form]);
+
   // Changes each field state value when user types
   const handleChange = event => {
     let { name, value } = event.target;
     setForm({ ...form, [name]: value });
   };
 
-  // Each time the user changes any input value we check the validity of them all
-  useEffect(() => {
-    setValid({
-      name: validateName(form.name),
-      email: validateEmail(form.email),
-      phone: validatePhone(form.phone),
-      document: validateDocument(form.document),
-    });
-  }, [form]);
-
-  // On Logo click redirect to login page
-  const handleReset = () => {
-    onErrorReset();
-    props.history.push('/login');
-  };
-
   // On submit we first check if there are any invalid fields, if any we show the
-  // invalid fields with their respective errors, otherwise we proceed to register the new user
+  // invalid fields with their respective errors, otherwise we proceed to edit the user information
   const handleSubmit = event => {
     event.preventDefault();
     setSubmitted(true);
     Object.keys(valid).reduce((sum, value) => sum && valid[value], true) &&
-      onAuthReset() &&
-      onSignUp(form);
+      onCustomerEditData(form);
   };
 
-  // If register was successful redirects to home!
-  let redirect;
-  redirect = success && <Redirect to="/login" />;
+  // If perhaps we can't find this user in db
+  error === 404 &&
+    (errorBlock = (
+      <div className={classes.card_subtitle}>
+        Erro ao obter informações de usuário, tente novamente mais tarde
+      </div>
+    ));
+
+  // If somehow the user submitted the data without filling all the fields
+  error === 400 &&
+    (errorBlock = (
+      <div className={classes.card_subtitle}>Preencha todos os campos!</div>
+    ));
 
   return (
     <div className={classes.container}>
-      {redirect}
+      <Grid
+        container
+        justify="center"
+        alignItems="flex-start"
+        className={classes.container_body}
+      >
+        <Card className={classes.card}>
+          <form name="form" onSubmit={handleSubmit}>
+            <CardContent>
+              <Grid container item justify="center">
+                <span className={classes.card_title}>Edite seus dados</span>
+              </Grid>
 
-      <Grid container className={classes.container_body}>
-        <Grid item xs={12} sm={5} className={classes.container_body__wrapper}>
-          <Card className={classes.card}>
-            <form name="form" onSubmit={handleSubmit}>
-              <CardContent>
-                <Logo handleReset={handleReset} />
+              <Grid container justify="center" item sm={12}>
+                {errorBlock}
+              </Grid>
 
-                <Grid container item justify="center">
-                  <span className={classes.card_title}>
-                    Cadastre-se para acessar
-                  </span>
-
-                  <Grid container item justify="center" xs={12} sm={9}>
+              {loading ? (
+                <Spinner />
+              ) : (
+                <Fragment>
+                  <Grid container item justify="center" xs={12}>
                     <TextField
                       name="email"
                       label="Email"
                       variant="outlined"
                       className={classes.card_input}
                       value={form.email}
-                      error={(!valid.email && submitted) || (error && true)}
-                      onChange={handleChange}
-                      helperText={
-                        (!valid.email && submitted && 'Email inválido!') ||
-                        (error && 'Email já cadastrado!')
-                      }
+                      disabled
                     />
                   </Grid>
 
-                  <Grid container item justify="center" xs={12} sm={9}>
+                  <Grid container item justify="center" xs={12}>
                     <TextField
                       name="name"
                       label="Nome"
@@ -134,7 +157,7 @@ export const SignUp = props => {
                     />
                   </Grid>
 
-                  <Grid container item justify="center" xs={12} sm={9}>
+                  <Grid container item justify="center" xs={12}>
                     <InputMask
                       mask="999.999.999-99"
                       value={form.document}
@@ -155,7 +178,7 @@ export const SignUp = props => {
                     </InputMask>
                   </Grid>
 
-                  <Grid container item justify="center" xs={12} sm={9}>
+                  <Grid container item justify="center" xs={12}>
                     <InputMask
                       mask="(99) 99999-9999"
                       value={form.phone}
@@ -177,30 +200,27 @@ export const SignUp = props => {
                       )}
                     </InputMask>
                   </Grid>
-                </Grid>
-              </CardContent>
+                </Fragment>
+              )}
+            </CardContent>
 
-              <CardActions className={classes.card_actions}>
-                <Grid container item justify="center" xs={12} sm={9}>
-                  <Button
-                    type="submit"
-                    size="large"
-                    color="primary"
-                    variant="contained"
-                    disabled={loading}
-                    className={classes.card_actions__button}
-                  >
-                    {loading ? (
-                      <CircularProgress color="secondary" />
-                    ) : (
-                      'Enviar'
-                    )}
-                  </Button>
-                </Grid>
-              </CardActions>
-            </form>
-          </Card>
-        </Grid>
+            <CardActions>
+              <Grid container item justify="center" xs={12}>
+                <Button
+                  type="submit"
+                  size="large"
+                  color="primary"
+                  variant="contained"
+                  disabled={loading}
+                  className={classes.card_button}
+                  fullWidth
+                >
+                  {loading ? <CircularProgress color="secondary" /> : 'Salvar'}
+                </Button>
+              </Grid>
+            </CardActions>
+          </form>
+        </Card>
       </Grid>
     </div>
   );

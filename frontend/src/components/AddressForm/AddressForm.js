@@ -5,18 +5,23 @@ import { Grid, Button, TextField, CircularProgress } from '@material-ui/core';
 import InputMask from 'react-input-mask';
 
 import classes from './AddressForm.module.scss';
-import { validateNumber, validatePostalCode } from '../../helpers/validation';
 import * as actions from '../../store/actions/index';
 
+import { validateNumber, validatePostalCode } from '../../helpers/validation';
+
 export const AddressForm = ({ address, handleClick, editAddressId }) => {
+  /* Helper Functions */
+  // Customer Address Long version
   const getLongInfo = field =>
     address.address_components.find(a => a.types.includes(field))?.long_name ||
     '';
 
+  // Customer Address Short version
   const getShortInfo = field =>
     address.address_components.find(a => a.types.includes(field))?.short_name ||
     '';
 
+  /* React State Hooks */
   const [form, setForm] = useState({
     city: getLongInfo('administrative_area_level_2') || '',
     complement: '',
@@ -33,13 +38,13 @@ export const AddressForm = ({ address, handleClick, editAddressId }) => {
   const [valid, setValid] = useState({ streetNumber: true, postalCode: true });
   const [submitted, setSubmitted] = useState(false);
 
-  // const error = useSelector(state => state.customer.error);
+  /* Redux Selectors */
   const loading = useSelector(state => state.customer.loading);
 
+  /* Redux Dispatchers */
   const dispatch = useDispatch();
   const onNewCustomerAddress = form =>
     dispatch(actions.customerNewAddress(form));
-
   const onEditCustomerAddress = (form, addressId) =>
     dispatch(actions.customerEditAddress(form, addressId));
 
@@ -70,7 +75,6 @@ export const AddressForm = ({ address, handleClick, editAddressId }) => {
       } else {
         onNewCustomerAddress(form);
       }
-
       handleClick(form);
     }
   };

@@ -62,12 +62,13 @@ export const authPassword = payload => {
           localStorage.setItem('IFOOD_token', token);
           localStorage.setItem('IFOOD_email', payload.email);
           localStorage.setItem('IFOOD_udid', res.data.id);
+          localStorage.setItem('IFOOD_name', res.data.name);
 
           dispatch(authPasswordSuccess({ token: token }));
         });
       })
       .catch(err => {
-        dispatch(authPasswordFail({ error: err.response.status }));
+        dispatch(authPasswordFail({ error: err }));
       });
   };
 };

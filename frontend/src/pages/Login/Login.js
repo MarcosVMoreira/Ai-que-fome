@@ -173,7 +173,7 @@ export const Login = () => {
       {redirect}
       <Snackbar
         open={success}
-        autoHideDuration={2000}
+        autoHideDuration={5000}
         onClose={handleToastClose}
       >
         <Toast onClose={handleToastClose} severity="success">
@@ -186,7 +186,7 @@ export const Login = () => {
           <Card className={classes.card}>
             <form name="form" onSubmit={handleSubmit}>
               <CardContent>
-                <Logo handleReset={handleReset} />
+                <Logo handleClick={handleReset} />
 
                 <Grid container item justify="center">
                   <span className={classes.card_title}>

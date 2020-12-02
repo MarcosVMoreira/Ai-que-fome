@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { Fragment, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   BrowserRouter,
@@ -8,11 +8,16 @@ import {
   withRouter,
 } from 'react-router-dom';
 
+import { Hidden } from '@material-ui/core';
+
 import * as actions from '../store/actions/index';
 
 import { Home } from '../pages/Home/Home';
 import { Login } from '../pages/Login/Login';
 import { SignUp } from '../pages/SignUp/SignUp';
+import { Profile } from '../pages/Profile/Profile';
+import { Navbar } from '../components/UI/Navbar/Navbar';
+import { BottomNav } from '../components/UI/BottomNav/BottomNav';
 
 export const Routes = () => {
   /* Redux Selectors */
@@ -31,10 +36,17 @@ export const Routes = () => {
   let routes;
   isAuthenticated
     ? (routes = (
-        <Switch>
-          <Route path="/home" component={Home} />
-          <Redirect to="/home" />
-        </Switch>
+        <Fragment>
+          <Navbar />
+          <Switch>
+            <Route path="/home" component={Home} />
+            <Route path="/profile" component={Profile} />
+            <Redirect to="/home" />
+          </Switch>
+          <Hidden mdUp>
+            <BottomNav />
+          </Hidden>
+        </Fragment>
       ))
     : (routes = (
         <Switch>

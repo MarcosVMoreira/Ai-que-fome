@@ -16,7 +16,10 @@ const theme = createMuiTheme(customTheme);
 
 const composeEnhancers =
   process.env.NODE_ENV === 'development'
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+        trace: true,
+        traceLimit: 25,
+      }) || compose
     : null;
 
 const store = createStore(

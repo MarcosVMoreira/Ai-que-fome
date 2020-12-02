@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
-import { Navbar } from '../../components/UI/Navbar/Navbar';
+
+import classes from './Home.module.scss';
 
 export const Home = () => {
   return (
     <Fragment>
-      <div>
-        <Navbar />
+      <div className={classes.home}>
+        <div>Home!</div>
       </div>
-      <div>Home!</div>
     </Fragment>
   );
 };
