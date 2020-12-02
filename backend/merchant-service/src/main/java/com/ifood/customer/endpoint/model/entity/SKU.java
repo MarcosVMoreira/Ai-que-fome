@@ -21,7 +21,7 @@ public class SKU {
 
     private String description;
 
-    private String availability;
+    private boolean availability;
 
     private String schedules;
 

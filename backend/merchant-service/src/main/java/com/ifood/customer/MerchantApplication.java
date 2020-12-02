@@ -1,5 +1,6 @@
 package com.ifood.customer;
 
+import com.ifood.core.property.JwtConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -27,7 +28,7 @@ public class MerchantApplication implements ApplicationRunner {
         log.info("--------------------- Application Arguments ---------------------");
         Stream.of(applicationArguments.getSourceArgs()).forEach(log::info);
         log.info("--------------------- Application Arguments ---------------------");
-        log.info("MS Customer successfully started!");
+        log.info("MS Merchant successfully started!");
     }
 }
 

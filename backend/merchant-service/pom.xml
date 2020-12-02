@@ -92,7 +92,7 @@
     </dependencyManagement>
 
     <build>
-        <finalName>customer</finalName>
+        <finalName>merchant</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

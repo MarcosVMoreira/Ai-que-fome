@@ -15,7 +15,7 @@ public class Category {
     @Id
     private String id;
 
-    private String availability;
+    private boolean availability;
 
     private String name;
 
