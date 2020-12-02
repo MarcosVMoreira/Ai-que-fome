@@ -29,6 +29,7 @@
         <module>core</module>
         <module>auth-service</module>
         <module>token</module>
+        <module>merchant-service</module>
     </modules>
 
     <dependencies>
