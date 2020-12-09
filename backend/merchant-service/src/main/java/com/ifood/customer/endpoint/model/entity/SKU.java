@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -25,11 +26,9 @@ public class SKU {
     private boolean availability;
 
     @NotEmpty(message = "The field 'price' is mandatory")
-    private String price;
+    private BigDecimal price;
 
     private String description;
-
-    private String schedules;
 
     private List<Option> options;
 

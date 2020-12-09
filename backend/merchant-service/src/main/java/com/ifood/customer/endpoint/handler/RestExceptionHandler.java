@@ -51,6 +51,7 @@ public class RestExceptionHandler {
                     .body(Collections.singletonList(ErrorResponse.builder()
                             .code("400.001")
                             .message(getMessage("400.001", field))
+                            .detail(e.getMessage())
                             .build()));
         }
         return defaultBadRequestError();

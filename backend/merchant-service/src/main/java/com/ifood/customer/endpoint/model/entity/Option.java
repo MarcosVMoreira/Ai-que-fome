@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
+import java.math.BigDecimal;
 
 @Data
 @Document
@@ -21,12 +22,12 @@ public class Option {
     private String name;
 
     @NotEmpty(message = "The field 'minQuantity' is mandatory")
-    private String minQuantity;
+    private Integer minQuantity;
 
     @NotEmpty(message = "The field 'maxQuantity' is mandatory")
-    private String maxQuantity;
+    private Integer maxQuantity;
 
     @NotEmpty(message = "The field 'price' is mandatory")
-    private String price;
+    private BigDecimal price;
 
 }

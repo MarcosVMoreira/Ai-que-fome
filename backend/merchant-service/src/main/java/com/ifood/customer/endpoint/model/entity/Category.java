@@ -24,7 +24,4 @@ public class Category {
     @NotEmpty(message = "The field 'name' is mandatory")
     private String name;
 
-    @NotEmpty(message = "The field 'order' is mandatory")
-    private String order;
-
 }

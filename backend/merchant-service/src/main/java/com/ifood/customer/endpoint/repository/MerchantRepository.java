@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface MerchantRepository extends MongoRepository<Merchant, String> {
 
-    Optional<Merchant> findByDocument (String cnpj);
-
+    Optional<Merchant> findByDocument (String document);
 
 }
