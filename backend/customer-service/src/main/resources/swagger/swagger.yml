@@ -1,0 +1,208 @@
+swagger: '2.0'
+info:
+  description: "API referente a clientes do app."
+  version: '1.0'
+  title: "Customers"
+host: "localhost:8080"
+basePath: "/customer"
+schemes:
+  - "https"
+tags:
+  - name: "Customers"
+    description: "Recursos referentes a clientes"
+paths:
+  '/customers':
+    get:
+      tags:
+        - "Customers"
+      description: "Busca todos os clientes"
+      parameters:
+        - in: header
+          name: Authorization
+          description: token gerado pelo endpoint auth
+          required: true
+          type: string
+      responses:
+        '200':
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/GetAllCustomers'
+        '401':
+          description: "Erro de autenticação."
+        '403':
+          description: "Erro de permissão."
+        '404':
+          description: "Recurso não encontrado."
+        '422':
+          description: "Entidade não processável."
+          schema:
+            $ref: '#/definitions/erros'
+        '500':
+          description: "Erro interno do servidor."
+        '503':
+          description: "Erro do servidor indisponível."
+        '504':
+          description: "Limite máximo de tempo atingido."
+    post:
+      tags:
+        - "Customers"
+      description: "Salva um cliente"
+      parameters:
+        - in: header
+          name: Authorization
+          description: token gerado pelo endpoint auth
+          required: true
+          type: string
+      responses:
+        '201':
+          description: Created.
+          headers:
+            location:
+              type: string
+              description: location do recurso criado (GET /customer/customers/{customerId})
+          schema:
+            $ref: '#/definitions/postCustomer'
+        '400':
+          description: "Campo obrigatório não informado."
+          schema:
+            $ref: '#/definitions/erros'
+        '401':
+          description: "Erro de autenticação."
+        '403':
+          description: "Erro de permissão."
+        '404':
+          description: "Recurso não encontrado."
+        '422':
+          description: "Entidade não processável."
+          schema:
+            $ref: '#/definitions/erros'
+        '500':
+          description: "Erro interno do servidor."
+        '503':
+          description: "Erro do servidor indisponível."
+        '504':
+          description: "Limite máximo de tempo atingido."
+
+
+definitions:
+  GetAllCustomers:
+    type: object
+    properties:
+      id:
+        type: string
+        example: "5fac69fa96baad73acc5b63f"
+      name:
+        type: string
+        example: "Joao"
+      phone:
+        type: string
+        example: "3712345678"
+      email:
+        type: string
+        example: "email@emai.com"
+      taxPayerIdentificationNumber:
+        type: string
+        example: "018512345678"
+      addressess:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: string
+              example: "5fac6c9d7d3fee757840b252"
+            streetName:
+              type: "string"
+              example: "Rua Assis"
+            streetNumber:
+              type: number
+              example: 123
+            district:
+              type: "string"
+              example: "MG"
+            city:
+              type: "string"
+              example: "Poços de Caldas"
+            neighborhood:
+              type: "string"
+              example: "Centro"
+            country:
+              type: "string"
+              example: "Brasil"
+            postalCode:
+              type: "string"
+              example: "35512345"
+            coordinates:
+              example: ["1234, 5678", "5678, 1234"]
+            favorite:
+              type: "boolean"
+              example: true
+            complement:
+              type: "string"
+              example: "Apto 123"
+            refPoint:
+              type: "string"
+              example: "Atrás do IF"
+  erros:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        description: "Código do erro"
+      message:
+        type: "string"
+        description: "Mensagem de erro"
+  postCustomer:
+    type: object
+    properties:
+      name:
+        type: string
+        example: "Joao"
+      phone:
+        type: string
+        example: "3712345678"
+      email:
+        type: string
+        example: "email@emai.com"
+      taxPayerIdentificationNumber:
+        type: string
+        example: "018512345678"
+      addressess:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            streetName:
+              type: "string"
+              example: "Rua Assis"
+            streetNumber:
+              type: number
+              example: 123
+            district:
+              type: "string"
+              example: "MG"
+            city:
+              type: "string"
+              example: "Poços de Caldas"
+            neighborhood:
+              type: "string"
+              example: "Centro"
+            country:
+              type: "string"
+              example: "Brasil"
+            postalCode:
+              type: "string"
+              example: "35512345"
+            coordinates:
+              example: ["1234, 5678", "5678, 1234"]
+            favorite:
+              type: "boolean"
+              example: true
+            complement:
+              type: "string"
+              example: "Apto 123"
+            refPoint:
+              type: "string"
+              example: "Atrás do IF"
