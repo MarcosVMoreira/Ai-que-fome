@@ -1,26 +1,24 @@
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CircularProgress,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Snackbar,
+  TextField,
+} from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 import React, { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-
-import {
-  Card,
-  Grid,
-  CardActions,
-  CardContent,
-  Button,
-  TextField,
-  CircularProgress,
-  InputAdornment,
-  IconButton,
-  Snackbar,
-} from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
-
+import { Logo } from '../../../components/UI/Logo/Logo';
+import { Toast } from '../../../components/UI/Toast/Toast';
+import { validateEmail, validatePassword } from '../../../helpers/validation';
+import * as actions from '../../../store/actions/index';
 import classes from './Login.module.scss';
-import { validateEmail, validatePassword } from '../../helpers/validation';
-import * as actions from '../../store/actions/index';
-import { Logo } from '../../components/UI/Logo/Logo';
-import { Toast } from '../../components/UI/Toast/Toast';
 
 export const Login = () => {
   /* React State Hooks */
@@ -42,7 +40,13 @@ export const Login = () => {
     return dispatch(actions.authEmail({ email: email }));
   };
   const onAuthPassword = (email, password) => {
-    return dispatch(actions.authPassword({ email: email, password: password }));
+    return dispatch(
+      actions.authPassword({
+        email: email,
+        password: password,
+        type: 'customer',
+      }),
+    );
   };
   const onReset = () => {
     return dispatch(actions.authReset());

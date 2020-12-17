@@ -1,7 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-
 import {
   Button,
   Dialog,
@@ -17,7 +13,9 @@ import {
   ExitToAppRounded,
   FastfoodRounded,
 } from '@material-ui/icons';
-
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import * as actions from '../../store/actions/index';
 import classes from './ProfileModal.module.scss';
 

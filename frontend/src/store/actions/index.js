@@ -1,15 +1,15 @@
 export {
+  authCheckState,
   authEmail,
   authPassword,
   authReset,
   errorReset,
-  authCheckState,
 } from './auth';
-export { signUp, signUpReset } from './signup';
 export {
   customerData,
+  customerEditAddress,
   customerEditData,
   customerNewAddress,
-  customerEditAddress,
   customerRemoveAddress,
 } from './customer';
+export { signUp, signUpReset } from './signup';

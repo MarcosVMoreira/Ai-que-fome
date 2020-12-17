@@ -1,13 +1,10 @@
+import { Button, CircularProgress, Grid, TextField } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { Grid, Button, TextField, CircularProgress } from '@material-ui/core';
 import InputMask from 'react-input-mask';
-
-import classes from './AddressForm.module.scss';
-import * as actions from '../../store/actions/index';
-
+import { useDispatch, useSelector } from 'react-redux';
 import { validateNumber, validatePostalCode } from '../../helpers/validation';
+import * as actions from '../../store/actions/index';
+import classes from './AddressForm.module.scss';
 
 export const AddressForm = ({ address, handleClick, editAddressId }) => {
   /* Helper Functions */

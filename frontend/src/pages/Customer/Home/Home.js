@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-
 import classes from './Home.module.scss';
 
 export const Home = () => {

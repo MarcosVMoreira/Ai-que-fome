@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
 import {
+  Button,
   Card,
-  Grid,
   CardActions,
   CardContent,
-  Button,
-  TextField,
   CircularProgress,
+  Grid,
+  TextField,
 } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
-
-import classes from './SignUp.module.scss';
-import {
-  validateEmail,
-  validateDocument,
-  validatePhone,
-  validateName,
-} from '../../helpers/validation';
-import * as actions from '../../store/actions/index';
-import { Logo } from '../../components/UI/Logo/Logo';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { Logo } from '../../../components/UI/Logo/Logo';
+import {
+  validateDocument,
+  validateEmail,
+  validateName,
+  validatePhone,
+} from '../../../helpers/validation';
+import * as actions from '../../../store/actions/index';
+import classes from './SignUp.module.scss';
 
 export const SignUp = props => {
   /* Redux Selectors */

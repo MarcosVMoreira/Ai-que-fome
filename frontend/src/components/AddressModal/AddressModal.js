@@ -1,6 +1,3 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
 import {
   Dialog,
   DialogContent,
@@ -15,14 +12,15 @@ import {
   CloseRounded,
   KeyboardArrowLeftRounded,
 } from '@material-ui/icons';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { geocodeByPlaceId } from 'react-places-autocomplete';
-
+import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/actions/index';
-import classes from './AddressModal.module.scss';
-import { Spinner } from '../UI/Spinner/Spinner';
 import { AddressCard } from '../AddressCard/AddressCard';
-import { AddressSearch } from '../AddressSearch/AddressSearch';
 import { AddressForm } from '../AddressForm/AddressForm';
+import { AddressSearch } from '../AddressSearch/AddressSearch';
+import { Spinner } from '../UI/Spinner/Spinner';
+import classes from './AddressModal.module.scss';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" ref={ref} {...props} />;

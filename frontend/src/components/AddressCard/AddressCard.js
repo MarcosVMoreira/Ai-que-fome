@@ -1,5 +1,3 @@
-import React, { Fragment, useState } from 'react';
-
 import {
   Card,
   CardActionArea,
@@ -10,7 +8,7 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import { MoreVertRounded } from '@material-ui/icons';
-
+import React, { Fragment, useState } from 'react';
 import classes from './AddressCard.module.scss';
 
 export const AddressCard = props => {

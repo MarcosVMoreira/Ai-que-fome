@@ -1,6 +1,6 @@
-import * as actionTypes from './actionTypes';
 import axios from '../../Axios';
 import { unmask } from '../../helpers/unmask';
+import * as actionTypes from './actionTypes';
 
 export const customerDataStart = () => ({
   type: actionTypes.CUSTOMER_DATA_START,

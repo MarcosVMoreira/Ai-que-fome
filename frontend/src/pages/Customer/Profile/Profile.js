@@ -1,6 +1,3 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
 import {
   Button,
   Card,
@@ -10,16 +7,17 @@ import {
   Grid,
   TextField,
 } from '@material-ui/core';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
-
-import * as actions from '../../store/actions/index';
-import classes from './Profile.module.scss';
-import { Spinner } from '../../components/UI/Spinner/Spinner';
+import { useDispatch, useSelector } from 'react-redux';
+import { Spinner } from '../../../components/UI/Spinner/Spinner';
 import {
   validateDocument,
   validateName,
   validatePhone,
-} from '../../helpers/validation';
+} from '../../../helpers/validation';
+import * as actions from '../../../store/actions/index';
+import classes from './Profile.module.scss';
 
 export const Profile = () => {
   /* Redux Selectors */

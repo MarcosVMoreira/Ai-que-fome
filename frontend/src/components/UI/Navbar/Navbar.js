@@ -1,6 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
-
 import {
   AppBar,
   Fab,
@@ -10,17 +7,18 @@ import {
   Toolbar,
 } from '@material-ui/core';
 import {
-  Search,
   AccountCircleRounded,
-  ShoppingCartRounded,
-  LocationOnOutlined,
   ExpandMoreRounded,
+  LocationOnOutlined,
+  Search,
+  ShoppingCartRounded,
 } from '@material-ui/icons';
-
-import classes from './Navbar.module.scss';
-import { Logo } from '../Logo/Logo';
+import React, { useEffect, useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import { AddressModal } from '../../AddressModal/AddressModal';
 import { ProfilePopover } from '../../ProfilePopover/ProfilePopover';
+import { Logo } from '../Logo/Logo';
+import classes from './Navbar.module.scss';
 
 export const Navbar = withRouter(props => {
   const [search, setSearch] = useState('');

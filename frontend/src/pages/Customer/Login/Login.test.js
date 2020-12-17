@@ -1,15 +1,12 @@
-import React from 'react';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-
 import { Button, TextField } from '@material-ui/core';
 import { createMount } from '@material-ui/core/test-utils';
-
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { rootReducer } from '../../../store/reducers/index';
 import { Login } from './Login';
-import { rootReducer } from '../../store/reducers/index';
 
 configure({ adapter: new Adapter() });
 

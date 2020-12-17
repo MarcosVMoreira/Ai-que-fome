@@ -1,16 +1,13 @@
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
-
-import { rootReducer } from './store/reducers/index';
-import { Routes } from './routes/routes';
 import customTheme from './assets/themes/theme.json';
-
 import './index.scss';
+import { Routes } from './routes/routes';
+import { rootReducer } from './store/reducers/index';
 
 const theme = createMuiTheme(customTheme);
 

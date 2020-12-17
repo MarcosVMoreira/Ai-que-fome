@@ -1,5 +1,5 @@
-import * as actionTypes from './actionTypes';
 import axios from '../../Axios';
+import * as actionTypes from './actionTypes';
 
 export const authEmailStart = () => ({
   type: actionTypes.AUTH_EMAIL_START,
@@ -58,14 +58,26 @@ export const authPassword = payload => {
       .post('/auth/login', authData)
       .then(res => {
         const token = res.headers.authorization.replace('Bearer ', '');
-        axios.get(`/customer/customers/email/${payload.email}`).then(res => {
-          localStorage.setItem('IFOOD_token', token);
-          localStorage.setItem('IFOOD_email', payload.email);
-          localStorage.setItem('IFOOD_udid', res.data.id);
-          localStorage.setItem('IFOOD_name', res.data.name);
 
-          dispatch(authPasswordSuccess({ token: token }));
-        });
+        if (payload.type === 'customer') {
+          axios.get(`/customer/customers/email/${payload.email}`).then(res => {
+            localStorage.setItem('IFOOD_token', token);
+            localStorage.setItem('IFOOD_email', payload.email);
+            localStorage.setItem('IFOOD_udid', res.data.id);
+            localStorage.setItem('IFOOD_name', res.data.name);
+
+            dispatch(authPasswordSuccess({ token: token }));
+          });
+        } else if (payload.type === 'merchant') {
+          axios.get(`/merchant/merchants/email/${payload.email}`).then(res => {
+            localStorage.setItem('IFOOD_token', token);
+            localStorage.setItem('IFOOD_email', payload.email);
+            localStorage.setItem('IFOOD_udid', res.data.id);
+            localStorage.setItem('IFOOD_name', res.data.name);
+
+            dispatch(authPasswordSuccess({ token: token }));
+          });
+        }
       })
       .catch(err => {
         dispatch(authPasswordFail({ error: err }));

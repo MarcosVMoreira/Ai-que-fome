@@ -1,5 +1,5 @@
 .container {
-  background: url('../../assets/images/background.webp') no-repeat center;
+  background: url('../../../assets/images/background.webp') no-repeat center;
   background-size: cover;
 
   &_body {
@@ -61,7 +61,7 @@
 // Changes the background on mobile
 @media (max-width: 600px) {
   .container {
-    background: url('../../assets/images/background-portrait.webp') no-repeat
+    background: url('../../../assets/images/background-portrait.webp') no-repeat
       center;
     background-size: cover;
 

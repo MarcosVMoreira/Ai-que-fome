@@ -1,5 +1,3 @@
-import React, { Fragment, useState } from 'react';
-
 import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import {
   AccountCircleRounded,
@@ -7,9 +5,9 @@ import {
   SearchRounded,
   ShoppingCartRounded,
 } from '@material-ui/icons';
-
-import classes from './BottomNav.module.scss';
+import React, { Fragment, useState } from 'react';
 import { ProfileModal } from '../../ProfileModal/ProfileModal';
+import classes from './BottomNav.module.scss';
 
 export const BottomNav = () => {
   const [value, setValue] = useState(0);
