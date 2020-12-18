@@ -29,10 +29,10 @@ export const customerData = () => {
           dispatch(customerDataSuccess({ customer: res.data }));
         })
         .catch(err => {
-          dispatch(customerDataFail({ error: err.response.status }));
+          dispatch(customerDataFail({ error: err.response?.status || 500 }));
         });
     } else {
-      dispatch(customerDataFail);
+      dispatch(customerDataFail({ error: 401 }));
     }
   };
 };
@@ -70,7 +70,7 @@ export const customerEditData = customer => {
         dispatch(customerData());
       })
       .catch(err => {
-        dispatch(customerEditDataFail({ error: err.response.status }));
+        dispatch(customerEditDataFail({ error: err.response?.status || 500 }));
       });
   };
 };
@@ -113,7 +113,9 @@ export const customerNewAddress = address => {
         dispatch(customerData());
       })
       .catch(err => {
-        dispatch(customerNewAddressFail({ error: err.response.status }));
+        dispatch(
+          customerNewAddressFail({ error: err.response?.status || 500 }),
+        );
       });
   };
 };
@@ -156,7 +158,9 @@ export const customerEditAddress = (address, addressId) => {
         dispatch(customerData());
       })
       .catch(err => {
-        dispatch(customerEditAddressFail({ error: err.response.status }));
+        dispatch(
+          customerEditAddressFail({ error: err.response?.status || 500 }),
+        );
       });
   };
 };
@@ -186,7 +190,9 @@ export const customerRemoveAddress = addressId => {
         dispatch(customerData());
       })
       .catch(err => {
-        dispatch(customerRemoveAddressFail({ error: err.response.status }));
+        dispatch(
+          customerRemoveAddressFail({ error: err.response?.status || 500 }),
+        );
       });
   };
 };

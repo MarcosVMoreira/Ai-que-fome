@@ -25,7 +25,10 @@ export const authEmail = payload => {
       })
       .catch(err => {
         dispatch(
-          authEmailFail({ error: err.response.status, email: payload.email }),
+          authEmailFail({
+            error: err.response?.status || 500,
+            email: payload.email,
+          }),
         );
       });
   };
@@ -80,7 +83,7 @@ export const authPassword = payload => {
         }
       })
       .catch(err => {
-        dispatch(authPasswordFail({ error: err }));
+        dispatch(authPasswordFail({ error: err.response?.status || 500 }));
       });
   };
 };

@@ -21,7 +21,7 @@ import classes from './Profile.module.scss';
 
 export const Profile = () => {
   /* Redux Selectors */
-  const customer = useSelector(state => state.customer.customer) || [];
+  const customer = useSelector(state => state.customer.customer);
   const error = useSelector(state => state.customer.error);
   const loading = useSelector(state => state.customer.loading);
 
@@ -49,7 +49,6 @@ export const Profile = () => {
     addresses: true,
   });
   const [submitted, setSubmitted] = useState(false);
-  let errorBlock;
 
   /* Functions */
   // Loads customer Data on page enter
@@ -59,24 +58,28 @@ export const Profile = () => {
 
   // Set customer data after successful load
   useEffect(() => {
-    setForm({
-      email: customer.email || '',
-      name: customer.name || '',
-      phone: customer.phone || '',
-      document: customer.taxPayerIdentificationNumber || '',
-      addresses: customer.addresses || [],
-    });
+    if (customer) {
+      setForm({
+        email: customer.email || '',
+        name: customer.name || '',
+        phone: customer.phone || '',
+        document: customer.taxPayerIdentificationNumber || '',
+        addresses: customer.addresses || [],
+      });
+    }
   }, [customer]);
 
   // Each time the user changes any input value we check the validity of them all
   useEffect(() => {
-    setValid({
-      email: true,
-      name: validateName(form.name),
-      phone: validatePhone(form.phone),
-      document: validateDocument(form.document),
-      addresses: true,
-    });
+    if (form) {
+      setValid({
+        email: true,
+        name: validateName(form.name),
+        phone: validatePhone(form.phone),
+        document: validateDocument(form.document),
+        addresses: true,
+      });
+    }
   }, [form]);
 
   // Changes each field state value when user types
@@ -94,18 +97,49 @@ export const Profile = () => {
       onCustomerEditData(form);
   };
 
-  // If perhaps we can't find this user in db
+  let errorBlock;
+  // If we get a 400 error, it means the user is trying to submit an incomplete form
+  error === 400 &&
+    (errorBlock = (
+      <div className={classes.card_subtitle}>
+        Erro de de formulário, preencha todos os campos!
+      </div>
+    ));
+  // Authentication error
+  error === 401 &&
+    (errorBlock = (
+      <div className={classes.card_subtitle}>
+        Erro de autenticação, faça login novamente!
+      </div>
+    ));
+  // Permission error
+  error === 403 &&
+    (errorBlock = (
+      <div className={classes.card_subtitle}>
+        Erro de permissão, contate um administrador caso continue vendo este
+        erro!
+      </div>
+    ));
+  // Customer error
   error === 404 &&
     (errorBlock = (
       <div className={classes.card_subtitle}>
         Erro ao obter informações de usuário, tente novamente mais tarde
       </div>
     ));
-
-  // If somehow the user submitted the data without filling all the fields
-  error === 400 &&
+  // Processing error
+  error === 422 &&
     (errorBlock = (
-      <div className={classes.card_subtitle}>Preencha todos os campos!</div>
+      <div className={classes.card_subtitle}>
+        Erro de processamento, por favor contate um administrador!
+      </div>
+    ));
+  // Server error
+  (error === 500 || error === 503 || error === 504) &&
+    (errorBlock = (
+      <div className={classes.card_subtitle}>
+        Erro de servidor, por favor contate um administrador!
+      </div>
     ));
 
   return (

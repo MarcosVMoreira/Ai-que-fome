@@ -5,6 +5,7 @@ import {
   CardContent,
   CircularProgress,
   Grid,
+  Snackbar,
   TextField,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
@@ -12,6 +13,7 @@ import InputMask from 'react-input-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { Logo } from '../../../components/UI/Logo/Logo';
+import { Toast } from '../../../components/UI/Toast/Toast';
 import {
   validateDocument,
   validateEmail,
@@ -83,20 +85,53 @@ export const SignUp = props => {
       onSignUp(form);
   };
 
-  // If register was successful redirects to home!
+  // Set Toast
+  const setToast = message => {
+    return (
+      <Snackbar
+        open={true}
+        autoHideDuration={10000}
+        onClose={() => (toast = '')}
+      >
+        <Toast onClose={() => (toast = '')} severity="error">
+          {message}
+        </Toast>
+      </Snackbar>
+    );
+  };
+
+  let toast;
   let redirect;
+  // If we get a 400 error, it means the user is trying to submit an incomplete form
+  error === 400 &&
+    (toast = setToast('Erro de de formulário, preencha todos os campos!'));
+  // If we get a 403 error, it means the user is trying to access something it doesn't have access
+  error === 403 &&
+    (toast = setToast(
+      'Erro de permissão, contate um administrador caso continue vendo este erro!',
+    ));
+  // If we get a 404 error, it means the user reached a null pointer!
+  error === 404 &&
+    (toast = setToast(
+      'Erro de acesso, contate um administrador caso continue vendo este erro!',
+    ));
+  // If we get 500, 503 or 504 redirects the user to not found page
+  (error === 500 || error === 503 || error === 504) &&
+    (redirect = <Redirect to="/not-found" />);
+  // If register was successful redirects to home!
   redirect = success && <Redirect to="/login" />;
 
   return (
     <div className={classes.container}>
       {redirect}
+      {toast}
 
       <Grid container className={classes.container_body}>
         <Grid item xs={12} sm={5} className={classes.container_body__wrapper}>
           <Card className={classes.card}>
             <form name="form" onSubmit={handleSubmit}>
               <CardContent>
-                <Logo handleReset={handleReset} />
+                <Logo handleClick={handleReset} />
 
                 <Grid container item justify="center">
                   <span className={classes.card_title}>
@@ -110,11 +145,11 @@ export const SignUp = props => {
                       variant="outlined"
                       className={classes.card_input}
                       value={form.email}
-                      error={(!valid.email && submitted) || (error && true)}
+                      error={(!valid.email && submitted) || error === 422}
                       onChange={handleChange}
                       helperText={
                         (!valid.email && submitted && 'Email inválido!') ||
-                        (error && 'Email já cadastrado!')
+                        (error === 422 && 'Email já cadastrado!')
                       }
                     />
                   </Grid>

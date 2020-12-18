@@ -32,7 +32,7 @@ export const signUp = payload => {
         dispatch(signUpSuccess());
       })
       .catch(err => {
-        dispatch(signUpFail({ error: err.response.status }));
+        dispatch(signUpFail({ error: err.response?.status || 500 }));
       });
   };
 };

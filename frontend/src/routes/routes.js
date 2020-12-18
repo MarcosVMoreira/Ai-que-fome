@@ -1,19 +1,14 @@
 import { Hidden } from '@material-ui/core';
 import React, { Fragment, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  BrowserRouter,
-  Redirect,
-  Route,
-  Switch,
-  withRouter,
-} from 'react-router-dom';
+import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
 import { BottomNav } from '../components/UI/BottomNav/BottomNav';
 import { Navbar } from '../components/UI/Navbar/Navbar';
 import { Home } from '../pages/Customer/Home/Home';
 import { Login } from '../pages/Customer/Login/Login';
 import { Profile } from '../pages/Customer/Profile/Profile';
 import { SignUp } from '../pages/Customer/SignUp/SignUp';
+import { NotFound } from '../pages/NotFound/NotFound';
 import * as actions from '../store/actions/index';
 
 export const Routes = () => {
@@ -38,7 +33,7 @@ export const Routes = () => {
           <Switch>
             <Route path="/home" component={Home} />
             <Route path="/profile" component={Profile} />
-            <Redirect to="/home" />
+            <Route path="*" component={Home} />
           </Switch>
           <Hidden mdUp>
             <BottomNav />
@@ -49,7 +44,8 @@ export const Routes = () => {
         <Switch>
           <Route path="/login" component={Login} />
           <Route path="/signup" component={withRouter(SignUp)} />
-          <Redirect to="/login" />
+          <Route path="/not-found" component={withRouter(NotFound)} />
+          <Route path="*" component={Login} />
         </Switch>
       ));
 

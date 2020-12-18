@@ -38,7 +38,6 @@ export const AddressModal = withWidth()(props => {
     message: null,
   });
   const [editAddress, setEditAddress] = useState(null);
-  let errorBlock;
 
   /* Redux Selectors */
   const customer = useSelector(state => state.customer.customer) || [];
@@ -126,11 +125,41 @@ export const AddressModal = withWidth()(props => {
     }
   };
 
-  // If perhaps we can't find this user in db
+  let errorBlock;
+  // Authentication error
+  error === 401 &&
+    (errorBlock = (
+      <div className={classes.modal_subtitle}>
+        Erro de autenticação, faça login novamente!
+      </div>
+    ));
+  // Permission error
+  error === 403 &&
+    (errorBlock = (
+      <div className={classes.modal_subtitle}>
+        Erro de permissão, contate um administrador caso continue vendo este
+        erro!
+      </div>
+    ));
+  // Customer error
   error === 404 &&
     (errorBlock = (
       <div className={classes.modal_subtitle}>
         Erro ao obter os endereços, tente novamente mais tarde
+      </div>
+    ));
+  // Processing error
+  error === 422 &&
+    (errorBlock = (
+      <div className={classes.modal_subtitle}>
+        Erro de processamento, por favor contate um administrador!
+      </div>
+    ));
+  // Server error
+  (error === 500 || error === 503 || error === 504) &&
+    (errorBlock = (
+      <div className={classes.modal_subtitle}>
+        Erro de servidor, por favor contate um administrador!
       </div>
     ));
 

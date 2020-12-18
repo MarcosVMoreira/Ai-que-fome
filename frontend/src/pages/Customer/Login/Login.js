@@ -105,6 +105,21 @@ export const Login = () => {
     setInvalidField(true);
   };
 
+  // Set Toast
+  const setToast = message => {
+    return (
+      <Snackbar
+        open={true}
+        autoHideDuration={10000}
+        onClose={() => (toast = '')}
+      >
+        <Toast onClose={() => (toast = '')} severity="error">
+          {message}
+        </Toast>
+      </Snackbar>
+    );
+  };
+
   // If registered is false then no email has been entered yet, therefore, show email for login
   // Otherwise, show password for login (it means the user has entered a registered mail)
   let form;
@@ -165,16 +180,29 @@ export const Login = () => {
       ));
 
   let redirect;
-  // If we get a 404 error, it means the user doesn't have an account, redirect to signup!
-  error === 404 && (redirect = <Redirect to="/signup" />);
+  let toast;
   // If we get a 401 error, it means the password entered by the user is incorrect
   error === 401 && handleWrongPassword();
+  // If we get a 403 error, it means the user is trying to access something it doesn't have access
+  error === 403 &&
+    (toast = setToast(
+      'Erro de permissão, contate um administrador caso continue vendo este erro!',
+    ));
+  // If we get a 404 error, it means the user doesn't have an account, redirect to signup!
+  error === 404 && (redirect = <Redirect to="/signup" />);
+  // If we get a 422 error, it means the user sent an incompatible format to the server
+  error === 422 &&
+    (toast = setToast(
+      'Erro de processamento, por favor contate um administrador!',
+    ));
+  // If we get 500, 503 or 504 redirects the user to not found page
+  (error === 500 || error === 503 || error === 504) &&
+    (redirect = <Redirect to="/not-found" />);
   // If user is authenticated redirects to home!
   authenticated && (redirect = <Redirect to="/home" />);
 
-  return (
-    <div className={classes.container}>
-      {redirect}
+  success &&
+    (toast = (
       <Snackbar
         open={success}
         autoHideDuration={5000}
@@ -184,6 +212,12 @@ export const Login = () => {
           Cadastrado com sucesso!
         </Toast>
       </Snackbar>
+    ));
+
+  return (
+    <div className={classes.container}>
+      {redirect}
+      {toast}
 
       <Grid container className={classes.container_body}>
         <Grid item xs={12} sm={5}>
@@ -208,7 +242,7 @@ export const Login = () => {
                     size="large"
                     color="primary"
                     variant="contained"
-                    disabled={loading}
+                    disabled={loading || error === 403 || error === 422}
                     className={classes.card_actions__button}
                   >
                     {loading ? (
