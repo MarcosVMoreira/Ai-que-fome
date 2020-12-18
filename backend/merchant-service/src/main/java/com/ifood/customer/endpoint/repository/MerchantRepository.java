@@ -10,4 +10,7 @@ public interface MerchantRepository extends MongoRepository<Merchant, String> {
 
     Optional<Merchant> findByDocument (String document);
 
+    Optional<Merchant> findByEmail (String email);
+
+
 }

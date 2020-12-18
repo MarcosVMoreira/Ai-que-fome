@@ -27,6 +27,10 @@ public class Merchant {
     @NotEmpty(message = "The field 'name' is mandatory")
     private String name;
 
+    @NotEmpty(message = "The field 'email' is mandatory")
+    @Indexed(unique=true)
+    private String email;
+
     @NotEmpty(message = "The field 'logo' is mandatory")
     private String logo;
 

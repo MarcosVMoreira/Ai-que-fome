@@ -5,6 +5,7 @@ import com.ifood.customer.endpoint.error.NotFoundException;
 import com.ifood.customer.endpoint.error.UnprocessableEntityException;
 import com.ifood.customer.endpoint.model.entity.Merchant;
 import com.ifood.customer.endpoint.repository.MerchantRepository;
+import com.ifood.customer.producer.MerchantMessageProducer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,8 @@ public class MerchantService {
 
     private final MerchantRepository merchantRepository;
 
+    private final MerchantMessageProducer messageProducer;
+
     public List<Merchant> listAll(Pageable pageable) {
         logger.info("Recuperando da base de dados todos os restaurantes...");
         return merchantRepository.findAll(pageable)
@@ -34,15 +37,27 @@ public class MerchantService {
     public Merchant save(Merchant merchant) {
         logger.info("Criando novo restaurante na base de dados...");
 
-        Optional<Merchant> foundMerchant =
+        Optional<Merchant> foundMerchantByDocument =
                 merchantRepository.findByDocument(merchant.getDocument());
 
-        if (foundMerchant.isPresent()) {
+        Optional<Merchant> foundMerchantByEmail =
+                merchantRepository.findByEmail(merchant.getEmail());
+
+        if (foundMerchantByDocument.isPresent()) {
             logger.info("Documento {} já existe na base de dados.", merchant.getDocument());
             throw new UnprocessableEntityException("422.001");
         }
 
-        return merchantRepository.save(merchant);
+        if (foundMerchantByEmail.isPresent()) {
+            logger.info("Email {} já existe na base de dados.", merchant.getDocument());
+            throw new UnprocessableEntityException("422.002");
+        }
+
+        Merchant savedMerchant = merchantRepository.save(merchant);
+
+        messageProducer.sendMerchantDataToRabbit(savedMerchant);
+
+        return savedMerchant;
     }
 
     public Merchant getMerchantById (String id) {

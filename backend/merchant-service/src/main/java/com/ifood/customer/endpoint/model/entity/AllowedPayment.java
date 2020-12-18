@@ -1,5 +1,6 @@
 package com.ifood.customer.endpoint.model.entity;
 
+import com.ifood.customer.endpoint.enumeration.PaymentEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class AllowedPayment {
     private String id;
 
     @NotEmpty(message = "The field 'name' is mandatory")
-    private String name;
+    private PaymentEnum name;
 
     @NotNull(message = "The field 'isAllowed' is mandatory")
     private boolean isAllowed;
