@@ -5,9 +5,10 @@ import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
 import { BottomNav } from '../components/UI/BottomNav/BottomNav';
 import { Navbar } from '../components/UI/Navbar/Navbar';
 import { Home } from '../pages/Customer/Home/Home';
-import { Login } from '../pages/Customer/Login/Login';
+import { Login as CustomerLogin } from '../pages/Customer/Login/Login';
 import { Profile } from '../pages/Customer/Profile/Profile';
 import { SignUp } from '../pages/Customer/SignUp/SignUp';
+import { Login as MerchantLogin } from '../pages/Merchant/Login/Login';
 import { NotFound } from '../pages/NotFound/NotFound';
 import * as actions from '../store/actions/index';
 
@@ -42,10 +43,11 @@ export const Routes = () => {
       ))
     : (routes = (
         <Switch>
-          <Route path="/login" component={Login} />
+          <Route path="/login" component={withRouter(CustomerLogin)} />
           <Route path="/signup" component={withRouter(SignUp)} />
+          <Route path="/merchant" component={withRouter(MerchantLogin)} />
           <Route path="/not-found" component={withRouter(NotFound)} />
-          <Route path="*" component={Login} />
+          <Route path="*" component={withRouter(CustomerLogin)} />
         </Switch>
       ));
 

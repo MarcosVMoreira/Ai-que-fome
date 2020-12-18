@@ -120,8 +120,8 @@ export const Login = props => {
     );
   };
 
-  const handleMerchant = () => {
-    props.history.push('/merchant');
+  const handleConsumer = () => {
+    props.history.push('/login');
   };
 
   // If registered is false then no email has been entered yet, therefore, show email for login
@@ -228,11 +228,11 @@ export const Login = props => {
           <Card className={classes.card}>
             <form name="form" onSubmit={handleSubmit}>
               <CardContent>
-                <Logo handleClick={handleReset} />
+                <Logo handleClick={handleReset} merchant />
 
                 <Grid container item justify="center">
                   <span className={classes.card_title}>
-                    Falta pouco para matar sua fome!
+                    Falta pouco para alavancar seu negócio!
                   </span>
 
                   {form}
@@ -262,9 +262,9 @@ export const Login = props => {
                     <Button
                       type="button"
                       color="primary"
-                      onClick={handleMerchant}
+                      onClick={handleConsumer}
                     >
-                      Lojista? Clique aqui
+                      Consumidor? Clique aqui
                     </Button>
                   </Grid>
                 </Grid>

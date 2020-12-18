@@ -45,7 +45,7 @@ describe('<Login /> Email', () => {
     );
 
     expect(wrapper.find(TextField).props().helperText).toBe(false);
-    wrapper.find(Button).simulate('submit');
+    wrapper.find(Button).at(0).simulate('submit');
     expect(wrapper.find(TextField).props().helperText).toBe('Email inválido!');
   });
 
@@ -62,7 +62,7 @@ describe('<Login /> Email', () => {
     expect(wrapper.find(TextField).props().value).toBe('otavio@otavio');
     expect(wrapper.find(TextField).props().helperText).toBe(false);
 
-    wrapper.find(Button).simulate('submit');
+    wrapper.find(Button).at(0).simulate('submit');
     expect(wrapper.find(TextField).props().helperText).toBe('Email inválido!');
   });
 });
@@ -111,7 +111,7 @@ describe('<Login /> Password', () => {
     );
 
     expect(wrapper.find(TextField).props().helperText).toBe(false);
-    wrapper.find(Button).simulate('submit');
+    wrapper.find(Button).at(0).simulate('submit');
     expect(wrapper.find(TextField).props().helperText).toBe('Senha inválida!');
   });
 });

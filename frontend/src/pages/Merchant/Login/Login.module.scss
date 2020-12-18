@@ -1,17 +1,12 @@
 .container {
-  background: url('../../../assets/images/background-signup.webp') no-repeat
+  background: url('../../../assets/images/background-merchant.webp') no-repeat
     center;
   background-size: cover;
 
   &_body {
     height: 100vh;
-    justify-content: flex-start;
+    justify-content: flex-end;
     align-items: center;
-
-    &__wrapper {
-      display: flex;
-      justify-content: center;
-    }
   }
 }
 
@@ -21,15 +16,31 @@
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.05), 0px 4px 16px rgba(0, 0, 0, 0.06) !important;
   padding: 30px 0px;
 
+  &_header {
+    display: flex;
+    justify-content: center;
+
+    &__logo {
+      cursor: pointer;
+      width: 150px;
+      margin: 20px;
+    }
+  }
+
   &_title {
-    font-size: 1.6em;
+    font-size: 1.5em;
     font-weight: 500;
     text-align: center;
   }
 
+  &_subtitle {
+    font-size: 1.3em;
+    color: #8e8e8e;
+    margin: 16px 0;
+  }
+
   &_input {
     width: 340px;
-    margin: 10px 0 !important;
   }
 
   &_actions {
@@ -51,8 +62,8 @@
 // Changes the background on mobile
 @media (max-width: 600px) {
   .container {
-    background: url('../../../assets/images/background-signup-portrait.webp')
-      no-repeat center;
+    background: url('../../../assets/images/background-portrait.webp') no-repeat
+      center;
     background-size: cover;
 
     &_body {
