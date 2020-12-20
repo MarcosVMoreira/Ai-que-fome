@@ -18,16 +18,16 @@ public class Option {
     @Id
     private String id;
 
-    @NotEmpty(message = "The field 'name' is mandatory")
+    @NotEmpty(message = "400.003")
     private String name;
 
-    @NotEmpty(message = "The field 'minQuantity' is mandatory")
+    @NotEmpty(message = "400.003")
     private Integer minQuantity;
 
-    @NotEmpty(message = "The field 'maxQuantity' is mandatory")
+    @NotEmpty(message = "400.003")
     private Integer maxQuantity;
 
-    @NotEmpty(message = "The field 'price' is mandatory")
+    @NotEmpty(message = "400.003")
     private BigDecimal price;
 
 }

@@ -1,5 +1,6 @@
 package com.ifood.customer.endpoint.controller;
 
+import com.ifood.customer.endpoint.model.entity.AllowedPayment;
 import com.ifood.customer.endpoint.model.entity.Merchant;
 import com.ifood.customer.endpoint.service.MerchantService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("merchants")
@@ -30,7 +32,7 @@ public class MerchantController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<Merchant> listAll (Pageable pageable) {
+    public Page<Merchant> listAll(Pageable pageable) {
         return new PageImpl<>(merchantService.listAll(pageable));
     }
 
@@ -42,23 +44,61 @@ public class MerchantController {
                 buildAndExpand(merchantService.save(merchant).getId()).toUri()).build();
     }
 
+    @GetMapping("email/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    public Merchant getMerchantByEmail(@PathVariable String email) {
+        return merchantService.getMerchantByEmail(email);
+    }
+
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Merchant getMerchantById (@PathVariable String id) {
+    public Merchant getMerchantById(@PathVariable String id) {
         return merchantService.getMerchantById(id);
     }
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Merchant update (@Valid @RequestBody Merchant merchant, @PathVariable String id) {
+    public Merchant update(@Valid @RequestBody Merchant merchant, @PathVariable String id) {
         return merchantService.update(merchant, id);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete (@PathVariable String id) {
+    public void delete(@PathVariable String id) {
         merchantService.delete(id);
     }
 
+    /* Allowed Payments */
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{merchantId}/allowed-payment")
+    public ResponseEntity<Void> saveAllowedPayment(@PathVariable String merchantId,
+                                                   @Valid @RequestBody AllowedPayment allowedPayment,
+                                                   UriComponentsBuilder componentsBuilder) {
+        List<String> list = merchantService.saveAllowedPayment(merchantId, allowedPayment);
+        return ResponseEntity.created(componentsBuilder.path("merchant/merchants/" + list.get(0) + "/allowed-payment/{id}").
+                buildAndExpand(list.get(1)).toUri()).build();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{merchantId}/allowed-payment/{allowedPaymentId}")
+    public AllowedPayment getAllowedPayment(@PathVariable String merchantId,
+                                            @PathVariable String allowedPaymentId) {
+        return merchantService.getAllowedPaymentById(merchantId, allowedPaymentId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{merchantId}/allowed-payment/{allowedPaymentId}")
+    public Merchant updateAllowedPayment(@PathVariable String merchantId,
+                                         @PathVariable String allowedPaymentId,
+                                         @Valid @RequestBody AllowedPayment allowedPayment) {
+        return merchantService.updateAllowedPayment(merchantId, allowedPaymentId, allowedPayment);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{merchantId}/allowed-payment/{allowedPaymentId}")
+    public void deleteAllowedPayment(@PathVariable String merchantId,
+                                     @PathVariable String allowedPaymentId) {
+        merchantService.deleteAllowedPayment(merchantId, allowedPaymentId);
+    }
 }

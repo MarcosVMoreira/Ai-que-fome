@@ -19,13 +19,13 @@ public class SKU {
     @Id
     private String id;
 
-    @NotEmpty(message = "The field 'name' is mandatory")
+    @NotEmpty(message = "400.003")
     private String name;
 
-    @NotEmpty(message = "The field 'availability' is mandatory")
+    @NotEmpty(message = "400.003")
     private boolean availability;
 
-    @NotEmpty(message = "The field 'price' is mandatory")
+    @NotEmpty(message = "400.003")
     private BigDecimal price;
 
     private String description;

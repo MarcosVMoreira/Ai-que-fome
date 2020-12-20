@@ -18,10 +18,10 @@ public class Category {
     @Id
     private String id;
 
-    @NotNull(message = "The field 'availability' is mandatory")
+    @NotNull(message = "400.003")
     private boolean availability;
 
-    @NotEmpty(message = "The field 'name' is mandatory")
+    @NotEmpty(message = "400.003")
     private String name;
 
 }

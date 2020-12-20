@@ -20,48 +20,48 @@ public class Merchant {
     @Id
     private String id;
 
-    @NotEmpty(message = "The field 'document' is mandatory")
+    @NotEmpty(message = "400.003")
     @Indexed(unique=true)
     private String document;
 
-    @NotEmpty(message = "The field 'name' is mandatory")
+    @NotEmpty(message = "400.003")
     private String name;
 
-    @NotEmpty(message = "The field 'email' is mandatory")
+    @NotEmpty(message = "400.003")
     @Indexed(unique=true)
     private String email;
 
-    @NotEmpty(message = "The field 'logo' is mandatory")
+    @NotEmpty(message = "400.003")
     private String logo;
 
-    @NotEmpty(message = "The field 'category' is mandatory")
+    @NotEmpty(message = "400.003")
     private String category;
 
-    @NotEmpty(message = "The field 'phone' is mandatory")
+    @NotEmpty(message = "400.003")
     private String phone;
 
-    @NotEmpty(message = "The field 'country' is mandatory")
+    @NotEmpty(message = "400.003")
     private String country;
 
-    @NotEmpty(message = "The field 'state' is mandatory")
+    @NotEmpty(message = "400.003")
     private String state;
 
-    @NotEmpty(message = "The field 'city' is mandatory")
+    @NotEmpty(message = "400.003")
     private String city;
 
-    @NotEmpty(message = "The field 'neighborhood' is mandatory")
+    @NotEmpty(message = "400.003")
     private String neighborhood;
 
-    @NotEmpty(message = "The field 'streetName' is mandatory")
+    @NotEmpty(message = "400.003")
     private String streetName;
 
-    @NotEmpty(message = "The field 'streetNumber' is mandatory")
+    @NotEmpty(message = "400.003")
     private String streetNumber;
 
-    @NotEmpty(message = "The field 'postalCode' is mandatory")
+    @NotEmpty(message = "400.003")
     private String postalCode;
 
-    @NotNull(message = "The field 'availability' is mandatory")
+    @NotNull(message = "400.003")
     private boolean availability;
 
     private List<AllowedPayment> allowedPayments;
