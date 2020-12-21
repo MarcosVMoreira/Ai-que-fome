@@ -25,6 +25,11 @@ export const validateDocument = document => {
   return re.test(unmask(document));
 };
 
+export const validateCompanyDocument = document => {
+  const re = /^\d{14}$/;
+  return re.test(unmask(document));
+};
+
 export const validatePhone = phone => {
   const re = /^\d{11}$/;
   return re.test(unmask(phone.replace(/[ ]/g, '')));
