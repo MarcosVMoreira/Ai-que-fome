@@ -1,20 +1,27 @@
 import { Hidden } from '@material-ui/core';
 import React, { Fragment, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter, Route, Switch, withRouter } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Redirect,
+  Route,
+  Switch,
+  withRouter,
+} from 'react-router-dom';
 import { BottomNav } from '../components/UI/BottomNav/BottomNav';
 import { Navbar } from '../components/UI/Navbar/Navbar';
-import { Home } from '../pages/Customer/Home/Home';
+import { Home as CustomerHome } from '../pages/Customer/Home/Home';
 import { Login as CustomerLogin } from '../pages/Customer/Login/Login';
 import { Profile } from '../pages/Customer/Profile/Profile';
-import { SignUp } from '../pages/Customer/SignUp/SignUp';
+import { SignUp as CustomerSignUp } from '../pages/Customer/SignUp/SignUp';
+import { Home as MerchantHome } from '../pages/Merchant/Home/Home';
 import { Login as MerchantLogin } from '../pages/Merchant/Login/Login';
-import { NotFound } from '../pages/NotFound/NotFound';
+import { SignUp as MerchantSignUp } from '../pages/Merchant/SignUp/SignUp';
 import * as actions from '../store/actions/index';
 
 export const Routes = () => {
   /* Redux Selectors */
-  const isAuthenticated = useSelector(state => state.auth.token !== null);
+  const authenticated = useSelector(state => state.auth.authenticated);
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
@@ -27,14 +34,15 @@ export const Routes = () => {
   }, [onCheckState]);
 
   let routes;
-  isAuthenticated
+  authenticated
     ? (routes = (
         <Fragment>
-          <Navbar />
+          {authenticated === 'customer' ? <Navbar /> : null}
           <Switch>
-            <Route path="/home" component={Home} />
-            <Route path="/profile" component={Profile} />
-            <Route path="*" component={Home} />
+            <Route path="/customer/home" component={CustomerHome} />
+            <Route path="/customer/profile" component={Profile} />
+            <Route path="/merchant/home" component={MerchantHome} />
+            <Redirect to={`/${authenticated}/home`} />
           </Switch>
           <Hidden mdUp>
             <BottomNav />
@@ -43,11 +51,17 @@ export const Routes = () => {
       ))
     : (routes = (
         <Switch>
-          <Route path="/login" component={withRouter(CustomerLogin)} />
-          <Route path="/signup" component={withRouter(SignUp)} />
-          <Route path="/merchant" component={withRouter(MerchantLogin)} />
-          <Route path="/not-found" component={withRouter(NotFound)} />
-          <Route path="*" component={withRouter(CustomerLogin)} />
+          <Route path="/customer/login" component={withRouter(CustomerLogin)} />
+          <Route
+            path="/customer/signup"
+            component={withRouter(CustomerSignUp)}
+          />
+          <Route path="/merchant/login" component={withRouter(MerchantLogin)} />
+          <Route
+            path="/merchant/signup"
+            component={withRouter(MerchantSignUp)}
+          />
+          <Redirect to="/customer/login" />
         </Switch>
       ));
 

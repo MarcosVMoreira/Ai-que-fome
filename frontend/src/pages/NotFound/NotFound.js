@@ -18,7 +18,7 @@ export const NotFound = props => {
   // On Logo click redirect to login page
   const handleReset = () => {
     onErrorReset();
-    props.history.push('/login');
+    props.history.push('/customer/login');
   };
 
   return (

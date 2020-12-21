@@ -48,7 +48,7 @@ export const Navbar = withRouter(props => {
 
   const handlePopover = event => setPopover(event.currentTarget);
 
-  const handleHome = () => props.history.push('/home');
+  const handleHome = () => props.history.push('/customer/home');
 
   return (
     <AppBar position="sticky" color="secondary">

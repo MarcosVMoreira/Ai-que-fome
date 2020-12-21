@@ -72,7 +72,7 @@ export const SignUp = props => {
   // On Logo click redirect to login page
   const handleReset = () => {
     onErrorReset();
-    props.history.push('/login');
+    props.history.push('/customer/login');
   };
 
   // On submit we first check if there are any invalid fields, if any we show the
@@ -119,7 +119,7 @@ export const SignUp = props => {
   (error === 500 || error === 503 || error === 504) &&
     (redirect = <Redirect to="/not-found" />);
   // If register was successful redirects to home!
-  redirect = success && <Redirect to="/login" />;
+  redirect = success && <Redirect to="/customer/login" />;
 
   return (
     <div className={classes.container}>

@@ -29,7 +29,6 @@ export const Login = props => {
 
   /* Redux Selectors */
   const registered = useSelector(state => state.auth.registered);
-  const authenticated = useSelector(state => state.auth.authenticated);
   const error = useSelector(state => state.auth.error);
   const loading = useSelector(state => state.auth.loading);
   const success = useSelector(state => state.signUp.success);
@@ -44,7 +43,7 @@ export const Login = props => {
       actions.authPassword({
         email: email,
         password: password,
-        type: 'customer',
+        type: 'merchant',
       }),
     );
   };
@@ -121,7 +120,7 @@ export const Login = props => {
   };
 
   const handleConsumer = () => {
-    props.history.push('/login');
+    props.history.push('/customer/login');
   };
 
   // If registered is false then no email has been entered yet, therefore, show email for login
@@ -193,7 +192,7 @@ export const Login = props => {
       'Erro de permissão, contate um administrador caso continue vendo este erro!',
     ));
   // If we get a 404 error, it means the user doesn't have an account, redirect to signup!
-  error === 404 && (redirect = <Redirect to="/signup" />);
+  error === 404 && (redirect = <Redirect to="/merchant/signup" />);
   // If we get a 422 error, it means the user sent an incompatible format to the server
   error === 422 &&
     (toast = setToast(
@@ -202,8 +201,6 @@ export const Login = props => {
   // If we get 500, 503 or 504 redirects the user to not found page
   (error === 500 || error === 503 || error === 504) &&
     (redirect = <Redirect to="/not-found" />);
-  // If user is authenticated redirects to home!
-  authenticated && (redirect = <Redirect to="/home" />);
 
   success &&
     (toast = (

@@ -5,7 +5,7 @@ export const Home = () => {
   return (
     <Fragment>
       <div className={classes.home}>
-        <div>Customer Home!</div>
+        <div>Merchant Home!</div>
       </div>
     </Fragment>
   );

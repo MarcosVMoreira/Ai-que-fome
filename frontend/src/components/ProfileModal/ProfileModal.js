@@ -45,11 +45,12 @@ export const ProfileModal = withRouter(props => {
   // Customer Logout
   const handleLogout = () => {
     onLogout();
+    props.history.push('/customer/login');
   };
 
   // Go to Customer Profile Page
   const handleProfile = () => {
-    props.history.push('/profile');
+    props.history.push('/customer/profile');
     props.handleModal(false);
   };
 

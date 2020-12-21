@@ -65,20 +65,22 @@ export const authPassword = payload => {
         if (payload.type === 'customer') {
           axios.get(`/customer/customers/email/${payload.email}`).then(res => {
             localStorage.setItem('IFOOD_token', token);
+            localStorage.setItem('IFOOD_type', payload.type);
             localStorage.setItem('IFOOD_email', payload.email);
             localStorage.setItem('IFOOD_udid', res.data.id);
             localStorage.setItem('IFOOD_name', res.data.name);
 
-            dispatch(authPasswordSuccess({ token: token }));
+            dispatch(authPasswordSuccess({ token: token, type: payload.type }));
           });
         } else if (payload.type === 'merchant') {
           axios.get(`/merchant/merchants/email/${payload.email}`).then(res => {
             localStorage.setItem('IFOOD_token', token);
+            localStorage.setItem('IFOOD_type', payload.type);
             localStorage.setItem('IFOOD_email', payload.email);
             localStorage.setItem('IFOOD_udid', res.data.id);
             localStorage.setItem('IFOOD_name', res.data.name);
 
-            dispatch(authPasswordSuccess({ token: token }));
+            dispatch(authPasswordSuccess({ token: token, type: payload.type }));
           });
         }
       })
@@ -99,11 +101,12 @@ export const errorReset = () => ({
 export const authCheckState = () => {
   return dispatch => {
     const token = localStorage.getItem('IFOOD_token');
+    const type = localStorage.getItem('IFOOD_type');
 
     if (!token) {
       dispatch(authReset());
     } else {
-      dispatch(authPasswordSuccess({ token: token }));
+      dispatch(authPasswordSuccess({ token: token, type: type }));
     }
   };
 };
