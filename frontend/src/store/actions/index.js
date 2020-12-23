@@ -12,4 +12,5 @@ export {
   customerNewAddress,
   customerRemoveAddress,
 } from './customer';
+export { fetchAddress, fetchCities, fetchStates } from './locate';
 export { signUp, signUpReset } from './signup';

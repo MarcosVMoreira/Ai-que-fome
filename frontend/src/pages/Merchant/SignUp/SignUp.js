@@ -16,7 +16,8 @@ import {
   TextField,
 } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
-import React, { useEffect, useState } from 'react';
+import { Autocomplete } from '@material-ui/lab';
+import React, { useCallback, useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -27,6 +28,7 @@ import {
   validateEmail,
   validateName,
   validatePhone,
+  validatePostalCode,
 } from '../../../helpers/validation';
 import * as actions from '../../../store/actions/index';
 import classes from './SignUp.module.scss';
@@ -37,12 +39,25 @@ export const SignUp = props => {
   const error = useSelector(state => state.signUp.error);
   const loading = useSelector(state => state.signUp.loading);
   const success = useSelector(state => state.signUp.success);
+  const postalCodeError = useSelector(state => state.locate.error);
+  const states = useSelector(state => state.locate.states);
+  const cities = useSelector(state => state.locate.cities);
+  const address = useSelector(state => state.locate.address);
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
   const onSignUp = form => dispatch(actions.signUp(form));
   const onErrorReset = () => dispatch(actions.errorReset());
   const onAuthReset = () => dispatch(actions.authReset());
+  const onFetchStates = useCallback(() => dispatch(actions.fetchStates()), [
+    dispatch,
+  ]);
+  const onFetchCities = useCallback(
+    state => dispatch(actions.fetchCities(state)),
+    [dispatch],
+  );
+  const onFetchAddress = postalCode =>
+    dispatch(actions.fetchAddress(postalCode));
 
   /* React State Hooks (if the user tried to Login using a non-existing mail
     we initialize the form with the attempted mail) */
@@ -87,6 +102,44 @@ export const SignUp = props => {
     setForm({ ...form, [name]: value });
   };
 
+  // Set the state and fetch the state cities
+  const handleState = (event, value) => {
+    setForm({ ...form, state: value, city: '' });
+    onFetchCities(value);
+  };
+
+  // Set the chosen city
+  const handleCity = (event, value) => {
+    setForm({ ...form, city: value });
+  };
+
+  // Fetches the user address by postalCode
+  const handleAddress = () => {
+    if (validatePostalCode(form.postalCode)) {
+      onFetchAddress(form.postalCode);
+    }
+  };
+
+  // On page load fetch all the states
+  useEffect(() => {
+    onFetchStates();
+  }, [onFetchStates]);
+
+  // Each time we fetch the user address by postalCode, fill the fields
+  useEffect(() => {
+    if (address) {
+      setForm(state => ({
+        ...state,
+        streetName: address.logradouro,
+        state: address.uf,
+        neighborhood: address.bairro,
+        city: address.localidade,
+      }));
+
+      onFetchCities(address.uf);
+    }
+  }, [address, onFetchCities]);
+
   // Each time the user changes any input value we check the validity of them all
   useEffect(() => {
     setValid({
@@ -106,11 +159,6 @@ export const SignUp = props => {
       availability: true,
     });
   }, [form]);
-
-  const postalCodeSearch = () => {
-    // Search postal code on ViaCEP
-    console.log('TO DO!!!');
-  };
 
   // On Logo click redirect to login page
   const handleReset = () => {
@@ -145,6 +193,9 @@ export const SignUp = props => {
 
   let toast;
   let redirect;
+  // If we get a 400 error from viacep, it means the server couldn't find the address from the postal code
+  postalCodeError === 400 &&
+    (toast = setToast('CEP não encontrado, tente novamente!'));
   // If we get a 400 error, it means the user is trying to submit an incomplete form
   error === 400 &&
     (toast = setToast('Erro de de formulário, preencha todos os campos!'));
@@ -161,7 +212,7 @@ export const SignUp = props => {
   // If we get 500, 503 or 504 redirects the user to not found page
   (error === 500 || error === 503 || error === 504) &&
     (redirect = <Redirect to="/not-found" />);
-  // If register was successful redirects to home!
+  // If register was successful redirects to login!
   redirect = success && <Redirect to="/merchant/login" />;
 
   return (
@@ -327,7 +378,7 @@ export const SignUp = props => {
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end">
-                                <IconButton onClick={postalCodeSearch}>
+                                <IconButton onClick={handleAddress}>
                                   <SearchOutlined />
                                 </IconButton>
                               </InputAdornment>
@@ -339,55 +390,55 @@ export const SignUp = props => {
                   </Grid>
 
                   <Grid container item justify="center" xs={12} sm={6}>
-                    <FormControl
-                      variant="outlined"
+                    <Autocomplete
+                      options={states?.map(state => state.sigla) || []}
+                      autoHighlight
                       className={classes.card_select}
-                      error={!valid.state && submitted}
-                    >
-                      <InputLabel>Selecione um Estado</InputLabel>
-                      <Select
-                        value={form.state}
-                        onChange={handleChange}
-                        name="state"
-                        label="Selecione um Estado"
-                      >
-                        <MenuItem value="">
-                          <em>Selecione um Estado</em>
-                        </MenuItem>
-                        <MenuItem value="ten">Ten</MenuItem>
-                        <MenuItem value="twenty">Twenty</MenuItem>
-                        <MenuItem value="thirty">Thirty</MenuItem>
-                      </Select>
-                      <FormHelperText>
-                        {!valid.state && submitted && 'Estado inválido!'}
-                      </FormHelperText>
-                    </FormControl>
+                      noOptionsText="Nenhum estado encontrado"
+                      getOptionLabel={option => option}
+                      renderOption={option => (
+                        <React.Fragment>{option}</React.Fragment>
+                      )}
+                      value={form.state}
+                      onChange={handleState}
+                      renderInput={params => (
+                        <TextField
+                          {...params}
+                          label="Selecione um Estado"
+                          variant="outlined"
+                          error={!valid.state && submitted}
+                          helperText={
+                            !valid.state && submitted && 'Estado inválido!'
+                          }
+                        />
+                      )}
+                    />
                   </Grid>
 
                   <Grid container item justify="center" xs={12} sm={6}>
-                    <FormControl
-                      variant="outlined"
+                    <Autocomplete
+                      options={cities?.map(city => city.nome) || []}
+                      autoHighlight
                       className={classes.card_select}
-                      error={!valid.city && submitted}
-                    >
-                      <InputLabel>Selecione uma Cidade</InputLabel>
-                      <Select
-                        value={form.city}
-                        onChange={handleChange}
-                        name="city"
-                        label="Selecione uma Cidade"
-                      >
-                        <MenuItem value="">
-                          <em>Selecione uma Cidade</em>
-                        </MenuItem>
-                        <MenuItem value="ten">Ten</MenuItem>
-                        <MenuItem value="twenty">Twenty</MenuItem>
-                        <MenuItem value="thirty">Thirty</MenuItem>
-                      </Select>
-                      <FormHelperText>
-                        {!valid.city && submitted && 'Cidade inválida!'}
-                      </FormHelperText>
-                    </FormControl>
+                      noOptionsText="Nenhuma cidade encontrada"
+                      getOptionLabel={option => option}
+                      renderOption={option => (
+                        <React.Fragment>{option}</React.Fragment>
+                      )}
+                      value={form.city}
+                      onChange={handleCity}
+                      renderInput={params => (
+                        <TextField
+                          {...params}
+                          label="Selecione uma Cidade"
+                          variant="outlined"
+                          error={!valid.city && submitted}
+                          helperText={
+                            !valid.city && submitted && 'Cidade inválida!'
+                          }
+                        />
+                      )}
+                    />
                   </Grid>
 
                   <Grid container item justify="center" xs={12} sm={6}>
