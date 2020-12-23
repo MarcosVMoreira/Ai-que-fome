@@ -2,22 +2,22 @@ import axios from '../../Axios';
 import { unmask } from '../../helpers/unmask';
 import * as actionTypes from './actionTypes';
 
-export const signUpStart = () => ({
-  type: actionTypes.SIGNUP_START,
+export const customerSignUpStart = () => ({
+  type: actionTypes.CUSTOMER_SIGNUP_START,
 });
 
-export const signUpSuccess = () => ({
-  type: actionTypes.SIGNUP_SUCCESS,
+export const customerSignUpSuccess = () => ({
+  type: actionTypes.CUSTOMER_SIGNUP_SUCCESS,
 });
 
-export const signUpFail = payload => ({
-  type: actionTypes.SIGNUP_FAIL,
+export const customerSignUpFail = payload => ({
+  type: actionTypes.CUSTOMER_SIGNUP_FAIL,
   payload,
 });
 
-export const signUp = payload => {
+export const customerSignUp = payload => {
   return dispatch => {
-    dispatch(signUpStart());
+    dispatch(customerSignUpStart());
 
     const signUpData = {
       email: payload.email,
@@ -29,10 +29,49 @@ export const signUp = payload => {
     axios
       .post('/customer/customers/', signUpData)
       .then(() => {
-        dispatch(signUpSuccess());
+        dispatch(customerSignUpSuccess());
       })
       .catch(err => {
-        dispatch(signUpFail({ error: err.response?.status || 500 }));
+        dispatch(customerSignUpFail({ error: err.response?.status || 500 }));
+      });
+  };
+};
+
+export const merchantSignUpStart = () => ({
+  type: actionTypes.MERCHANT_SIGNUP_START,
+});
+
+export const merchantSignUpSuccess = () => ({
+  type: actionTypes.MERCHANT_SIGNUP_SUCCESS,
+});
+
+export const merchantSignUpFail = payload => ({
+  type: actionTypes.MERCHANT_SIGNUP_FAIL,
+  payload,
+});
+
+export const merchantSignUp = payload => {
+  return dispatch => {
+    dispatch(merchantSignUpStart());
+
+    const signUpData = {
+      ...payload,
+      phone: unmask(payload.phone),
+      document: unmask(payload.document),
+      category: payload.categories.join(','),
+      country: 'BR',
+      availability: true,
+    };
+
+    delete signUpData.categories;
+
+    axios
+      .post('/merchant/merchants/', signUpData)
+      .then(() => {
+        dispatch(merchantSignUpSuccess());
+      })
+      .catch(err => {
+        dispatch(merchantSignUpFail({ error: err.response?.status || 500 }));
       });
   };
 };

@@ -32,7 +32,7 @@ export const SignUp = props => {
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
-  const onSignUp = form => dispatch(actions.signUp(form));
+  const onCustomerSignUp = form => dispatch(actions.customerSignUp(form));
   const onErrorReset = () => dispatch(actions.errorReset());
   const onAuthReset = () => dispatch(actions.authReset());
 
@@ -82,7 +82,7 @@ export const SignUp = props => {
     setSubmitted(true);
     Object.keys(valid).reduce((sum, value) => sum && valid[value], true) &&
       onAuthReset() &&
-      onSignUp(form);
+      onCustomerSignUp(form);
   };
 
   // Set Toast

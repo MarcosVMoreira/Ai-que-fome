@@ -6,21 +6,41 @@ const initialState = {
   success: false,
 };
 
-const signUpStart = state => ({
+const customerSignUpStart = state => ({
   ...state,
   error: null,
   success: false,
   loading: true,
 });
 
-const signUpSuccess = state => ({
+const customerSignUpSuccess = state => ({
   ...state,
   error: null,
   loading: false,
   success: true,
 });
 
-const signUpFail = (state, payload) => ({
+const customerSignUpFail = (state, payload) => ({
+  ...state,
+  error: payload.error,
+  loading: false,
+});
+
+const merchantSignUpStart = state => ({
+  ...state,
+  error: null,
+  success: false,
+  loading: true,
+});
+
+const merchantSignUpSuccess = state => ({
+  ...state,
+  error: null,
+  loading: false,
+  success: true,
+});
+
+const merchantSignUpFail = (state, payload) => ({
   ...state,
   error: payload.error,
   loading: false,
@@ -32,12 +52,18 @@ const signUpReset = () => ({
 
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case actionTypes.SIGNUP_START:
-      return signUpStart(state);
-    case actionTypes.SIGNUP_SUCCESS:
-      return signUpSuccess(state);
-    case actionTypes.SIGNUP_FAIL:
-      return signUpFail(state, payload);
+    case actionTypes.CUSTOMER_SIGNUP_START:
+      return customerSignUpStart(state);
+    case actionTypes.CUSTOMER_SIGNUP_SUCCESS:
+      return customerSignUpSuccess(state);
+    case actionTypes.CUSTOMER_SIGNUP_FAIL:
+      return customerSignUpFail(state, payload);
+    case actionTypes.MERCHANT_SIGNUP_START:
+      return merchantSignUpStart(state);
+    case actionTypes.MERCHANT_SIGNUP_SUCCESS:
+      return merchantSignUpSuccess(state);
+    case actionTypes.MERCHANT_SIGNUP_FAIL:
+      return merchantSignUpFail(state, payload);
     case actionTypes.SIGNUP_RESET:
       return signUpReset();
     default:

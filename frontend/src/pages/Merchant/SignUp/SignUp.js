@@ -46,7 +46,7 @@ export const SignUp = props => {
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
-  const onSignUp = form => dispatch(actions.signUp(form));
+  const onMerchantSignUp = form => dispatch(actions.merchantSignUp(form));
   const onErrorReset = () => dispatch(actions.errorReset());
   const onAuthReset = () => dispatch(actions.authReset());
   const onFetchStates = useCallback(() => dispatch(actions.fetchStates()), [
@@ -69,13 +69,11 @@ export const SignUp = props => {
     categories: [],
     logo: '',
     postalCode: '',
-    country: 'Brasil',
     state: '',
     city: '',
     neighborhood: '',
     streetName: '',
     streetNumber: '',
-    availability: true,
   });
   const [valid, setValid] = useState({
     email: true,
@@ -85,13 +83,11 @@ export const SignUp = props => {
     categories: true,
     logo: true,
     postalCode: true,
-    country: true,
     state: true,
     city: true,
     neighborhood: true,
     streetName: true,
     streetNumber: true,
-    availability: true,
   });
   const [submitted, setSubmitted] = useState(false);
 
@@ -150,13 +146,11 @@ export const SignUp = props => {
       categories: form.categories.length > 0,
       logo: Boolean(form.logo),
       postalCode: Boolean(form.postalCode),
-      country: true,
       state: Boolean(form.state),
       city: Boolean(form.city),
       neighborhood: Boolean(form.neighborhood),
       streetName: Boolean(form.streetName),
       streetNumber: Boolean(form.streetNumber),
-      availability: true,
     });
   }, [form]);
 
@@ -170,10 +164,13 @@ export const SignUp = props => {
   // invalid fields with their respective errors, otherwise we proceed to register the new user
   const handleSubmit = event => {
     event.preventDefault();
+
+    console.log(form);
+
     setSubmitted(true);
     Object.keys(valid).reduce((sum, value) => sum && valid[value], true) &&
       onAuthReset() &&
-      onSignUp(form);
+      onMerchantSignUp(form);
   };
 
   // Set Toast
