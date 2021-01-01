@@ -1,6 +1,7 @@
 package com.ifood.customer.endpoint.controller;
 
 import com.ifood.customer.endpoint.model.entity.AllowedPayment;
+import com.ifood.customer.endpoint.model.entity.Category;
 import com.ifood.customer.endpoint.model.entity.Merchant;
 import com.ifood.customer.endpoint.service.MerchantService;
 import lombok.RequiredArgsConstructor;
@@ -100,5 +101,39 @@ public class MerchantController {
     public void deleteAllowedPayment(@PathVariable String merchantId,
                                      @PathVariable String allowedPaymentId) {
         merchantService.deleteAllowedPayment(merchantId, allowedPaymentId);
+    }
+
+    /* Category */
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{merchantId}/category")
+    public ResponseEntity<Void> saveCategory(@PathVariable String merchantId,
+                                                   @Valid @RequestBody Category category,
+                                                   UriComponentsBuilder componentsBuilder) {
+        List<String> list = merchantService.saveCategory(merchantId, category);
+        return ResponseEntity.created(componentsBuilder.path("merchant/merchants/" + list.get(0) + "/category/{id}").
+                buildAndExpand(list.get(1)).toUri()).build();
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{merchantId}/category/{categoryId}")
+    public Category getCategory(@PathVariable String merchantId,
+                                            @PathVariable String categoryId) {
+        return merchantService.getCategoryById(merchantId, categoryId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{merchantId}/category/{categoryId}")
+    public Merchant updateCategory(@PathVariable String merchantId,
+                                         @PathVariable String categoryId,
+                                         @Valid @RequestBody Category category) {
+        return merchantService.updateCategory(merchantId, categoryId, category);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{merchantId}/category/{categoryId}")
+    public void deleteCategory(@PathVariable String merchantId,
+                                     @PathVariable String categoryId) {
+        merchantService.deleteCategory(merchantId, categoryId);
     }
 }

@@ -4,6 +4,7 @@ import com.ifood.customer.endpoint.error.BadRequestException;
 import com.ifood.customer.endpoint.error.NotFoundException;
 import com.ifood.customer.endpoint.error.UnprocessableEntityException;
 import com.ifood.customer.endpoint.model.entity.AllowedPayment;
+import com.ifood.customer.endpoint.model.entity.Category;
 import com.ifood.customer.endpoint.model.entity.Merchant;
 import com.ifood.customer.endpoint.repository.MerchantRepository;
 import com.ifood.customer.producer.MerchantMessageProducer;
@@ -150,9 +151,11 @@ public class MerchantService {
         if (!merchant.get().getAllowedPayments().isEmpty() &&
                 merchant.get().getAllowedPayments()
                         .stream()
-                        .anyMatch(a -> allowedPayment.getName().equals(a.getName()))) {
+                        .filter(a -> allowedPayment.getName().equals(a.getName()))
+                        .anyMatch(a -> !allowedPaymentId.equals(a.getId()))) {
             throw new UnprocessableEntityException("422.003");
         }
+
         merchant.get().getAllowedPayments().stream()
                 .filter(a -> allowedPaymentId.equals(a.getId()))
                 .findAny()
@@ -176,6 +179,92 @@ public class MerchantService {
         if (!allowedPayments.isEmpty()) {
             allowedPayments.removeIf(a -> a.getId().equals(idAllowedPayment));
             merchant.get().setAllowedPayments(allowedPayments);
+            merchantRepository.save(merchant.get());
+        }
+    }
+
+    /* Category */
+
+    public List<String> saveCategory(String merchantId, @Valid Category receivedCategory) {
+        List<String> list = new ArrayList<>();
+        Optional<Merchant> merchant = merchantRepository.findById(merchantId);
+
+        if (!merchant.isPresent()) {
+            throw new NotFoundException();
+        }
+        if (Optional.ofNullable(merchant.get().getCategories()).isPresent()
+                && !merchant.get().getCategories().isEmpty()
+                &&  merchant.get().getCategories()
+                    .stream()
+                    .anyMatch(category -> receivedCategory.getName().equals(category.getName()))) {
+            throw new UnprocessableEntityException("422.004");
+        }
+        receivedCategory.setId(new Category().getId());
+        Optional.ofNullable(merchant.get().getCategories())
+                .ifPresent(a -> a.add(receivedCategory));
+        if (!Optional.ofNullable(merchant.get().getCategories()).isPresent()) {
+            merchant.get()
+                    .setCategories(Collections.singletonList(receivedCategory));
+        }
+        merchantRepository.save(merchant.get());
+        list.add(merchant.get().getId());
+        list.add(receivedCategory.getId());
+
+        return list;
+    }
+
+    public Category getCategoryById(String idMerchant, String idCategory) {
+        Optional<Merchant> merchant = merchantRepository.findById(idMerchant);
+
+        if (!merchant.isPresent()
+                || !Optional.ofNullable(merchant.get().getCategories()).isPresent()) {
+            throw new NotFoundException();
+        }
+
+        return merchant.get().getCategories().stream()
+                .filter(a -> idCategory.equals(a.getId()))
+                .findAny()
+                .orElseThrow(NotFoundException::new);
+    }
+
+    public Merchant updateCategory (String idMerchant, String idCategory, @Valid Category category) {
+        Optional<Merchant> merchant = merchantRepository.findById(idMerchant);
+
+        if (!merchant.isPresent()) {
+            throw new NotFoundException();
+        }
+
+        if (!merchant.get().getCategories().isEmpty() &&
+                merchant.get().getCategories()
+                        .stream()
+                        .filter(a -> category.getName().equals(a.getName()))
+                        .anyMatch(a -> !idCategory.equals(a.getId()))) {
+            throw new UnprocessableEntityException("422.004");
+        }
+
+        merchant.get().getCategories().stream()
+                .filter(a -> idCategory.equals(a.getId()))
+                .findAny()
+                .orElseThrow(NotFoundException::new);
+        category.setId(idCategory);
+        List<Category> categoryList = merchant.get().getCategories();
+        categoryList.removeIf(a -> a.getId().equals(idCategory));
+        categoryList.add(category);
+        merchant.get().setCategories(categoryList);
+
+        return merchantRepository.save(merchant.get());
+    }
+
+    public void deleteCategory (String idMerchant, String idCategory) {
+        Optional<Merchant> merchant = merchantRepository.findById(idMerchant);
+
+        if (!merchant.isPresent()) {
+            throw new NotFoundException();
+        }
+        List<Category> categories = merchant.get().getCategories();
+        if (!categories.isEmpty()) {
+            categories.removeIf(a -> a.getId().equals(idCategory));
+            merchant.get().setCategories(categories);
             merchantRepository.save(merchant.get());
         }
     }
