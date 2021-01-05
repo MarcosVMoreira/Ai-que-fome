@@ -55,6 +55,10 @@ export const MERCHANT_DATA_START = 'MERCHANT_DATA_START';
 export const MERCHANT_DATA_SUCCESS = 'MERCHANT_DATA_SUCCESS';
 export const MERCHANT_DATA_FAIL = 'MERCHANT_DATA_FAIL';
 
+export const MERCHANT_EDIT_DATA_START = 'MERCHANT_EDIT_DATA_START';
+export const MERCHANT_EDIT_DATA_SUCCESS = 'MERCHANT_EDIT_DATA_SUCCESS';
+export const MERCHANT_EDIT_DATA_FAIL = 'MERCHANT_EDIT_DATA_FAIL';
+
 /*--------------------------------- RESETS ---------------------------------*/
 export const AUTH_RESET = 'AUTH_RESET';
 export const SIGNUP_RESET = 'SIGNUP_RESET';

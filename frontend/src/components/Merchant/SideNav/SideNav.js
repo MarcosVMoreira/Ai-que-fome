@@ -8,17 +8,21 @@ import {
 } from '@material-ui/core';
 import {
   ExitToAppRounded,
-  FastfoodOutlined,
-  RestaurantMenuOutlined,
-  SettingsOutlined,
+  FastfoodRounded,
+  HomeRounded,
+  RestaurantMenuRounded,
+  SettingsRounded,
 } from '@material-ui/icons';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../../../store/actions/index';
 import classes from './SideNav.module.scss';
 
 export const SideNav = withRouter(props => {
+  /* Redux State Hooks */
+  const [activeRoute, setActiveRoute] = useState(null);
+
   /* Redux Dispatchers */
   const dispatch = useDispatch();
   const onLogout = () => dispatch(actions.authReset());
@@ -28,6 +32,10 @@ export const SideNav = withRouter(props => {
     onLogout();
     props.history.push('/merchant/login');
   };
+
+  useEffect(() => {
+    setActiveRoute(props.history.location.pathname);
+  }, [props.history.location]);
 
   return (
     <Drawer className={classes.sidenav} variant="permanent">
@@ -40,6 +48,18 @@ export const SideNav = withRouter(props => {
         className={classes.sidenav_list}
       >
         <List>
+          <ListItem button selected={activeRoute === '/merchant/home'}>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+            >
+              <HomeRounded fontSize="large" color="primary" />
+              <Typography color="primary">Início</Typography>
+            </Grid>
+          </ListItem>
+
           <ListItem button>
             <Grid
               container
@@ -47,7 +67,7 @@ export const SideNav = withRouter(props => {
               justify="center"
               alignItems="center"
             >
-              <RestaurantMenuOutlined fontSize="large" color="primary" />
+              <RestaurantMenuRounded fontSize="large" color="primary" />
               <Typography color="primary">Restaurante</Typography>
             </Grid>
           </ListItem>
@@ -59,7 +79,7 @@ export const SideNav = withRouter(props => {
               justify="center"
               alignItems="center"
             >
-              <FastfoodOutlined fontSize="large" color="primary" />
+              <FastfoodRounded fontSize="large" color="primary" />
               <Typography color="primary">Pedidos</Typography>
             </Grid>
           </ListItem>
@@ -73,7 +93,7 @@ export const SideNav = withRouter(props => {
               justify="center"
               alignItems="center"
             >
-              <SettingsOutlined fontSize="large" color="primary" />
+              <SettingsRounded fontSize="large" color="primary" />
               <Typography color="primary">Configurações</Typography>
             </Grid>
           </ListItem>

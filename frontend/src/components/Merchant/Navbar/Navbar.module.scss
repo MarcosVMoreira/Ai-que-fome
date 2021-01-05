@@ -47,3 +47,12 @@
     font-size: 1em !important;
   }
 }
+
+.error {
+  font-size: 0.875rem;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 500;
+  transition: all 0.5s ease;
+  text-align: center;
+  color: red;
+}
