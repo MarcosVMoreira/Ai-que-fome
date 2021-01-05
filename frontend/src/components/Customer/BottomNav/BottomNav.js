@@ -6,7 +6,7 @@ import {
   ShoppingCartRounded,
 } from '@material-ui/icons';
 import React, { Fragment, useState } from 'react';
-import { ProfileModal } from '../../ProfileModal/ProfileModal';
+import { ProfileModal } from '../ProfileModal/ProfileModal';
 import classes from './BottomNav.module.scss';
 
 export const BottomNav = () => {

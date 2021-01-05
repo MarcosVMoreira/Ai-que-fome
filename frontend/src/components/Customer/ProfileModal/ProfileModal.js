@@ -16,7 +16,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import * as actions from '../../store/actions/index';
+import * as actions from '../../../store/actions/index';
 import classes from './ProfileModal.module.scss';
 
 const Transition = React.forwardRef(function Transition(props, ref) {

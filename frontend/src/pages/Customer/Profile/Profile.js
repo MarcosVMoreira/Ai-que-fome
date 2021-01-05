@@ -10,7 +10,7 @@ import {
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
 import { useDispatch, useSelector } from 'react-redux';
-import { Spinner } from '../../../components/UI/Spinner/Spinner';
+import { Spinner } from '../../../components/Shared/Spinner/Spinner';
 import {
   validateDocument,
   validateName,

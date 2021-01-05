@@ -8,8 +8,10 @@ import {
   Switch,
   withRouter,
 } from 'react-router-dom';
-import { BottomNav } from '../components/UI/BottomNav/BottomNav';
-import { Navbar } from '../components/UI/Navbar/Navbar';
+import { BottomNav } from '../components/Customer/BottomNav/BottomNav';
+import { Navbar as CustomerNavbar } from '../components/Customer/Navbar/Navbar';
+import { Navbar as MerchantNavbar } from '../components/Merchant/Navbar/Navbar';
+import { SideNav } from '../components/Merchant/SideNav/SideNav';
 import { Home as CustomerHome } from '../pages/Customer/Home/Home';
 import { Login as CustomerLogin } from '../pages/Customer/Login/Login';
 import { Profile } from '../pages/Customer/Profile/Profile';
@@ -37,7 +39,14 @@ export const Routes = () => {
   authenticated
     ? (routes = (
         <Fragment>
-          {authenticated === 'customer' ? <Navbar /> : null}
+          {authenticated === 'customer' ? (
+            <CustomerNavbar />
+          ) : (
+            <Fragment>
+              <MerchantNavbar />
+              <SideNav />
+            </Fragment>
+          )}
           <Switch>
             <Route path="/customer/home" component={CustomerHome} />
             <Route path="/customer/profile" component={Profile} />

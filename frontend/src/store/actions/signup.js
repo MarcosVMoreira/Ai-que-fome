@@ -56,6 +56,7 @@ export const merchantSignUp = payload => {
 
     const signUpData = {
       ...payload,
+      postalCode: unmask(payload.postalCode),
       phone: unmask(payload.phone),
       document: unmask(payload.document),
       category: payload.categories.join(','),

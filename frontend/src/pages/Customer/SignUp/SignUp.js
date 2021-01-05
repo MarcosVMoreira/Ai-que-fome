@@ -12,8 +12,8 @@ import React, { useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { Logo } from '../../../components/UI/Logo/Logo';
-import { Toast } from '../../../components/UI/Toast/Toast';
+import { Logo } from '../../../components/Shared/Logo/Logo';
+import { Toast } from '../../../components/Shared/Toast/Toast';
 import {
   validateDocument,
   validateEmail,

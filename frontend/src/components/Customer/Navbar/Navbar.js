@@ -15,9 +15,9 @@ import {
 } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import { AddressModal } from '../../AddressModal/AddressModal';
-import { ProfilePopover } from '../../ProfilePopover/ProfilePopover';
-import { Logo } from '../Logo/Logo';
+import { Logo } from '../../Shared/Logo/Logo';
+import { AddressModal } from '../AddressModal/AddressModal';
+import { ProfilePopover } from '../ProfilePopover/ProfilePopover';
 import classes from './Navbar.module.scss';
 
 export const Navbar = withRouter(props => {

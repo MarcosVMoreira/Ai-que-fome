@@ -1,0 +1,49 @@
+.navbar {
+  z-index: 9999 !important;
+
+  &_toolbar {
+    padding: 0 !important;
+  }
+
+  &_logo {
+    cursor: pointer;
+    width: 75px;
+    height: 75px;
+    margin: 10px 0;
+  }
+
+  &_title {
+    text-transform: uppercase;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+
+  &_subtitle {
+    margin-right: 24px;
+    font-weight: 600;
+    color: #737373;
+  }
+
+  &_await {
+    background-color: #2dd36f;
+
+    &__title {
+      @extend .navbar_title;
+      margin: 0 10px;
+      color: #fff;
+    }
+
+    &__subtitle {
+      @extend .navbar_subtitle;
+      margin: 0 10px;
+      color: #fff;
+    }
+  }
+
+  &_chip {
+    background-color: #2dd36f !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+    font-size: 1.2em !important;
+  }
+}

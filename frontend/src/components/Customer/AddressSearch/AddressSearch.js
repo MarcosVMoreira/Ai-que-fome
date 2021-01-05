@@ -2,7 +2,7 @@ import { InputBase } from '@material-ui/core';
 import { LocationOn, Search } from '@material-ui/icons';
 import React, { Fragment } from 'react';
 import PlacesAutocomplete from 'react-places-autocomplete';
-import { Spinner } from '../../UI/Spinner/Spinner';
+import { Spinner } from '../../Shared/Spinner/Spinner';
 import { AddressCard } from '../AddressCard/AddressCard';
 import classes from './AddressSearch.module.scss';
 

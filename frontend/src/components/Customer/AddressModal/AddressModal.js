@@ -15,11 +15,11 @@ import {
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { geocodeByPlaceId } from 'react-places-autocomplete';
 import { useDispatch, useSelector } from 'react-redux';
-import * as actions from '../../store/actions/index';
+import * as actions from '../../../store/actions/index';
+import { Spinner } from '../../Shared/Spinner/Spinner';
 import { AddressCard } from '../AddressCard/AddressCard';
 import { AddressForm } from '../AddressForm/AddressForm';
 import { AddressSearch } from '../AddressSearch/AddressSearch';
-import { Spinner } from '../UI/Spinner/Spinner';
 import classes from './AddressModal.module.scss';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
