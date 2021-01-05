@@ -7,14 +7,15 @@ export const Navbar = () => {
     <AppBar position="sticky" color="secondary" className={classes.navbar}>
       <Toolbar className={classes.navbar_toolbar}>
         <Grid container direction="row">
-          <Grid item container justify="center" lg={1}>
+          <Grid item container justify="center" xs={1}>
             <img
               src="https://techcrunch.com/wp-content/uploads/2018/07/logo-2.png?w=300"
+              alt="merchant store logo"
               className={classes.navbar_logo}
             />
           </Grid>
 
-          <Grid item lg={5} container justify="space-around" direction="column">
+          <Grid item xs={5} container justify="space-around" direction="column">
             <Grid item>
               <span className={classes.navbar_title}>Mozilla Firefox</span>
             </Grid>
@@ -25,7 +26,7 @@ export const Navbar = () => {
             </Grid>
           </Grid>
 
-          <Grid item lg={3} container justify="space-around" direction="column">
+          <Grid item xs={3} container justify="space-around" direction="column">
             <Grid item>
               <span className={classes.navbar_title}>
                 Horário de Funcionamento
@@ -39,7 +40,7 @@ export const Navbar = () => {
 
           <Grid
             item
-            lg={3}
+            xs={3}
             container
             justify="space-around"
             direction="column"

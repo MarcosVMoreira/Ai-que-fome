@@ -1,85 +1,96 @@
 import {
   Drawer,
+  Grid,
   List,
   ListItem,
-  ListItemIcon,
-  ListItemText,
   Toolbar,
   Typography,
 } from '@material-ui/core';
-import { AccountCircleRounded } from '@material-ui/icons';
+import {
+  ExitToAppRounded,
+  FastfoodOutlined,
+  RestaurantMenuOutlined,
+  SettingsOutlined,
+} from '@material-ui/icons';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import * as actions from '../../../store/actions/index';
 import classes from './SideNav.module.scss';
 
-export const SideNav = () => {
-  return (
-    <div className={classes.root}>
-      <Drawer className={classes.drawer} variant="permanent">
-        <Toolbar />
-        <div className={classes.drawerContainer}>
-          <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? (
-                    <AccountCircleRounded />
-                  ) : (
-                    <AccountCircleRounded />
-                  )}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
+export const SideNav = withRouter(props => {
+  /* Redux Dispatchers */
+  const dispatch = useDispatch();
+  const onLogout = () => dispatch(actions.authReset());
 
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? (
-                    <AccountCircleRounded />
-                  ) : (
-                    <AccountCircleRounded />
-                  )}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-        </div>
-      </Drawer>
-      <main className={classes.content}>
-        <Toolbar />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-          dolor purus non enim praesent elementum facilisis leo vel. Risus at
-          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
-          quisque non tellus. Convallis convallis tellus id interdum velit
-          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
-          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
-          faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
-          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
-          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
-          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
-          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
-          morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
-      </main>
-    </div>
+  // Customer Logout
+  const handleLogout = () => {
+    onLogout();
+    props.history.push('/merchant/login');
+  };
+
+  return (
+    <Drawer className={classes.sidenav} variant="permanent">
+      <Toolbar className={classes.sidenav_toolbar} />
+
+      <Grid
+        container
+        direction="column"
+        justify="space-between"
+        className={classes.sidenav_list}
+      >
+        <List>
+          <ListItem button>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+            >
+              <RestaurantMenuOutlined fontSize="large" color="primary" />
+              <Typography color="primary">Restaurante</Typography>
+            </Grid>
+          </ListItem>
+
+          <ListItem button>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+            >
+              <FastfoodOutlined fontSize="large" color="primary" />
+              <Typography color="primary">Pedidos</Typography>
+            </Grid>
+          </ListItem>
+        </List>
+
+        <List>
+          <ListItem button>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+            >
+              <SettingsOutlined fontSize="large" color="primary" />
+              <Typography color="primary">Configurações</Typography>
+            </Grid>
+          </ListItem>
+
+          <ListItem button onClick={handleLogout}>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+            >
+              <ExitToAppRounded fontSize="large" color="primary" />
+              <Typography color="primary">Sair</Typography>
+            </Grid>
+          </ListItem>
+        </List>
+      </Grid>
+    </Drawer>
   );
-};
+});

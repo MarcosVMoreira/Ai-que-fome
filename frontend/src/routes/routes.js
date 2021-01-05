@@ -40,7 +40,12 @@ export const Routes = () => {
     ? (routes = (
         <Fragment>
           {authenticated === 'customer' ? (
-            <CustomerNavbar />
+            <Fragment>
+              <CustomerNavbar />
+              <Hidden mdUp>
+                <BottomNav />
+              </Hidden>
+            </Fragment>
           ) : (
             <Fragment>
               <MerchantNavbar />
@@ -53,9 +58,6 @@ export const Routes = () => {
             <Route path="/merchant/home" component={MerchantHome} />
             <Redirect to={`/${authenticated}/home`} />
           </Switch>
-          <Hidden mdUp>
-            <BottomNav />
-          </Hidden>
         </Fragment>
       ))
     : (routes = (
