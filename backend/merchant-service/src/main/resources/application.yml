@@ -3,7 +3,8 @@ spring:
     name: merchant
   data:
     mongodb:
-      uri: ${MONGOURI}
+      #uri: ${MONGOURI}
+      uri: mongodb://root:mongolocalprotavao@localhost:27017/DeliveryApp?authSource=admin
   main:
     allow-bean-definition-overriding: true
 

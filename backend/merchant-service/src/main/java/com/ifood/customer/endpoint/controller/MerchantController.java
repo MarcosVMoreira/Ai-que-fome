@@ -3,6 +3,7 @@ package com.ifood.customer.endpoint.controller;
 import com.ifood.customer.endpoint.model.entity.AllowedPayment;
 import com.ifood.customer.endpoint.model.entity.Category;
 import com.ifood.customer.endpoint.model.entity.Merchant;
+import com.ifood.customer.endpoint.model.entity.SKU;
 import com.ifood.customer.endpoint.service.MerchantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -72,68 +73,28 @@ public class MerchantController {
     /* Allowed Payments */
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{merchantId}/allowed-payment")
-    public ResponseEntity<Void> saveAllowedPayment(@PathVariable String merchantId,
-                                                   @Valid @RequestBody AllowedPayment allowedPayment,
-                                                   UriComponentsBuilder componentsBuilder) {
-        List<String> list = merchantService.saveAllowedPayment(merchantId, allowedPayment);
-        return ResponseEntity.created(componentsBuilder.path("merchant/merchants/" + list.get(0) + "/allowed-payment/{id}").
-                buildAndExpand(list.get(1)).toUri()).build();
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{merchantId}/allowed-payment/{allowedPaymentId}")
-    public AllowedPayment getAllowedPayment(@PathVariable String merchantId,
-                                            @PathVariable String allowedPaymentId) {
-        return merchantService.getAllowedPaymentById(merchantId, allowedPaymentId);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/{merchantId}/allowed-payment/{allowedPaymentId}")
-    public Merchant updateAllowedPayment(@PathVariable String merchantId,
-                                         @PathVariable String allowedPaymentId,
-                                         @Valid @RequestBody AllowedPayment allowedPayment) {
-        return merchantService.updateAllowedPayment(merchantId, allowedPaymentId, allowedPayment);
-    }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{merchantId}/allowed-payment/{allowedPaymentId}")
-    public void deleteAllowedPayment(@PathVariable String merchantId,
-                                     @PathVariable String allowedPaymentId) {
-        merchantService.deleteAllowedPayment(merchantId, allowedPaymentId);
+    @PutMapping("/{merchantId}/allowed-payment")
+    public Merchant saveAllowedPayment(@PathVariable String merchantId,
+                                                   @Valid @RequestBody List<AllowedPayment> allowedPayment) {
+        return merchantService.updateAllowedPayment(merchantId, allowedPayment);
     }
 
     /* Category */
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{merchantId}/category")
-    public ResponseEntity<Void> saveCategory(@PathVariable String merchantId,
-                                                   @Valid @RequestBody Category category,
-                                                   UriComponentsBuilder componentsBuilder) {
-        List<String> list = merchantService.saveCategory(merchantId, category);
-        return ResponseEntity.created(componentsBuilder.path("merchant/merchants/" + list.get(0) + "/category/{id}").
-                buildAndExpand(list.get(1)).toUri()).build();
+    @PutMapping("/{merchantId}/category")
+    public Merchant saveCategory(@PathVariable String merchantId,
+                                                   @Valid @RequestBody List<Category> category) {
+        return merchantService.updateCategory(merchantId, category);
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{merchantId}/category/{categoryId}")
-    public Category getCategory(@PathVariable String merchantId,
-                                            @PathVariable String categoryId) {
-        return merchantService.getCategoryById(merchantId, categoryId);
+    /* SKU */
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping("/{merchantId}/sku")
+    public Merchant saveSKU(@PathVariable String merchantId,
+                                             @Valid @RequestBody List<SKU> sku) {
+        return merchantService.updateSKU(merchantId, sku);
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/{merchantId}/category/{categoryId}")
-    public Merchant updateCategory(@PathVariable String merchantId,
-                                         @PathVariable String categoryId,
-                                         @Valid @RequestBody Category category) {
-        return merchantService.updateCategory(merchantId, categoryId, category);
-    }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{merchantId}/category/{categoryId}")
-    public void deleteCategory(@PathVariable String merchantId,
-                                     @PathVariable String categoryId) {
-        merchantService.deleteCategory(merchantId, categoryId);
-    }
 }
