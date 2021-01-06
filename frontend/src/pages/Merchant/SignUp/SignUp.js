@@ -1,22 +1,22 @@
+import DateFnsUtils from '@date-io/date-fns';
 import {
   Button,
   Card,
   CardActions,
   CardContent,
   CircularProgress,
-  FormControl,
-  FormHelperText,
   Grid,
   IconButton,
   InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
   Snackbar,
   TextField,
 } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
 import { Autocomplete } from '@material-ui/lab';
+import {
+  KeyboardTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 import React, { useCallback, useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
 import { useDispatch, useSelector } from 'react-redux';
@@ -66,7 +66,8 @@ export const SignUp = props => {
     name: '',
     phone: '',
     document: '',
-    categories: [],
+    hourStart: new Date(),
+    hourEnd: new Date(),
     logo: '',
     postalCode: '',
     state: '',
@@ -80,7 +81,8 @@ export const SignUp = props => {
     name: true,
     phone: true,
     document: true,
-    categories: true,
+    hourStart: true,
+    hourEnd: true,
     logo: true,
     postalCode: true,
     state: true,
@@ -107,6 +109,14 @@ export const SignUp = props => {
   // Set the chosen city
   const handleCity = (event, value) => {
     setForm({ ...form, city: value });
+  };
+
+  const handleHourStart = value => {
+    setForm({ ...form, hourStart: value });
+  };
+
+  const handleHourEnd = value => {
+    setForm({ ...form, hourEnd: value });
   };
 
   // Fetches the user address by postalCode
@@ -143,7 +153,8 @@ export const SignUp = props => {
       email: validateEmail(form.email),
       phone: validatePhone(form.phone),
       document: validateCompanyDocument(form.document),
-      categories: form.categories.length > 0,
+      hourStart: Boolean(form.hourStart),
+      hourEnd: Boolean(form.hourEnd),
       logo: Boolean(form.logo),
       postalCode: Boolean(form.postalCode),
       state: Boolean(form.state),
@@ -164,8 +175,6 @@ export const SignUp = props => {
   // invalid fields with their respective errors, otherwise we proceed to register the new user
   const handleSubmit = event => {
     event.preventDefault();
-
-    console.log(form);
 
     setSubmitted(true);
     Object.keys(valid).reduce((sum, value) => sum && valid[value], true) &&
@@ -308,30 +317,40 @@ export const SignUp = props => {
                     </InputMask>
                   </Grid>
 
-                  <Grid container item justify="center" xs={12} sm={6}>
-                    <FormControl
-                      variant="outlined"
-                      className={classes.card_select}
-                      error={!valid.categories && submitted}
-                    >
-                      <InputLabel>Selecione ao menos uma Categoria</InputLabel>
-                      <Select
-                        multiple
-                        value={form.categories}
-                        onChange={handleChange}
-                        name="categories"
-                        label="Selecione ao menos uma Categoria"
-                      >
-                        <MenuItem value="ten">Ten</MenuItem>
-                        <MenuItem value="twenty">Twenty</MenuItem>
-                        <MenuItem value="thirty">Thirty</MenuItem>
-                      </Select>
-                      <FormHelperText>
-                        {!valid.categories &&
-                          submitted &&
-                          'Categoria inválida!'}
-                      </FormHelperText>
-                    </FormControl>
+                  <Grid container item justify="center" xs={12} sm={3}>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <KeyboardTimePicker
+                        className={classes.card_input}
+                        ampm={false}
+                        margin="normal"
+                        label="Hora de Abertura"
+                        value={form.hourStart}
+                        onChange={handleHourStart}
+                        inputVariant="outlined"
+                        invalidDateMessage="Hora Inválida"
+                        emptyLabel={
+                          !valid.hourStart && submitted && 'Hora Inválida!'
+                        }
+                      />
+                    </MuiPickersUtilsProvider>
+                  </Grid>
+
+                  <Grid container item justify="center" xs={12} sm={3}>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                      <KeyboardTimePicker
+                        className={classes.card_input}
+                        ampm={false}
+                        margin="normal"
+                        label="Hora de Fechamento"
+                        value={form.hourEnd}
+                        onChange={handleHourEnd}
+                        inputVariant="outlined"
+                        invalidDateMessage="Hora Inválida"
+                        emptyLabel={
+                          !valid.hourEnd && submitted && 'Hora Inválida!'
+                        }
+                      />
+                    </MuiPickersUtilsProvider>
                   </Grid>
 
                   <Grid container item justify="center" xs={12} sm={6}>
@@ -393,6 +412,9 @@ export const SignUp = props => {
                       className={classes.card_select}
                       noOptionsText="Nenhum estado encontrado"
                       getOptionLabel={option => option}
+                      getOptionSelected={(option, value) =>
+                        option.id === value.id
+                      }
                       renderOption={option => (
                         <React.Fragment>{option}</React.Fragment>
                       )}
@@ -419,6 +441,9 @@ export const SignUp = props => {
                       className={classes.card_select}
                       noOptionsText="Nenhuma cidade encontrada"
                       getOptionLabel={option => option}
+                      getOptionSelected={(option, value) =>
+                        option.id === value.id
+                      }
                       renderOption={option => (
                         <React.Fragment>{option}</React.Fragment>
                       )}
