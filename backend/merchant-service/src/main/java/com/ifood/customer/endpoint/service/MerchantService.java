@@ -149,7 +149,7 @@ public class MerchantService {
         }
 
         if (receivedSKU.isEmpty()) {
-            throw new UnprocessableEntityException("400.003");
+            throw new UnprocessableEntityException("400.006");
         }
 
         receivedSKU.forEach(sku -> sku.setId(new Category().getId()));
