@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -22,11 +23,13 @@ public class SKU {
     @NotEmpty(message = "400.003")
     private String name;
 
-    @NotEmpty(message = "400.003")
+    @NotNull(message = "400.003")
     private boolean availability;
 
-    @NotEmpty(message = "400.003")
+    @NotNull(message = "400.003")
     private BigDecimal price;
+
+    private String idCategory;
 
     private String description;
 
