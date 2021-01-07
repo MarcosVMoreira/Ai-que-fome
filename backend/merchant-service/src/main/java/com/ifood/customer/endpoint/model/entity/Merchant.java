@@ -1,5 +1,6 @@
 package com.ifood.customer.endpoint.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ifood.customer.endpoint.enumeration.MerchantTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,9 +8,12 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -61,6 +65,14 @@ public class Merchant {
 
     @NotNull(message = "400.003")
     private boolean availability;
+
+    @NotNull(message = "400.003")
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime businessStart;
+
+    @NotNull(message = "400.003")
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime businessEnd;
 
     private List<AllowedPayment> allowedPayments;
 
