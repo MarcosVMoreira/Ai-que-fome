@@ -25,7 +25,10 @@ export const AddressForm = ({ address, handleClick, editAddressId }) => {
   const [form, setForm] = useState({
     city: getLongInfo('administrative_area_level_2') || '',
     complement: '',
-    coordinates: null,
+    coordinates: [
+      address.geometry.location.lat(),
+      address.geometry.location.lng(),
+    ],
     favorite: false,
     country: getLongInfo('country') || '',
     district: getShortInfo('administrative_area_level_1') || '',

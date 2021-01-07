@@ -19,10 +19,12 @@ import {
 } from '@material-ui/pickers';
 import React, { useCallback, useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
+import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { Logo } from '../../../components/Shared/Logo/Logo';
 import { Toast } from '../../../components/Shared/Toast/Toast';
+import { unmask } from '../../../helpers/unmask';
 import {
   validateCompanyDocument,
   validateEmail,
@@ -75,6 +77,7 @@ export const SignUp = props => {
     neighborhood: '',
     streetName: '',
     streetNumber: '',
+    coordinates: '',
   });
   const [valid, setValid] = useState({
     email: true,
@@ -90,6 +93,7 @@ export const SignUp = props => {
     neighborhood: true,
     streetName: true,
     streetNumber: true,
+    coordinates: true,
   });
   const [submitted, setSubmitted] = useState(false);
 
@@ -111,16 +115,25 @@ export const SignUp = props => {
     setForm({ ...form, city: value });
   };
 
-  const handlebusinessStart = value => {
+  const handleBusinessStart = value => {
     setForm({ ...form, businessStart: value });
   };
 
-  const handlebusinessEnd = value => {
+  const handleBusinessEnd = value => {
     setForm({ ...form, businessEnd: value });
   };
 
   // Fetches the user address by postalCode
   const handleAddress = () => {
+    geocodeByAddress(unmask(form.postalCode)).then(res => {
+      getLatLng(res[0]).then(({ lat, lng }) => {
+        setForm(state => ({
+          ...state,
+          coordinates: [lat, lng],
+        }));
+      });
+    });
+
     if (validatePostalCode(form.postalCode)) {
       onFetchAddress(form.postalCode);
     }
@@ -162,6 +175,7 @@ export const SignUp = props => {
       neighborhood: Boolean(form.neighborhood),
       streetName: Boolean(form.streetName),
       streetNumber: Boolean(form.streetNumber),
+      coordinates: Boolean(form.coordinates),
     });
   }, [form]);
 
@@ -325,7 +339,7 @@ export const SignUp = props => {
                         margin="normal"
                         label="Hora de Abertura"
                         value={form.businessStart}
-                        onChange={handlebusinessStart}
+                        onChange={handleBusinessStart}
                         inputVariant="outlined"
                         invalidDateMessage="Hora Inválida"
                         emptyLabel={
@@ -343,7 +357,7 @@ export const SignUp = props => {
                         margin="normal"
                         label="Hora de Fechamento"
                         value={form.businessEnd}
-                        onChange={handlebusinessEnd}
+                        onChange={handleBusinessEnd}
                         inputVariant="outlined"
                         invalidDateMessage="Hora Inválida"
                         emptyLabel={
