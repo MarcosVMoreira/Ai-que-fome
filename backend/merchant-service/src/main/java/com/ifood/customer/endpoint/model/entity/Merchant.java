@@ -1,5 +1,6 @@
 package com.ifood.customer.endpoint.model.entity;
 
+import com.ifood.customer.endpoint.enumeration.MerchantTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,9 +36,6 @@ public class Merchant {
     private String logo;
 
     @NotEmpty(message = "400.003")
-    private String category;
-
-    @NotEmpty(message = "400.003")
     private String phone;
 
     @NotEmpty(message = "400.003")
@@ -69,5 +67,7 @@ public class Merchant {
     private List<Category> categories;
 
     private List<SKU> skus;
+
+    private List<MerchantTypeEnum> merchantType;
 
 }

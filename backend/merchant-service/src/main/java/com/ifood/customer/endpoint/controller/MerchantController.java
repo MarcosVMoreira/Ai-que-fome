@@ -1,5 +1,6 @@
 package com.ifood.customer.endpoint.controller;
 
+import com.ifood.customer.endpoint.enumeration.MerchantTypeEnum;
 import com.ifood.customer.endpoint.model.entity.AllowedPayment;
 import com.ifood.customer.endpoint.model.entity.Category;
 import com.ifood.customer.endpoint.model.entity.Merchant;
@@ -97,4 +98,14 @@ public class MerchantController {
         return merchantService.updateSKU(merchantId, sku);
     }
 
+    /* Merchant Type */
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping("/{merchantId}/merchant-type")
+    public Merchant saveMerchantType(@PathVariable String merchantId,
+                            @Valid @RequestBody List<MerchantTypeEnum> merchantTypeEnums) {
+        return merchantService.updateMerchantType(merchantId, merchantTypeEnums);
+    }
+
 }
+

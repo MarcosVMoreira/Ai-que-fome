@@ -1,5 +1,6 @@
 package com.ifood.customer.endpoint.service;
 
+import com.ifood.customer.endpoint.enumeration.MerchantTypeEnum;
 import com.ifood.customer.endpoint.error.BadRequestException;
 import com.ifood.customer.endpoint.error.NotFoundException;
 import com.ifood.customer.endpoint.error.UnprocessableEntityException;
@@ -155,6 +156,24 @@ public class MerchantService {
         receivedSKU.forEach(sku -> sku.setId(new Category().getId()));
 
         merchant.get().setSkus(receivedSKU);
+
+        return merchantRepository.save(merchant.get());
+    }
+
+    /* Merchant Type */
+
+    public Merchant updateMerchantType(String merchantId, @Valid List<MerchantTypeEnum> receivedMerchantType) {
+        Optional<Merchant> merchant = merchantRepository.findById(merchantId);
+
+        if (!merchant.isPresent()) {
+            throw new NotFoundException();
+        }
+
+        if (receivedMerchantType.isEmpty()) {
+            throw new UnprocessableEntityException("400.007");
+        }
+
+        merchant.get().setMerchantType(receivedMerchantType);
 
         return merchantRepository.save(merchant.get());
     }
