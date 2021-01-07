@@ -66,8 +66,8 @@ export const SignUp = props => {
     name: '',
     phone: '',
     document: '',
-    hourStart: new Date(),
-    hourEnd: new Date(),
+    businessStart: new Date(),
+    businessEnd: new Date(),
     logo: '',
     postalCode: '',
     state: '',
@@ -81,8 +81,8 @@ export const SignUp = props => {
     name: true,
     phone: true,
     document: true,
-    hourStart: true,
-    hourEnd: true,
+    businessStart: true,
+    businessEnd: true,
     logo: true,
     postalCode: true,
     state: true,
@@ -111,12 +111,12 @@ export const SignUp = props => {
     setForm({ ...form, city: value });
   };
 
-  const handleHourStart = value => {
-    setForm({ ...form, hourStart: value });
+  const handlebusinessStart = value => {
+    setForm({ ...form, businessStart: value });
   };
 
-  const handleHourEnd = value => {
-    setForm({ ...form, hourEnd: value });
+  const handlebusinessEnd = value => {
+    setForm({ ...form, businessEnd: value });
   };
 
   // Fetches the user address by postalCode
@@ -153,8 +153,8 @@ export const SignUp = props => {
       email: validateEmail(form.email),
       phone: validatePhone(form.phone),
       document: validateCompanyDocument(form.document),
-      hourStart: Boolean(form.hourStart),
-      hourEnd: Boolean(form.hourEnd),
+      businessStart: Boolean(form.businessStart),
+      businessEnd: Boolean(form.businessEnd),
       logo: Boolean(form.logo),
       postalCode: Boolean(form.postalCode),
       state: Boolean(form.state),
@@ -324,12 +324,12 @@ export const SignUp = props => {
                         ampm={false}
                         margin="normal"
                         label="Hora de Abertura"
-                        value={form.hourStart}
-                        onChange={handleHourStart}
+                        value={form.businessStart}
+                        onChange={handlebusinessStart}
                         inputVariant="outlined"
                         invalidDateMessage="Hora Inválida"
                         emptyLabel={
-                          !valid.hourStart && submitted && 'Hora Inválida!'
+                          !valid.businessStart && submitted && 'Hora Inválida!'
                         }
                       />
                     </MuiPickersUtilsProvider>
@@ -342,12 +342,12 @@ export const SignUp = props => {
                         ampm={false}
                         margin="normal"
                         label="Hora de Fechamento"
-                        value={form.hourEnd}
-                        onChange={handleHourEnd}
+                        value={form.businessEnd}
+                        onChange={handlebusinessEnd}
                         inputVariant="outlined"
                         invalidDateMessage="Hora Inválida"
                         emptyLabel={
-                          !valid.hourEnd && submitted && 'Hora Inválida!'
+                          !valid.businessEnd && submitted && 'Hora Inválida!'
                         }
                       />
                     </MuiPickersUtilsProvider>

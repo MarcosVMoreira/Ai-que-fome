@@ -113,7 +113,9 @@ export const Navbar = () => {
               </Grid>
 
               <Grid item>
-                <span className={classes.navbar_subtitle}>11:00 ás 20:00</span>
+                <span className={classes.navbar_subtitle}>
+                  {merchant.businessStart} às {merchant.businessEnd}
+                </span>
               </Grid>
             </Grid>
 

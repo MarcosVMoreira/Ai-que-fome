@@ -59,8 +59,8 @@ export const merchantSignUp = payload => {
       postalCode: unmask(payload.postalCode),
       phone: unmask(payload.phone),
       document: unmask(payload.document),
-      hourStart: new Date(payload.hourStart).toLocaleTimeString(),
-      hourEnd: new Date(payload.hourEnd).toLocaleTimeString(),
+      businessStart: new Date(payload.businessStart).toLocaleTimeString(),
+      businessEnd: new Date(payload.businessEnd).toLocaleTimeString(),
       country: 'BR',
       availability: true,
     };
