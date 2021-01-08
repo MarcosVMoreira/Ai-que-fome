@@ -5,9 +5,14 @@ import {
   CardActions,
   CardContent,
   CircularProgress,
+  FormControl,
+  FormHelperText,
   Grid,
   IconButton,
   InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
   Snackbar,
   TextField,
 } from '@material-ui/core';
@@ -61,6 +66,277 @@ export const SignUp = props => {
   const onFetchAddress = postalCode =>
     dispatch(actions.fetchAddress(postalCode));
 
+  /* Constants */
+  const aPayments = [
+    {
+      code: 'DINHEIRO',
+      label: 'Dinheiro',
+    },
+    {
+      code: 'VA',
+      label: 'Vale-Alimentação',
+    },
+    {
+      code: 'CARTAO_DEBITO',
+      label: 'Cartão de Débito',
+    },
+    {
+      code: 'CARTAO_CREDITO',
+      label: 'Cartão de Crédito',
+    },
+    {
+      code: 'VR',
+      label: 'Vale-Refeição',
+    },
+  ];
+
+  const aCategories = [
+    {
+      code: 'AFRICANA',
+      label: 'Africana',
+    },
+    {
+      code: 'ALEMA',
+      label: 'Alemã',
+    },
+    {
+      code: 'ARABE',
+      label: 'Árabe',
+    },
+    {
+      code: 'ARGENTINA',
+      label: 'Argentina',
+    },
+    {
+      code: 'ASIATICA',
+      label: 'Asiática',
+    },
+    {
+      code: 'ACAI',
+      label: 'Açai',
+    },
+    {
+      code: 'BAIANA',
+      label: 'Baiana',
+    },
+    {
+      code: 'BEBIDAS',
+      label: 'Bebidas',
+    },
+    {
+      code: 'BRASILEIRA',
+      label: 'Brasileira',
+    },
+    {
+      code: 'CAFETERIA',
+      label: 'Cafeteria',
+    },
+    {
+      code: 'CARNES',
+      label: 'Carnes',
+    },
+    {
+      code: 'CASA_DE_SUCOS',
+      label: 'Casa de Sucos',
+    },
+    {
+      code: 'CHINESA',
+      label: 'Chinesa',
+    },
+    {
+      code: 'COLOMBIANA',
+      label: 'Colombiana',
+    },
+    {
+      code: 'CONGELADOS_FIT',
+      label: 'Congelados Fit',
+    },
+    {
+      code: 'CONGELADOS',
+      label: 'Congelados',
+    },
+    {
+      code: 'CONTEMPORANEA',
+      label: 'Contemporânea',
+    },
+    {
+      code: 'CONVENIENCIA',
+      label: 'Conveniência',
+    },
+    {
+      code: 'COREANA',
+      label: 'Coreana',
+    },
+    {
+      code: 'COZINHA_RAPIDA',
+      label: 'Cozinha Rápida',
+    },
+    {
+      code: 'CREPE',
+      label: 'Crepe',
+    },
+    {
+      code: 'DOCES_BOLOS',
+      label: 'Doces e Bolos',
+    },
+    {
+      code: 'ESPANHOLA',
+      label: 'Espanhola',
+    },
+    {
+      code: 'FRANCESA',
+      label: 'Francesa',
+    },
+    {
+      code: 'FRANGOS',
+      label: 'Frangos',
+    },
+    {
+      code: 'FRUTOS_DO_MAR',
+      label: 'Frutos do Mar',
+    },
+    {
+      code: 'GAUCHA',
+      label: 'Gaúcha',
+    },
+    {
+      code: 'GREGA',
+      label: 'Grega',
+    },
+    {
+      code: 'HAMBURGUER',
+      label: 'Hambúrguer',
+    },
+    {
+      code: 'INDIANA',
+      label: 'Indiana',
+    },
+    {
+      code: 'ITALIANA',
+      label: 'Italiana',
+    },
+    {
+      code: 'JAPONESA',
+      label: 'Japonesa',
+    },
+    {
+      code: 'LANCHES',
+      label: 'Lanches',
+    },
+    {
+      code: 'MARMITA',
+      label: 'Marmita',
+    },
+    {
+      code: 'MARROQUINA',
+      label: 'Marroquina',
+    },
+    {
+      code: 'MEDITERRANEA',
+      label: 'Mediterrânea',
+    },
+    {
+      code: 'MERCADO',
+      label: 'Mercado',
+    },
+    {
+      code: 'MEXICANA',
+      label: 'Mexicana',
+    },
+    {
+      code: 'MINEIRA',
+      label: 'Mineira',
+    },
+    {
+      code: 'NORDESTINA',
+      label: 'Nordestina',
+    },
+    {
+      code: 'PADARIA',
+      label: 'Padaria',
+    },
+    {
+      code: 'PANQUECA',
+      label: 'Panqueca',
+    },
+    {
+      code: 'PARANAENSE',
+      label: 'Paranaense',
+    },
+    {
+      code: 'PASTEL',
+      label: 'Pastel',
+    },
+    {
+      code: 'PEIXES',
+      label: 'Peixes',
+    },
+    {
+      code: 'PERUANA',
+      label: 'Peruana',
+    },
+    {
+      code: 'PIZZA',
+      label: 'Pizza',
+    },
+    {
+      code: 'PORTUGUESA',
+      label: 'Portuguesa',
+    },
+    {
+      code: 'PRESENTES',
+      label: 'Presentes',
+    },
+    {
+      code: 'SALGADOS',
+      label: 'Salgados',
+    },
+    {
+      code: 'SAUDAVEL',
+      label: 'Saudável',
+    },
+    {
+      code: 'SOPAS_CALDOS',
+      label: 'Sopas e Caldos',
+    },
+    {
+      code: 'SORVETES',
+      label: 'Sorvetes',
+    },
+    {
+      code: 'TAILANDESA',
+      label: 'Tailandesa',
+    },
+    {
+      code: 'TAPIOCA',
+      label: 'Tapioca',
+    },
+    {
+      code: 'TIPICA_NORTE',
+      label: 'Típica do Norte',
+    },
+    {
+      code: 'VARIADA',
+      label: 'Variada',
+    },
+    {
+      code: 'VEGANA',
+      label: 'Vegana',
+    },
+    {
+      code: 'VEGETARIANA',
+      label: 'Vegatariana',
+    },
+    {
+      code: 'XIS',
+      label: 'Xis',
+    },
+    {
+      code: 'YAKISOBA',
+      label: 'Yakisoba',
+    },
+  ];
+
   /* React State Hooks (if the user tried to Login using a non-existing mail
     we initialize the form with the attempted mail) */
   const [form, setForm] = useState({
@@ -78,6 +354,8 @@ export const SignUp = props => {
     streetName: '',
     streetNumber: '',
     coordinates: '',
+    categories: [],
+    allowedPayments: [],
   });
   const [valid, setValid] = useState({
     email: true,
@@ -94,6 +372,8 @@ export const SignUp = props => {
     streetName: true,
     streetNumber: true,
     coordinates: true,
+    categories: true,
+    allowedPayments: true,
   });
   const [submitted, setSubmitted] = useState(false);
 
@@ -176,6 +456,8 @@ export const SignUp = props => {
       streetName: Boolean(form.streetName),
       streetNumber: Boolean(form.streetNumber),
       coordinates: Boolean(form.coordinates),
+      categories: Boolean(form.allowedPayments.length),
+      allowedPayments: Boolean(form.allowedPayments.length),
     });
   }, [form]);
 
@@ -376,11 +658,66 @@ export const SignUp = props => {
                       value={form.logo}
                       error={!valid.logo && submitted}
                       onChange={handleChange}
-                      helperText={
-                        (!valid.email && submitted && 'Email inválido!') ||
-                        (error === 422 && 'Email já cadastrado!')
-                      }
+                      helperText={!valid.logo && submitted && 'URL inválida!'}
                     />
+                  </Grid>
+
+                  <Grid container item justify="center" xs={12} sm={6}>
+                    <FormControl
+                      className={classes.card_select}
+                      variant="outlined"
+                      error={!valid.categories && submitted}
+                    >
+                      <InputLabel>Categorias</InputLabel>
+                      <Select
+                        name="categories"
+                        multiple
+                        value={form.categories}
+                        onChange={handleChange}
+                        label="Categorias"
+                      >
+                        {aCategories.map(oCategory => (
+                          <MenuItem key={oCategory.code} value={oCategory.code}>
+                            {oCategory.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+
+                      {!valid.categories && submitted && (
+                        <FormHelperText>
+                          Selecione ao menos uma categoria!
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  </Grid>
+
+                  <Grid container item justify="center" xs={12} sm={6}>
+                    <FormControl
+                      className={classes.card_select}
+                      variant="outlined"
+                      error={!valid.allowedPayments && submitted}
+                    >
+                      <InputLabel>Meios de Pagamento</InputLabel>
+                      <Select
+                        name="allowedPayments"
+                        multiple
+                        value={form.allowedPayments}
+                        onChange={handleChange}
+                        label="Meios de Pagamento"
+                      >
+                        {aPayments.map(oPayments => (
+                          <MenuItem key={oPayments.code} value={oPayments.code}>
+                            {oPayments.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+
+                      {!valid.allowedPayments && submitted && (
+                        <FormHelperText>
+                          Selecione ao menos um meio de pagamento!
+                        </FormHelperText>
+                      )}
+                    </FormControl>
                   </Grid>
 
                   <Grid container item justify="center" xs={12}>
@@ -521,13 +858,6 @@ export const SignUp = props => {
                       }
                     />
                   </Grid>
-                  {/*
-                  country
-                  state
-                  city
-                  neighborhood
-                  streetName
-                  streetNumber */}
                 </Grid>
               </CardContent>
 

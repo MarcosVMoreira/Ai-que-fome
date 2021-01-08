@@ -61,6 +61,7 @@ export const merchantSignUp = payload => {
       document: unmask(payload.document),
       businessStart: new Date(payload.businessStart).toLocaleTimeString(),
       businessEnd: new Date(payload.businessEnd).toLocaleTimeString(),
+      merchantType: payload.categories,
       country: 'BR',
       availability: true,
     };
