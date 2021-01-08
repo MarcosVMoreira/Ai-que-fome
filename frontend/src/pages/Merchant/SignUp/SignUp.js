@@ -403,20 +403,29 @@ export const SignUp = props => {
     setForm({ ...form, businessEnd: value });
   };
 
-  // Fetches the user address by postalCode
+  // Fetches the user address by postalCode, if google api doesn't find any coordinates
+  // throw an error, otherwise, then we search for the postalCode on ViaCep
   const handleAddress = () => {
-    geocodeByAddress(unmask(form.postalCode)).then(res => {
-      getLatLng(res[0]).then(({ lat, lng }) => {
-        setForm(state => ({
-          ...state,
-          coordinates: [lat, lng],
-        }));
-      });
-    });
+    geocodeByAddress(unmask(form.postalCode))
+      .then(res => {
+        getLatLng(res[0]).then(({ lat, lng }) => {
+          setForm(state => ({
+            ...state,
+            coordinates: [lat, lng],
+          }));
+        });
 
-    if (validatePostalCode(form.postalCode)) {
-      onFetchAddress(form.postalCode);
-    }
+        if (validatePostalCode(form.postalCode)) {
+          onFetchAddress(form.postalCode);
+        }
+      })
+      .catch(err => {
+        if (err === 'ZERO_RESULTS') {
+          if (validatePostalCode(form.postalCode)) {
+            onFetchAddress('00000-000');
+          }
+        }
+      });
   };
 
   // On page load fetch all the states
