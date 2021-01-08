@@ -22,11 +22,12 @@ import {
   KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
 import { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { Spinner } from '../../../components/Shared/Spinner/Spinner';
 import { Toast } from '../../../components/Shared/Toast/Toast';
 import { unmask } from '../../../helpers/unmask';
 import {
@@ -575,324 +576,338 @@ export const Restaurant = () => {
                   </span>
                 </Grid>
 
-                <Grid container item justify="center" xs={12} sm={6}>
-                  <TextField
-                    name="email"
-                    label="Email para Acesso"
-                    variant="outlined"
-                    disabled
-                    className={classes.card_input}
-                    value={form.email}
-                    onChange={handleChange}
-                  />
-                </Grid>
-
-                <Grid container item justify="center" xs={12} sm={6}>
-                  <TextField
-                    name="name"
-                    label="Nome do Restaurante"
-                    variant="outlined"
-                    className={classes.card_input}
-                    value={form.name}
-                    error={!valid.name && submitted}
-                    onChange={handleChange}
-                    helperText={
-                      !valid.name &&
-                      submitted &&
-                      'Nome do Restaurante inválido!'
-                    }
-                  />
-                </Grid>
-
-                <Grid container item justify="center" xs={12} sm={6}>
-                  <InputMask
-                    mask="99.999.999/9999-99"
-                    value={form.document}
-                    onChange={handleChange}
-                  >
-                    {() => (
+                {loading ? (
+                  <Spinner />
+                ) : (
+                  <Fragment>
+                    <Grid container item justify="center" xs={12} sm={6}>
                       <TextField
-                        name="document"
-                        label="CNPJ"
+                        name="email"
+                        label="Email para Acesso"
                         variant="outlined"
+                        disabled
                         className={classes.card_input}
-                        error={!valid.document && submitted}
-                        helperText={
-                          !valid.document && submitted && 'CNPJ inválido!'
-                        }
+                        value={form.email}
+                        onChange={handleChange}
                       />
-                    )}
-                  </InputMask>
-                </Grid>
+                    </Grid>
 
-                <Grid container item justify="center" xs={12} sm={6}>
-                  <InputMask
-                    mask="(99) 99999-9999"
-                    value={form.phone}
-                    onChange={handleChange}
-                  >
-                    {() => (
+                    <Grid container item justify="center" xs={12} sm={6}>
                       <TextField
-                        name="phone"
-                        label="Celular"
+                        name="name"
+                        label="Nome do Restaurante"
                         variant="outlined"
                         className={classes.card_input}
-                        error={!valid.phone && submitted}
+                        value={form.name}
+                        error={!valid.name && submitted}
+                        onChange={handleChange}
                         helperText={
-                          !valid.phone &&
+                          !valid.name &&
                           submitted &&
-                          'Telefone Celular inválido!'
+                          'Nome do Restaurante inválido!'
                         }
                       />
-                    )}
-                  </InputMask>
-                </Grid>
+                    </Grid>
 
-                <Grid container item justify="center" xs={12} sm={3}>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardTimePicker
-                      className={classes.card_input}
-                      ampm={false}
-                      margin="normal"
-                      label="Hora de Abertura"
-                      value={form.businessStart}
-                      onChange={handleBusinessStart}
-                      inputVariant="outlined"
-                      invalidDateMessage="Hora Inválida"
-                      emptyLabel={
-                        !valid.businessStart && submitted && 'Hora Inválida!'
-                      }
-                    />
-                  </MuiPickersUtilsProvider>
-                </Grid>
+                    <Grid container item justify="center" xs={12} sm={6}>
+                      <InputMask
+                        mask="99.999.999/9999-99"
+                        value={form.document}
+                        onChange={handleChange}
+                      >
+                        {() => (
+                          <TextField
+                            name="document"
+                            label="CNPJ"
+                            variant="outlined"
+                            className={classes.card_input}
+                            error={!valid.document && submitted}
+                            helperText={
+                              !valid.document && submitted && 'CNPJ inválido!'
+                            }
+                          />
+                        )}
+                      </InputMask>
+                    </Grid>
 
-                <Grid container item justify="center" xs={12} sm={3}>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardTimePicker
-                      className={classes.card_input}
-                      ampm={false}
-                      margin="normal"
-                      label="Hora de Fechamento"
-                      value={form.businessEnd}
-                      onChange={handleBusinessEnd}
-                      inputVariant="outlined"
-                      invalidDateMessage="Hora Inválida"
-                      emptyLabel={
-                        !valid.businessEnd && submitted && 'Hora Inválida!'
-                      }
-                    />
-                  </MuiPickersUtilsProvider>
-                </Grid>
+                    <Grid container item justify="center" xs={12} sm={6}>
+                      <InputMask
+                        mask="(99) 99999-9999"
+                        value={form.phone}
+                        onChange={handleChange}
+                      >
+                        {() => (
+                          <TextField
+                            name="phone"
+                            label="Celular"
+                            variant="outlined"
+                            className={classes.card_input}
+                            error={!valid.phone && submitted}
+                            helperText={
+                              !valid.phone &&
+                              submitted &&
+                              'Telefone Celular inválido!'
+                            }
+                          />
+                        )}
+                      </InputMask>
+                    </Grid>
 
-                <Grid container item justify="center" xs={12} sm={6}>
-                  <TextField
-                    name="logo"
-                    label="URL da Logo"
-                    variant="outlined"
-                    className={classes.card_input}
-                    value={form.logo}
-                    error={!valid.logo && submitted}
-                    onChange={handleChange}
-                    helperText={!valid.logo && submitted && 'URL inválida!'}
-                  />
-                </Grid>
+                    <Grid container item justify="center" xs={12} sm={3}>
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardTimePicker
+                          className={classes.card_input}
+                          ampm={false}
+                          margin="normal"
+                          label="Hora de Abertura"
+                          value={form.businessStart}
+                          onChange={handleBusinessStart}
+                          inputVariant="outlined"
+                          invalidDateMessage="Hora Inválida"
+                          emptyLabel={
+                            !valid.businessStart &&
+                            submitted &&
+                            'Hora Inválida!'
+                          }
+                        />
+                      </MuiPickersUtilsProvider>
+                    </Grid>
 
-                <Grid container item justify="center" xs={12} sm={6}>
-                  <FormControl
-                    className={classes.card_select}
-                    variant="outlined"
-                    error={!valid.categories && submitted}
-                  >
-                    <InputLabel>Categorias</InputLabel>
-                    <Select
-                      name="categories"
-                      multiple
-                      value={form.categories}
-                      onChange={handleChange}
-                      label="Categorias"
-                    >
-                      {aCategories.map(oCategory => (
-                        <MenuItem key={oCategory.code} value={oCategory.code}>
-                          {oCategory.label}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                    <Grid container item justify="center" xs={12} sm={3}>
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardTimePicker
+                          className={classes.card_input}
+                          ampm={false}
+                          margin="normal"
+                          label="Hora de Fechamento"
+                          value={form.businessEnd}
+                          onChange={handleBusinessEnd}
+                          inputVariant="outlined"
+                          invalidDateMessage="Hora Inválida"
+                          emptyLabel={
+                            !valid.businessEnd && submitted && 'Hora Inválida!'
+                          }
+                        />
+                      </MuiPickersUtilsProvider>
+                    </Grid>
 
-                    {!valid.categories && submitted && (
-                      <FormHelperText>
-                        Selecione ao menos uma categoria!
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                </Grid>
-
-                <Grid container item justify="center" xs={12} sm={6}>
-                  <FormControl
-                    className={classes.card_select}
-                    variant="outlined"
-                    error={!valid.allowedPayments && submitted}
-                  >
-                    <InputLabel>Meios de Pagamento</InputLabel>
-                    <Select
-                      name="allowedPayments"
-                      multiple
-                      value={form.allowedPayments}
-                      onChange={handleChange}
-                      label="Meios de Pagamento"
-                    >
-                      {aPayments.map(oPayments => (
-                        <MenuItem key={oPayments.code} value={oPayments.code}>
-                          {oPayments.label}
-                        </MenuItem>
-                      ))}
-                    </Select>
-
-                    {!valid.allowedPayments && submitted && (
-                      <FormHelperText>
-                        Selecione ao menos um meio de pagamento!
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                </Grid>
-
-                <Grid container item justify="center" xs={12}>
-                  <span className={classes.card_title}>
-                    Endereço do Restaurante
-                  </span>
-                </Grid>
-
-                <Grid container item justify="center" xs={12} sm={6}>
-                  <InputMask
-                    mask="99999-999"
-                    value={form.postalCode}
-                    onChange={handleChange}
-                  >
-                    {() => (
+                    <Grid container item justify="center" xs={12} sm={6}>
                       <TextField
-                        name="postalCode"
-                        label="CEP"
+                        name="logo"
+                        label="URL da Logo"
                         variant="outlined"
                         className={classes.card_input}
-                        error={!valid.postalCode && submitted}
-                        helperText={
-                          !valid.postalCode && submitted && 'CEP inválido!'
-                        }
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton onClick={handleAddress}>
-                                <SearchOutlined />
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }}
+                        value={form.logo}
+                        error={!valid.logo && submitted}
+                        onChange={handleChange}
+                        helperText={!valid.logo && submitted && 'URL inválida!'}
                       />
-                    )}
-                  </InputMask>
-                </Grid>
+                    </Grid>
 
-                <Grid container item justify="center" xs={12} sm={6}>
-                  <Autocomplete
-                    options={states?.map(state => state.sigla) || []}
-                    autoHighlight
-                    className={classes.card_select}
-                    noOptionsText="Nenhum estado encontrado"
-                    getOptionLabel={option => option}
-                    getOptionSelected={(option, value) =>
-                      option.id === value.id
-                    }
-                    renderOption={option => (
-                      <React.Fragment>{option}</React.Fragment>
-                    )}
-                    value={form.state}
-                    onChange={handleState}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        label="Selecione um Estado"
+                    <Grid container item justify="center" xs={12} sm={6}>
+                      <FormControl
+                        className={classes.card_select}
                         variant="outlined"
-                        error={!valid.state && submitted}
-                        helperText={
-                          !valid.state && submitted && 'Estado inválido!'
-                        }
-                      />
-                    )}
-                  />
-                </Grid>
+                        error={!valid.categories && submitted}
+                      >
+                        <InputLabel>Categorias</InputLabel>
+                        <Select
+                          name="categories"
+                          multiple
+                          value={form.categories}
+                          onChange={handleChange}
+                          label="Categorias"
+                        >
+                          {aCategories.map(oCategory => (
+                            <MenuItem
+                              key={oCategory.code}
+                              value={oCategory.code}
+                            >
+                              {oCategory.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
 
-                <Grid container item justify="center" xs={12} sm={6}>
-                  <Autocomplete
-                    options={cities?.map(city => city.nome) || []}
-                    autoHighlight
-                    className={classes.card_select}
-                    noOptionsText="Nenhuma cidade encontrada"
-                    getOptionLabel={option => option}
-                    getOptionSelected={(option, value) =>
-                      option.id === value.id
-                    }
-                    renderOption={option => (
-                      <React.Fragment>{option}</React.Fragment>
-                    )}
-                    value={form.city}
-                    onChange={handleCity}
-                    renderInput={params => (
-                      <TextField
-                        {...params}
-                        label="Selecione uma Cidade"
+                        {!valid.categories && submitted && (
+                          <FormHelperText>
+                            Selecione ao menos uma categoria!
+                          </FormHelperText>
+                        )}
+                      </FormControl>
+                    </Grid>
+
+                    <Grid container item justify="center" xs={12} sm={6}>
+                      <FormControl
+                        className={classes.card_select}
                         variant="outlined"
-                        error={!valid.city && submitted}
+                        error={!valid.allowedPayments && submitted}
+                      >
+                        <InputLabel>Meios de Pagamento</InputLabel>
+                        <Select
+                          name="allowedPayments"
+                          multiple
+                          value={form.allowedPayments}
+                          onChange={handleChange}
+                          label="Meios de Pagamento"
+                        >
+                          {aPayments.map(oPayments => (
+                            <MenuItem
+                              key={oPayments.code}
+                              value={oPayments.code}
+                            >
+                              {oPayments.label}
+                            </MenuItem>
+                          ))}
+                        </Select>
+
+                        {!valid.allowedPayments && submitted && (
+                          <FormHelperText>
+                            Selecione ao menos um meio de pagamento!
+                          </FormHelperText>
+                        )}
+                      </FormControl>
+                    </Grid>
+
+                    <Grid container item justify="center" xs={12}>
+                      <span className={classes.card_title}>
+                        Endereço do Restaurante
+                      </span>
+                    </Grid>
+
+                    <Grid container item justify="center" xs={12} sm={6}>
+                      <InputMask
+                        mask="99999-999"
+                        value={form.postalCode}
+                        onChange={handleChange}
+                      >
+                        {() => (
+                          <TextField
+                            name="postalCode"
+                            label="CEP"
+                            variant="outlined"
+                            className={classes.card_input}
+                            error={!valid.postalCode && submitted}
+                            helperText={
+                              !valid.postalCode && submitted && 'CEP inválido!'
+                            }
+                            InputProps={{
+                              endAdornment: (
+                                <InputAdornment position="end">
+                                  <IconButton onClick={handleAddress}>
+                                    <SearchOutlined />
+                                  </IconButton>
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                        )}
+                      </InputMask>
+                    </Grid>
+
+                    <Grid container item justify="center" xs={12} sm={6}>
+                      <Autocomplete
+                        options={states?.map(state => state.sigla) || []}
+                        autoHighlight
+                        className={classes.card_select}
+                        noOptionsText="Nenhum estado encontrado"
+                        getOptionLabel={option => option}
+                        getOptionSelected={(option, value) =>
+                          option.id === value.id
+                        }
+                        renderOption={option => (
+                          <React.Fragment>{option}</React.Fragment>
+                        )}
+                        value={form.state}
+                        onChange={handleState}
+                        renderInput={params => (
+                          <TextField
+                            {...params}
+                            label="Selecione um Estado"
+                            variant="outlined"
+                            error={!valid.state && submitted}
+                            helperText={
+                              !valid.state && submitted && 'Estado inválido!'
+                            }
+                          />
+                        )}
+                      />
+                    </Grid>
+
+                    <Grid container item justify="center" xs={12} sm={6}>
+                      <Autocomplete
+                        options={cities?.map(city => city.nome) || []}
+                        autoHighlight
+                        className={classes.card_select}
+                        noOptionsText="Nenhuma cidade encontrada"
+                        getOptionLabel={option => option}
+                        getOptionSelected={(option, value) =>
+                          option.id === value.id
+                        }
+                        renderOption={option => (
+                          <React.Fragment>{option}</React.Fragment>
+                        )}
+                        value={form.city}
+                        onChange={handleCity}
+                        renderInput={params => (
+                          <TextField
+                            {...params}
+                            label="Selecione uma Cidade"
+                            variant="outlined"
+                            error={!valid.city && submitted}
+                            helperText={
+                              !valid.city && submitted && 'Cidade inválida!'
+                            }
+                          />
+                        )}
+                      />
+                    </Grid>
+
+                    <Grid container item justify="center" xs={12} sm={6}>
+                      <TextField
+                        name="neighborhood"
+                        label="Bairro"
+                        variant="outlined"
+                        className={classes.card_input}
+                        value={form.neighborhood}
+                        error={!valid.neighborhood && submitted}
+                        onChange={handleChange}
                         helperText={
-                          !valid.city && submitted && 'Cidade inválida!'
+                          !valid.neighborhood && submitted && 'Bairro inválido!'
                         }
                       />
-                    )}
-                  />
-                </Grid>
+                    </Grid>
 
-                <Grid container item justify="center" xs={12} sm={6}>
-                  <TextField
-                    name="neighborhood"
-                    label="Bairro"
-                    variant="outlined"
-                    className={classes.card_input}
-                    value={form.neighborhood}
-                    error={!valid.neighborhood && submitted}
-                    onChange={handleChange}
-                    helperText={
-                      !valid.neighborhood && submitted && 'Bairro inválido!'
-                    }
-                  />
-                </Grid>
+                    <Grid container item justify="center" xs={12} sm={10}>
+                      <TextField
+                        name="streetName"
+                        label="Endereço do Restaurante"
+                        variant="outlined"
+                        className={classes.card_input}
+                        value={form.streetName}
+                        error={!valid.streetName && submitted}
+                        onChange={handleChange}
+                        helperText={
+                          !valid.streetName && submitted && 'Rua inválida!'
+                        }
+                      />
+                    </Grid>
 
-                <Grid container item justify="center" xs={12} sm={10}>
-                  <TextField
-                    name="streetName"
-                    label="Endereço do Restaurante"
-                    variant="outlined"
-                    className={classes.card_input}
-                    value={form.streetName}
-                    error={!valid.streetName && submitted}
-                    onChange={handleChange}
-                    helperText={
-                      !valid.streetName && submitted && 'Rua inválida!'
-                    }
-                  />
-                </Grid>
-
-                <Grid container item justify="center" xs={12} sm={2}>
-                  <TextField
-                    name="streetNumber"
-                    label="Número"
-                    variant="outlined"
-                    className={classes.card_input}
-                    value={form.streetNumber}
-                    error={!valid.streetNumber && submitted}
-                    onChange={handleChange}
-                    helperText={
-                      !valid.streetNumber && submitted && 'Número inválido!'
-                    }
-                  />
-                </Grid>
+                    <Grid container item justify="center" xs={12} sm={2}>
+                      <TextField
+                        name="streetNumber"
+                        label="Número"
+                        variant="outlined"
+                        className={classes.card_input}
+                        value={form.streetNumber}
+                        error={!valid.streetNumber && submitted}
+                        onChange={handleChange}
+                        helperText={
+                          !valid.streetNumber && submitted && 'Número inválido!'
+                        }
+                      />
+                    </Grid>
+                  </Fragment>
+                )}
               </Grid>
             </CardContent>
 
