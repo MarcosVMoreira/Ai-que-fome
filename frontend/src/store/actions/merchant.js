@@ -1,4 +1,5 @@
 import axios from '../../Axios';
+import { unmask } from '../../helpers/unmask';
 import * as actionTypes from './actionTypes';
 
 export const merchantDataStart = () => ({
@@ -33,5 +34,53 @@ export const merchantData = () => {
     } else {
       dispatch(merchantDataFail({ error: 401 }));
     }
+  };
+};
+
+export const merchantEditDataStart = () => ({
+  type: actionTypes.MERCHANT_EDIT_DATA_START,
+});
+
+export const merchantEditDataSuccess = () => ({
+  type: actionTypes.MERCHANT_EDIT_DATA_SUCCESS,
+});
+
+export const merchantEditDataFail = payload => ({
+  type: actionTypes.MERCHANT_EDIT_DATA_FAIL,
+  payload,
+});
+
+export const merchantEditData = merchant => {
+  return dispatch => {
+    dispatch(merchantEditDataStart());
+    const merchantId = localStorage.getItem('IFOOD_udid');
+
+    const data = {
+      ...merchant,
+      postalCode: unmask(merchant.postalCode),
+      phone: unmask(merchant.phone),
+      document: unmask(merchant.document),
+      businessStart: new Date(merchant.businessStart).toLocaleTimeString(),
+      businessEnd: new Date(merchant.businessEnd).toLocaleTimeString(),
+      merchantType: merchant.categories,
+      allowedPayments: merchant.allowedPayments.map(el => ({
+        name: el,
+        isAllowed: true,
+      })),
+      country: 'BR',
+      availability: true,
+    };
+
+    delete data.categories;
+
+    axios
+      .put(`/merchant/merchants/${merchantId}`, data)
+      .then(() => {
+        dispatch(merchantEditDataSuccess());
+        dispatch(merchantData());
+      })
+      .catch(err => {
+        dispatch(merchantEditDataFail({ error: err.response?.status || 500 }));
+      });
   };
 };

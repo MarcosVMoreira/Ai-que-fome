@@ -56,9 +56,9 @@ export const customerEditData = customer => {
     const customerId = localStorage.getItem('IFOOD_udid');
 
     const data = {
+      email: customer.email,
       name: customer.name,
       phone: unmask(customer.phone),
-      email: customer.email,
       taxPayerIdentificationNumber: unmask(customer.document),
       addresses: customer.addresses,
     };

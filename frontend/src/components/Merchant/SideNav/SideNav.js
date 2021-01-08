@@ -10,12 +10,12 @@ import {
   ExitToAppRounded,
   FastfoodRounded,
   HomeRounded,
+  MenuBookRounded,
   RestaurantMenuRounded,
-  SettingsRounded,
 } from '@material-ui/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import * as actions from '../../../store/actions/index';
 import classes from './SideNav.module.scss';
 
@@ -48,56 +48,64 @@ export const SideNav = withRouter(props => {
         className={classes.sidenav_list}
       >
         <List>
-          <ListItem button selected={activeRoute === '/merchant/home'}>
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-            >
-              <HomeRounded fontSize="large" color="primary" />
-              <Typography color="primary">Início</Typography>
-            </Grid>
-          </ListItem>
+          <Link to="/merchant/home">
+            <ListItem button selected={activeRoute === '/merchant/home'}>
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+              >
+                <HomeRounded fontSize="large" color="primary" />
+                <Typography color="primary">Início</Typography>
+              </Grid>
+            </ListItem>
+          </Link>
 
-          <ListItem button>
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-            >
-              <RestaurantMenuRounded fontSize="large" color="primary" />
-              <Typography color="primary">Restaurante</Typography>
-            </Grid>
-          </ListItem>
+          <Link to="/merchant/restaurant">
+            <ListItem button selected={activeRoute === '/merchant/restaurant'}>
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+              >
+                <RestaurantMenuRounded fontSize="large" color="primary" />
+                <Typography color="primary">Restaurante</Typography>
+              </Grid>
+            </ListItem>
+          </Link>
 
-          <ListItem button>
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-            >
-              <FastfoodRounded fontSize="large" color="primary" />
-              <Typography color="primary">Pedidos</Typography>
-            </Grid>
-          </ListItem>
+          <Link to="/merchant/menu">
+            <ListItem button selected={activeRoute === '/merchant/menu'}>
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+              >
+                <MenuBookRounded fontSize="large" color="primary" />
+                <Typography color="primary">Cardápio</Typography>
+              </Grid>
+            </ListItem>
+          </Link>
+
+          <Link to="/merchant/orders">
+            <ListItem button selected={activeRoute === '/merchant/orders'}>
+              <Grid
+                container
+                direction="column"
+                justify="center"
+                alignItems="center"
+              >
+                <FastfoodRounded fontSize="large" color="primary" />
+                <Typography color="primary">Pedidos</Typography>
+              </Grid>
+            </ListItem>
+          </Link>
         </List>
 
         <List>
-          <ListItem button>
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-            >
-              <SettingsRounded fontSize="large" color="primary" />
-              <Typography color="primary">Configurações</Typography>
-            </Grid>
-          </ListItem>
-
           <ListItem button onClick={handleLogout}>
             <Grid
               container
