@@ -51,7 +51,7 @@ public class ApplicationUserService {
         ApplicationUser applicationUser = ApplicationUser.builder()
                 .email(email)
                 .role(ADMIN)
-                .customerId(id)
+                .userId(id)
                 .loginCode(loginCode)
                 .build();
 

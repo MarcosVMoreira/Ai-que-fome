@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CustomerAMQPConfig {
 
-    public static final String QUEUE = "customer-created";
-    public static final String EXCHANGE_NAME = "customer-created";
+    public static final String QUEUE = "user-created";
+    public static final String EXCHANGE_NAME = "user-created";
     public static final String ROUTING_KEY = "";
 
     @Bean

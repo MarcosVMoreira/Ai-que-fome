@@ -2,7 +2,6 @@ package com.ifood.customer.endpoint.service;
 
 import com.ifood.customer.endpoint.model.dto.AddressDTO;
 import com.ifood.customer.endpoint.model.dto.CustomerDTO;
-import com.ifood.customer.endpoint.model.entity.Address;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;

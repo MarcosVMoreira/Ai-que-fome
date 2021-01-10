@@ -1,12 +1,15 @@
 spring:
   application:
-    name: auth
+    name: merchant
   data:
     mongodb:
+      #uri: ${MONGOURI}
       uri: mongodb://root:mongolocalprotavao@localhost:27017/DeliveryApp?authSource=admin
+  main:
+    allow-bean-definition-overriding: true
 
 server:
-  port: 8083
+  port: 8084
 
 eureka:
   instance:
@@ -20,3 +23,6 @@ eureka:
 jwt:
   config:
     type: signed
+
+security:
+  ignored: /swagger-resources/**

@@ -1,9 +1,9 @@
-package com.ifood.customer.message.producer;
+package com.ifood.customer.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ifood.customer.endpoint.model.dto.CustomerDTO;
-import com.ifood.customer.endpoint.model.entity.CustomerAsyncPayload;
+import com.ifood.customer.endpoint.model.entity.Merchant;
+import com.ifood.customer.endpoint.model.entity.MerchantAsyncPayload;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerMessageProducer {
+public class MerchantMessageProducer {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
@@ -21,11 +21,11 @@ public class CustomerMessageProducer {
     @Autowired
     private static final String EXCHANGE_NAME = "user-created";
 
-    public void sendCustomerDataToRabbit (CustomerDTO customer) {
+    public void sendMerchantDataToRabbit (Merchant merchant) {
         try {
-            CustomerAsyncPayload payload = CustomerAsyncPayload.builder()
-                    .email(customer.getEmail())
-                    .id(customer.getId())
+            MerchantAsyncPayload payload = MerchantAsyncPayload.builder()
+                    .email(merchant.getEmail())
+                    .id(merchant.getId())
                     .build();
             String json = new ObjectMapper().writeValueAsString(payload);
             rabbitTemplate.convertAndSend(EXCHANGE_NAME, "", json);
