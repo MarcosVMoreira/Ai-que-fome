@@ -1,6 +1,7 @@
 package com.ifood.customer.endpoint.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ifood.customer.endpoint.enumeration.AllowedPaymentEnum;
 import com.ifood.customer.endpoint.enumeration.MerchantTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -74,12 +76,20 @@ public class Merchant {
     @JsonFormat(pattern = "HH:mm")
     private LocalTime businessEnd;
 
-    private List<AllowedPayment> allowedPayments;
+    private List<String> coordinates;
+
+    private List<AllowedPaymentEnum> allowedPayments;
 
     private List<Category> categories;
 
     private List<SKU> skus;
 
     private List<MerchantTypeEnum> merchantType;
+
+    private BigDecimal rate;
+
+    private String description;
+
+    private String basePreparationTime;
 
 }

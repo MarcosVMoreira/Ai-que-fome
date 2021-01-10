@@ -1,15 +1,13 @@
 package com.ifood.customer.endpoint.model.entity;
 
-import com.ifood.customer.endpoint.enumeration.PaymentEnum;
+import com.ifood.customer.endpoint.enumeration.AllowedPaymentEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -22,7 +20,7 @@ public class AllowedPayment {
     private String id;
 
     @NotNull(message = "400.003")
-    private PaymentEnum name;
+    private AllowedPaymentEnum name;
 
     @NotNull(message = "400.003")
     private Boolean isAllowed;

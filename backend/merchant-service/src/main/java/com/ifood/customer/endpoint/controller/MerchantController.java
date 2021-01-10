@@ -1,5 +1,6 @@
 package com.ifood.customer.endpoint.controller;
 
+import com.ifood.customer.endpoint.enumeration.AllowedPaymentEnum;
 import com.ifood.customer.endpoint.enumeration.MerchantTypeEnum;
 import com.ifood.customer.endpoint.model.entity.AllowedPayment;
 import com.ifood.customer.endpoint.model.entity.Category;
@@ -78,8 +79,8 @@ public class MerchantController {
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{merchantId}/allowed-payment")
     public Merchant saveAllowedPayment(@PathVariable String merchantId,
-                                                   @Valid @RequestBody List<AllowedPayment> allowedPayment) {
-        return merchantService.updateAllowedPayment(merchantId, allowedPayment);
+                                                   @Valid @RequestBody List<AllowedPaymentEnum> allowedPaymentEnums) {
+        return merchantService.updateAllowedPayment(merchantId, allowedPaymentEnums);
     }
 
     /* Category */
@@ -110,4 +111,3 @@ public class MerchantController {
     }
 
 }
-

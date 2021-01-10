@@ -1,6 +1,6 @@
 package com.ifood.customer.endpoint.enumeration;
 
-public enum PaymentEnum {
+public enum AllowedPaymentEnum {
 
     CARTAO_CREDITO, CARTAO_DEBITO, VR, VA, DINHEIRO
 }

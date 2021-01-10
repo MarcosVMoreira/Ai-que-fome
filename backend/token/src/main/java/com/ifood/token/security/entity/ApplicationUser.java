@@ -30,8 +30,8 @@ public class ApplicationUser {
     @Builder.Default
     private String role = "USER";
 
-    @NotEmpty(message = "The field 'customerId' is mandatory")
-    private String customerId;
+    @NotEmpty(message = "The field 'userId' is mandatory")
+    private String userId;
 
     @NotEmpty(message =  "The field 'loginCode' is mandatory")
     @ToString.Exclude
@@ -41,11 +41,7 @@ public class ApplicationUser {
         this.id = applicationUser.getId();
         this.email = applicationUser.getEmail();
         this.role = applicationUser.getRole();
-        this.customerId = applicationUser.getCustomerId();
+        this.userId = applicationUser.getUserId();
         this.loginCode = applicationUser.getLoginCode();
     }
-
-
-
 }
-

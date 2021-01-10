@@ -1,5 +1,6 @@
 package com.ifood.customer.endpoint.service;
 
+import com.ifood.customer.endpoint.enumeration.AllowedPaymentEnum;
 import com.ifood.customer.endpoint.enumeration.MerchantTypeEnum;
 import com.ifood.customer.endpoint.error.BadRequestException;
 import com.ifood.customer.endpoint.error.NotFoundException;
@@ -102,7 +103,7 @@ public class MerchantService {
 
     /* AllowedPayments */
 
-    public Merchant updateAllowedPayment(String merchantId, @Valid List<AllowedPayment> receivedAllowedPayment) {
+    public Merchant updateAllowedPayment(String merchantId, @Valid List<AllowedPaymentEnum> receivedAllowedPayment) {
         Optional<Merchant> merchant = merchantRepository.findById(merchantId);
 
         if (!merchant.isPresent()) {
@@ -110,10 +111,8 @@ public class MerchantService {
         }
 
         if (receivedAllowedPayment.isEmpty()) {
-            throw new UnprocessableEntityException("400.005");
+            throw new UnprocessableEntityException("400.004");
         }
-
-        receivedAllowedPayment.forEach(sku -> sku.setId(new Category().getId()));
 
         merchant.get().setAllowedPayments(receivedAllowedPayment);
 
