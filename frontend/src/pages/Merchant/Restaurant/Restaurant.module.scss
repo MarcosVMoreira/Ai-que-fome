@@ -42,16 +42,3 @@
 .MuiSvgIcon-root {
   font-size: 2.5em !important;
 }
-
-// Changes the background on mobile
-@media (max-width: 600px) {
-  .container {
-    background: url('../../../assets/images/background-signup-portrait.webp')
-      no-repeat center;
-    background-size: cover;
-
-    &_body {
-      align-items: flex-start;
-    }
-  }
-}

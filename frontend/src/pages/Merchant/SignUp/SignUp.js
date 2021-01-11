@@ -346,6 +346,8 @@ export const SignUp = props => {
     document: '',
     businessStart: new Date(),
     businessEnd: new Date(),
+    description: '',
+    basePreparationTime: '',
     logo: '',
     postalCode: '',
     state: '',
@@ -353,7 +355,7 @@ export const SignUp = props => {
     neighborhood: '',
     streetName: '',
     streetNumber: '',
-    coordinates: '',
+    coordinates: [],
     categories: [],
     allowedPayments: [],
   });
@@ -364,6 +366,8 @@ export const SignUp = props => {
     document: true,
     businessStart: true,
     businessEnd: true,
+    description: '',
+    basePreparationTime: '',
     logo: true,
     postalCode: true,
     state: true,
@@ -457,6 +461,8 @@ export const SignUp = props => {
       document: validateCompanyDocument(form.document),
       businessStart: Boolean(form.businessStart),
       businessEnd: Boolean(form.businessEnd),
+      description: Boolean(form.description),
+      basePreparationTime: Boolean(form.basePreparationTime),
       logo: Boolean(form.logo),
       postalCode: Boolean(form.postalCode),
       state: Boolean(form.state),
@@ -578,6 +584,23 @@ export const SignUp = props => {
                     />
                   </Grid>
 
+                  <Grid container item justify="center" xs={12}>
+                    <TextField
+                      name="description"
+                      label="Descrição Breve do Restaurante"
+                      variant="outlined"
+                      className={classes.card_input}
+                      value={form.description}
+                      error={!valid.description && submitted}
+                      onChange={handleChange}
+                      helperText={
+                        !valid.description &&
+                        submitted &&
+                        'Descrição do Restaurante inválida!'
+                      }
+                    />
+                  </Grid>
+
                   <Grid container item justify="center" xs={12} sm={6}>
                     <InputMask
                       mask="99.999.999/9999-99"
@@ -658,7 +681,25 @@ export const SignUp = props => {
                     </MuiPickersUtilsProvider>
                   </Grid>
 
-                  <Grid container item justify="center" xs={12} sm={6}>
+                  <Grid container item justify="center" xs={12} sm={3}>
+                    <TextField
+                      type="number"
+                      name="basePreparationTime"
+                      label="Tempo de Preparo (min)"
+                      variant="outlined"
+                      className={classes.card_input}
+                      value={form.basePreparationTime}
+                      error={!valid.basePreparationTime && submitted}
+                      onChange={handleChange}
+                      helperText={
+                        !valid.basePreparationTime &&
+                        submitted &&
+                        'Tempo médio de preparo inválido!'
+                      }
+                    />
+                  </Grid>
+
+                  <Grid container item justify="center" xs={12} sm={3}>
                     <TextField
                       name="logo"
                       label="URL da Logo"

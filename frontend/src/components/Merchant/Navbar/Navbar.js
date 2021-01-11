@@ -1,4 +1,5 @@
 import { AppBar, Chip, Grid, Toolbar } from '@material-ui/core';
+import { Rating } from '@material-ui/lab';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../../store/actions/index';
@@ -87,8 +88,11 @@ export const Navbar = () => {
               justify="space-around"
               direction="column"
             >
-              <Grid item>
+              <Grid item container>
                 <span className={classes.navbar_title}>{merchant.name}</span>
+
+                <Rating value={merchant.rate} readOnly precision={0.25} />
+                <span className={classes.navbar_rate}>({merchant.rate})</span>
               </Grid>
 
               <Grid item container alignItems="center">
@@ -134,7 +138,9 @@ export const Navbar = () => {
               </Grid>
 
               <Grid item>
-                <span className={classes.navbar_await__subtitle}>20min</span>
+                <span className={classes.navbar_await__subtitle}>
+                  {merchant.basePreparationTime}min
+                </span>
               </Grid>
             </Grid>
           </Grid>

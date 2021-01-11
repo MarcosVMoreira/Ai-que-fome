@@ -63,12 +63,9 @@ export const merchantEditData = merchant => {
       businessStart: new Date(merchant.businessStart).toLocaleTimeString(),
       businessEnd: new Date(merchant.businessEnd).toLocaleTimeString(),
       merchantType: merchant.categories,
-      allowedPayments: merchant.allowedPayments.map(el => ({
-        name: el,
-        isAllowed: true,
-      })),
       country: 'BR',
       availability: true,
+      rate: 5.0,
     };
 
     delete data.categories;
