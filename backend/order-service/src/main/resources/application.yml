@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: merchant
+  data:
+    mongodb:
+      #uri: ${MONGOURI}
+      uri: mongodb://root:mongolocalprotavao@localhost:27017/DeliveryApp?authSource=admin
+  main:
+    allow-bean-definition-overriding: true
+
+server:
+  port: 8085
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}-${random.int}
+  client:
+    service-url:
+      defaultZone: http://localhost:8081/eureka/
+    register-with-eureka: true
+
+jwt:
+  config:
+    type: signed
+
+security:
+  ignored: /swagger-resources/**
