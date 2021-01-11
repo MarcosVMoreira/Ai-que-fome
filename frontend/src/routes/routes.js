@@ -18,6 +18,7 @@ import { Profile as CustomerProfile } from '../pages/Customer/Profile/Profile';
 import { SignUp as CustomerSignUp } from '../pages/Customer/SignUp/SignUp';
 import { Home as MerchantHome } from '../pages/Merchant/Home/Home';
 import { Login as MerchantLogin } from '../pages/Merchant/Login/Login';
+import { Menu as MerchantMenu } from '../pages/Merchant/Menu/Menu';
 import { Restaurant as MerchantRestaurant } from '../pages/Merchant/Restaurant/Restaurant';
 import { SignUp as MerchantSignUp } from '../pages/Merchant/SignUp/SignUp';
 import * as actions from '../store/actions/index';
@@ -58,7 +59,8 @@ export const Routes = () => {
             <Route path="/customer/profile" component={CustomerProfile} />
             <Route path="/merchant/home" component={MerchantHome} />
             <Route path="/merchant/restaurant" component={MerchantRestaurant} />
-            <Redirect to={`/${authenticated}/restaurant`} />
+            <Route path="/merchant/menu" component={MerchantMenu} />
+            <Redirect to={`/${authenticated}/menu`} />
           </Switch>
         </Fragment>
       ))

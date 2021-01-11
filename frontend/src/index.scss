@@ -15,3 +15,17 @@ body {
 a {
   text-decoration: none;
 }
+
+.MuiDataGrid-cell {
+  &:focus {
+    outline: none !important;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.MuiDataGrid-window {
+  overflow-x: hidden !important;
+}
