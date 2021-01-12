@@ -346,6 +346,8 @@ export const Restaurant = () => {
     document: '',
     businessStart: new Date(),
     businessEnd: new Date(),
+    description: '',
+    basePreparationTime: '',
     logo: '',
     postalCode: '',
     state: '',
@@ -353,8 +355,11 @@ export const Restaurant = () => {
     neighborhood: '',
     streetName: '',
     streetNumber: '',
-    coordinates: '',
+    rate: '',
+    coordinates: [],
     categories: [],
+    skus: [],
+    merchantType: [],
     allowedPayments: [],
   });
   const [valid, setValid] = useState({
@@ -364,6 +369,8 @@ export const Restaurant = () => {
     document: true,
     businessStart: true,
     businessEnd: true,
+    description: true,
+    basePreparationTime: true,
     logo: true,
     postalCode: true,
     state: true,
@@ -371,8 +378,11 @@ export const Restaurant = () => {
     neighborhood: true,
     streetName: true,
     streetNumber: true,
+    rate: true,
     coordinates: true,
     categories: true,
+    skus: true,
+    merchantType: true,
     allowedPayments: true,
   });
   const [submitted, setSubmitted] = useState(false);
@@ -425,6 +435,8 @@ export const Restaurant = () => {
           merchant.businessEnd.split(':')[0],
           merchant.businessEnd.split(':')[1],
         ),
+        description: merchant.description,
+        basePreparationTime: merchant.basePreparationTime,
         logo: merchant.logo,
         postalCode: merchant.postalCode,
         state: merchant.state,
@@ -432,9 +444,12 @@ export const Restaurant = () => {
         neighborhood: merchant.neighborhood,
         streetName: merchant.streetName,
         streetNumber: merchant.streetNumber,
+        rate: merchant.rate,
         coordinates: merchant.coordinates,
-        categories: merchant.merchantType,
-        allowedPayments: merchant.allowedPayments.map(el => el.name),
+        merchantType: merchant.merchantType,
+        categories: merchant.categories,
+        skus: merchant.skus,
+        allowedPayments: merchant.allowedPayments,
       });
     }
   }, [merchant]);
@@ -448,6 +463,8 @@ export const Restaurant = () => {
       document: validateCompanyDocument(form.document),
       businessStart: Boolean(form.businessStart),
       businessEnd: Boolean(form.businessEnd),
+      description: Boolean(form.description),
+      basePreparationTime: Boolean(form.basePreparationTime),
       logo: Boolean(form.logo),
       postalCode: Boolean(form.postalCode),
       state: Boolean(form.state),
@@ -455,8 +472,11 @@ export const Restaurant = () => {
       neighborhood: Boolean(form.neighborhood),
       streetName: Boolean(form.streetName),
       streetNumber: Boolean(form.streetNumber),
-      coordinates: Boolean(form.coordinates),
-      categories: Boolean(form.allowedPayments.length),
+      rate: Boolean(form.rate),
+      coordinates: Boolean(form.coordinates.length),
+      categories: Boolean(form.categories.length),
+      merchantType: Boolean(form.merchantType.length),
+      skus: Boolean(form.skus.length),
       allowedPayments: Boolean(form.allowedPayments.length),
     });
   }, [form]);
@@ -515,8 +535,6 @@ export const Restaurant = () => {
   // invalid fields with their respective errors, otherwise we proceed to register the new user
   const handleSubmit = event => {
     event.preventDefault();
-
-    console.log(form);
 
     setSubmitted(true);
     Object.keys(valid).reduce((sum, value) => sum && valid[value], true) &&
@@ -609,6 +627,23 @@ export const Restaurant = () => {
                       />
                     </Grid>
 
+                    <Grid container item justify="center" xs={12}>
+                      <TextField
+                        name="description"
+                        label="Descrição Breve do Restaurante"
+                        variant="outlined"
+                        className={classes.card_input}
+                        value={form.description}
+                        error={!valid.description && submitted}
+                        onChange={handleChange}
+                        helperText={
+                          !valid.description &&
+                          submitted &&
+                          'Descrição do Restaurante inválida!'
+                        }
+                      />
+                    </Grid>
+
                     <Grid container item justify="center" xs={12} sm={6}>
                       <InputMask
                         mask="99.999.999/9999-99"
@@ -691,7 +726,25 @@ export const Restaurant = () => {
                       </MuiPickersUtilsProvider>
                     </Grid>
 
-                    <Grid container item justify="center" xs={12} sm={6}>
+                    <Grid container item justify="center" xs={12} sm={3}>
+                      <TextField
+                        type="number"
+                        name="basePreparationTime"
+                        label="Tempo de Preparo (min)"
+                        variant="outlined"
+                        className={classes.card_input}
+                        value={form.basePreparationTime}
+                        error={!valid.basePreparationTime && submitted}
+                        onChange={handleChange}
+                        helperText={
+                          !valid.basePreparationTime &&
+                          submitted &&
+                          'Tempo médio de preparo inválido!'
+                        }
+                      />
+                    </Grid>
+
+                    <Grid container item justify="center" xs={12} sm={3}>
                       <TextField
                         name="logo"
                         label="URL da Logo"
@@ -708,13 +761,13 @@ export const Restaurant = () => {
                       <FormControl
                         className={classes.card_select}
                         variant="outlined"
-                        error={!valid.categories && submitted}
+                        error={!valid.merchantType && submitted}
                       >
                         <InputLabel>Categorias</InputLabel>
                         <Select
                           name="categories"
                           multiple
-                          value={form.categories}
+                          value={form.merchantType}
                           onChange={handleChange}
                           label="Categorias"
                         >
@@ -728,7 +781,7 @@ export const Restaurant = () => {
                           ))}
                         </Select>
 
-                        {!valid.categories && submitted && (
+                        {!valid.merchantType && submitted && (
                           <FormHelperText>
                             Selecione ao menos uma categoria!
                           </FormHelperText>

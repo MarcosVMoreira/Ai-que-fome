@@ -356,7 +356,7 @@ export const SignUp = props => {
     streetName: '',
     streetNumber: '',
     coordinates: [],
-    categories: [],
+    merchantType: [],
     allowedPayments: [],
   });
   const [valid, setValid] = useState({
@@ -366,8 +366,8 @@ export const SignUp = props => {
     document: true,
     businessStart: true,
     businessEnd: true,
-    description: '',
-    basePreparationTime: '',
+    description: true,
+    basePreparationTime: true,
     logo: true,
     postalCode: true,
     state: true,
@@ -376,7 +376,7 @@ export const SignUp = props => {
     streetName: true,
     streetNumber: true,
     coordinates: true,
-    categories: true,
+    merchantType: true,
     allowedPayments: true,
   });
   const [submitted, setSubmitted] = useState(false);
@@ -470,8 +470,8 @@ export const SignUp = props => {
       neighborhood: Boolean(form.neighborhood),
       streetName: Boolean(form.streetName),
       streetNumber: Boolean(form.streetNumber),
-      coordinates: Boolean(form.coordinates),
-      categories: Boolean(form.allowedPayments.length),
+      coordinates: Boolean(form.coordinates.length),
+      merchantType: Boolean(form.merchantType.length),
       allowedPayments: Boolean(form.allowedPayments.length),
     });
   }, [form]);
@@ -720,9 +720,9 @@ export const SignUp = props => {
                     >
                       <InputLabel>Categorias</InputLabel>
                       <Select
-                        name="categories"
+                        name="merchantType"
                         multiple
-                        value={form.categories}
+                        value={form.merchantType}
                         onChange={handleChange}
                         label="Categorias"
                       >
@@ -733,7 +733,7 @@ export const SignUp = props => {
                         ))}
                       </Select>
 
-                      {!valid.categories && submitted && (
+                      {!valid.merchantType && submitted && (
                         <FormHelperText>
                           Selecione ao menos uma categoria!
                         </FormHelperText>

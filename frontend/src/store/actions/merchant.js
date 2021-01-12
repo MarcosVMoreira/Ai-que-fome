@@ -62,13 +62,9 @@ export const merchantEditData = merchant => {
       document: unmask(merchant.document),
       businessStart: new Date(merchant.businessStart).toLocaleTimeString(),
       businessEnd: new Date(merchant.businessEnd).toLocaleTimeString(),
-      merchantType: merchant.categories,
       country: 'BR',
       availability: true,
-      rate: 5.0,
     };
-
-    delete data.categories;
 
     axios
       .put(`/merchant/merchants/${merchantId}`, data)
