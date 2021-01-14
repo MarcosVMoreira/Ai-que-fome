@@ -79,7 +79,7 @@ public class MerchantController {
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{merchantId}/allowed-payment")
     public Merchant saveAllowedPayment(@PathVariable String merchantId,
-                                                   @Valid @RequestBody List<AllowedPaymentEnum> allowedPaymentEnums) {
+                                       @Valid @RequestBody List<AllowedPaymentEnum> allowedPaymentEnums) {
         return merchantService.updateAllowedPayment(merchantId, allowedPaymentEnums);
     }
 
@@ -88,17 +88,18 @@ public class MerchantController {
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{merchantId}/category")
     public Merchant saveCategory(@PathVariable String merchantId,
-                                                   @Valid @RequestBody List<Category> category) {
+                                 @Valid @RequestBody List<Category> category) {
         return merchantService.updateCategory(merchantId, category);
     }
 
     /* SKU */
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PutMapping("/{merchantId}/sku")
+    @PutMapping("/{merchantId}/category/{categoryId}/sku")
     public Merchant saveSKU(@PathVariable String merchantId,
-                                             @Valid @RequestBody List<SKU> sku) {
-        return merchantService.updateSKU(merchantId, sku);
+                            @PathVariable String categoryId,
+                            @Valid @RequestBody List<SKU> sku) {
+        return merchantService.updateSKU(merchantId, categoryId, sku);
     }
 
     /* Merchant Type */
@@ -106,7 +107,7 @@ public class MerchantController {
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{merchantId}/merchant-type")
     public Merchant saveMerchantType(@PathVariable String merchantId,
-                            @Valid @RequestBody List<MerchantTypeEnum> merchantTypeEnums) {
+                                     @Valid @RequestBody List<MerchantTypeEnum> merchantTypeEnums) {
         return merchantService.updateMerchantType(merchantId, merchantTypeEnums);
     }
 

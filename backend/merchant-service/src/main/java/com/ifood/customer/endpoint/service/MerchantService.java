@@ -141,10 +141,14 @@ public class MerchantService {
 
     /* SKU */
 
-    public Merchant updateSKU(String merchantId, @Valid List<SKU> receivedSKU) {
+    public Merchant updateSKU(String merchantId, String categoryId, @Valid List<SKU> receivedSKU) {
         Optional<Merchant> merchant = merchantRepository.findById(merchantId);
 
         if (!merchant.isPresent()) {
+            throw new NotFoundException();
+        }
+
+        if (merchant.get().getCategories().stream().noneMatch(category -> categoryId.equals(category.getId()))) {
             throw new NotFoundException();
         }
 
@@ -154,7 +158,10 @@ public class MerchantService {
 
         receivedSKU.forEach(sku -> sku.setId(new Category().getId()));
 
-        merchant.get().setSkus(receivedSKU);
+        merchant.get().getCategories()
+                .stream()
+                .filter(category -> categoryId.equals(category.getId()))
+                .forEach(filteredCategory -> filteredCategory.setSkus(receivedSKU));
 
         return merchantRepository.save(merchant.get());
     }
