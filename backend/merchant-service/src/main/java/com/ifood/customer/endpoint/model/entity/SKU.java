@@ -29,8 +29,6 @@ public class SKU {
     @NotNull(message = "400.003")
     private BigDecimal price;
 
-    private String idCategory;
-
     private String description;
 
     private List<Option> options;

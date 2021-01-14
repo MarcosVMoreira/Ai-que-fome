@@ -82,8 +82,6 @@ public class Merchant {
 
     private List<Category> categories;
 
-    private List<SKU> skus;
-
     private List<MerchantTypeEnum> merchantType;
 
     private BigDecimal rate;
