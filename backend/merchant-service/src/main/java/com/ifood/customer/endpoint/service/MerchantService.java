@@ -32,6 +32,8 @@ public class MerchantService {
 
     private final MerchantMessageProducer messageProducer;
 
+    private final NextSequenceService nextSequenceService;
+
     public List<Merchant> listAll(Pageable pageable) {
         logger.info("Recuperando da base de dados todos os restaurantes...");
         return merchantRepository.findAll(pageable)
@@ -57,6 +59,8 @@ public class MerchantService {
             logger.info("Email {} já existe na base de dados.", merchant.getDocument());
             throw new UnprocessableEntityException("422.002");
         }
+
+        merchant.setCode(nextSequenceService.getNextSequence("DatabaseSequence"));
 
         Merchant savedMerchant = merchantRepository.save(merchant);
 
@@ -97,6 +101,7 @@ public class MerchantService {
             throw new UnprocessableEntityException("422.001");
         }
         merchant.setId(id);
+        merchant.setCode(verifyingDocument.get().getCode());
 
         return merchantRepository.save(merchant);
     }

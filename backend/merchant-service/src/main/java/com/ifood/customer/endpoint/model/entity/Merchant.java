@@ -9,12 +9,10 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -27,15 +25,17 @@ public class Merchant {
     @Id
     private String id;
 
+    private long code;
+
     @NotEmpty(message = "400.003")
-    @Indexed(unique=true)
+    @Indexed(unique = true)
     private String document;
 
     @NotEmpty(message = "400.003")
     private String name;
 
     @NotEmpty(message = "400.003")
-    @Indexed(unique=true)
+    @Indexed(unique = true)
     private String email;
 
     @NotEmpty(message = "400.003")
