@@ -68,6 +68,10 @@ const fetchAddressFail = (state, payload) => ({
   address: null,
 });
 
+const locateReset = () => ({
+  ...initialState,
+});
+
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case actionTypes.FETCH_STATES_START:
@@ -88,6 +92,8 @@ const reducer = (state = initialState, { type, payload }) => {
       return fetchAddressSuccess(state, payload);
     case actionTypes.FETCH_ADDRESS_FAIL:
       return fetchAddressFail(state, payload);
+    case actionTypes.LOCATE_RESET:
+      return locateReset();
     default:
       return state;
   }

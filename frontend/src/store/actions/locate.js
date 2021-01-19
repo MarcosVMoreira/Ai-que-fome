@@ -96,3 +96,7 @@ export const fetchAddress = postalCode => {
       });
   };
 };
+
+export const locateReset = () => ({
+  type: actionTypes.LOCATE_RESET,
+});

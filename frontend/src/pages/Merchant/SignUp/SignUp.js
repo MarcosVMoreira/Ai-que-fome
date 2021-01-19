@@ -65,6 +65,7 @@ export const SignUp = props => {
   );
   const onFetchAddress = postalCode =>
     dispatch(actions.fetchAddress(postalCode));
+  const onLocateReset = () => dispatch(actions.locateReset());
 
   /* Constants */
   const aPayments = [
@@ -479,6 +480,7 @@ export const SignUp = props => {
   // On Logo click redirect to login page
   const handleReset = () => {
     onErrorReset();
+    onLocateReset();
     props.history.push('/merchant/login');
   };
 
@@ -490,6 +492,7 @@ export const SignUp = props => {
     setSubmitted(true);
     Object.keys(valid).reduce((sum, value) => sum && valid[value], true) &&
       onAuthReset() &&
+      onLocateReset() &&
       onMerchantSignUp(form);
   };
 

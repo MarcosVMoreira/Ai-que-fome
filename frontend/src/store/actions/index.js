@@ -12,6 +12,6 @@ export {
   customerNewAddress,
   customerRemoveAddress,
 } from './customer';
-export { fetchAddress, fetchCities, fetchStates } from './locate';
+export { fetchAddress, fetchCities, fetchStates, locateReset } from './locate';
 export { merchantData, merchantEditData } from './merchant';
 export { customerSignUp, merchantSignUp, signUpReset } from './signup';

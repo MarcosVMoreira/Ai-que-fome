@@ -63,3 +63,4 @@ export const MERCHANT_EDIT_DATA_FAIL = 'MERCHANT_EDIT_DATA_FAIL';
 export const AUTH_RESET = 'AUTH_RESET';
 export const SIGNUP_RESET = 'SIGNUP_RESET';
 export const ERROR_RESET = 'ERROR_RESET';
+export const LOCATE_RESET = 'LOCATE_RESET';

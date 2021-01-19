@@ -358,7 +358,6 @@ export const Restaurant = () => {
     rate: '',
     coordinates: [],
     categories: [],
-    skus: [],
     merchantType: [],
     allowedPayments: [],
   });
@@ -381,7 +380,6 @@ export const Restaurant = () => {
     rate: true,
     coordinates: true,
     categories: true,
-    skus: true,
     merchantType: true,
     allowedPayments: true,
   });
@@ -447,8 +445,7 @@ export const Restaurant = () => {
         rate: merchant.rate,
         coordinates: merchant.coordinates,
         merchantType: merchant.merchantType,
-        categories: merchant.categories,
-        skus: merchant.skus,
+        categories: merchant.categories || [],
         allowedPayments: merchant.allowedPayments,
       });
     }
@@ -474,9 +471,8 @@ export const Restaurant = () => {
       streetNumber: Boolean(form.streetNumber),
       rate: Boolean(form.rate),
       coordinates: Boolean(form.coordinates.length),
-      categories: Boolean(form.categories.length),
+      categories: true,
       merchantType: Boolean(form.merchantType.length),
-      skus: Boolean(form.skus.length),
       allowedPayments: Boolean(form.allowedPayments.length),
     });
   }, [form]);
