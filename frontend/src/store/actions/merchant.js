@@ -41,8 +41,9 @@ export const merchantEditDataStart = () => ({
   type: actionTypes.MERCHANT_EDIT_DATA_START,
 });
 
-export const merchantEditDataSuccess = () => ({
+export const merchantEditDataSuccess = payload => ({
   type: actionTypes.MERCHANT_EDIT_DATA_SUCCESS,
+  payload,
 });
 
 export const merchantEditDataFail = payload => ({
@@ -68,12 +69,60 @@ export const merchantEditData = merchant => {
 
     axios
       .put(`/merchant/merchants/${merchantId}`, data)
-      .then(() => {
-        dispatch(merchantEditDataSuccess());
-        dispatch(merchantData());
+      .then(res => {
+        dispatch(merchantEditDataSuccess({ merchant: res.data }));
       })
       .catch(err => {
         dispatch(merchantEditDataFail({ error: err.response?.status || 500 }));
+      });
+  };
+};
+
+export const merchantPutCategoriesStart = () => ({
+  type: actionTypes.MERCHANT_PUT_CATEGORIES_START,
+});
+
+export const merchantPutCategoriesSuccess = payload => ({
+  type: actionTypes.MERCHANT_PUT_CATEGORIES_SUCCESS,
+  payload,
+});
+
+export const merchantPutCategoriesFail = payload => ({
+  type: actionTypes.MERCHANT_PUT_CATEGORIES_FAIL,
+  payload,
+});
+
+export const merchantPutCategories = categories => {
+  return dispatch => {
+    dispatch(merchantPutCategoriesStart());
+    const merchantId = localStorage.getItem('IFOOD_udid');
+    const categoriesCopy = [...categories];
+    const mappedCategories = categoriesCopy.map(category => ({
+      availability: category.availability,
+      name: category.name,
+      skus: category.skus?.map(sku => ({
+        availability: sku.availability,
+        description: sku.description,
+        name: sku.name,
+        price: sku.price,
+        options: sku.options?.map(option => ({
+          name: option.name,
+          price: option.price,
+          maxQuantity: option.maxQuantity,
+          minQuantity: option.minQuantity,
+        })),
+      })),
+    }));
+
+    axios
+      .put(`/merchant/merchants/${merchantId}/category`, mappedCategories)
+      .then(res => {
+        dispatch(merchantPutCategoriesSuccess({ merchant: res.data }));
+      })
+      .catch(err => {
+        dispatch(
+          merchantPutCategoriesFail({ error: err.response?.status || 500 }),
+        );
       });
   };
 };

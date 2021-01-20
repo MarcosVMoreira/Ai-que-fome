@@ -29,13 +29,32 @@ const merchantEditDataStart = state => ({
   loading: true,
 });
 
-const merchantEditDataSuccess = state => ({
+const merchantEditDataSuccess = (state, payload) => ({
   ...state,
+  merchant: payload.merchant,
   error: null,
   loading: false,
 });
 
 const merchantEditDataFail = (state, payload) => ({
+  ...state,
+  error: payload.error,
+  loading: false,
+});
+
+const merchantPutCategoriesStart = state => ({
+  ...state,
+  loading: true,
+});
+
+const merchantPutCategoriesSuccess = (state, payload) => ({
+  ...state,
+  merchant: payload.merchant,
+  error: null,
+  loading: false,
+});
+
+const merchantPutCategoriesFail = (state, payload) => ({
   ...state,
   error: payload.error,
   loading: false,
@@ -52,9 +71,15 @@ const reducer = (state = initialState, { type, payload }) => {
     case actionTypes.MERCHANT_EDIT_DATA_START:
       return merchantEditDataStart(state);
     case actionTypes.MERCHANT_EDIT_DATA_SUCCESS:
-      return merchantEditDataSuccess(state);
+      return merchantEditDataSuccess(state, payload);
     case actionTypes.MERCHANT_EDIT_DATA_FAIL:
       return merchantEditDataFail(state, payload);
+    case actionTypes.MERCHANT_PUT_CATEGORIES_START:
+      return merchantPutCategoriesStart(state);
+    case actionTypes.MERCHANT_PUT_CATEGORIES_SUCCESS:
+      return merchantPutCategoriesSuccess(state, payload);
+    case actionTypes.MERCHANT_PUT_CATEGORIES_FAIL:
+      return merchantPutCategoriesFail(state, payload);
     default:
       return state;
   }
