@@ -1,27 +1,31 @@
+import { Hidden } from '@material-ui/core';
 import React, { Fragment, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   BrowserRouter,
-  Switch,
-  Route,
   Redirect,
+  Route,
+  Switch,
   withRouter,
 } from 'react-router-dom';
-
-import { Hidden } from '@material-ui/core';
-
+import { BottomNav as CustomerBottomNav } from '../components/Customer/BottomNav/BottomNav';
+import { Navbar as CustomerNavbar } from '../components/Customer/Navbar/Navbar';
+import { Navbar as MerchantNavbar } from '../components/Merchant/Navbar/Navbar';
+import { SideNav as MerchantSideNav } from '../components/Merchant/SideNav/SideNav';
+import { Home as CustomerHome } from '../pages/Customer/Home/Home';
+import { Login as CustomerLogin } from '../pages/Customer/Login/Login';
+import { Profile as CustomerProfile } from '../pages/Customer/Profile/Profile';
+import { SignUp as CustomerSignUp } from '../pages/Customer/SignUp/SignUp';
+import { Home as MerchantHome } from '../pages/Merchant/Home/Home';
+import { Login as MerchantLogin } from '../pages/Merchant/Login/Login';
+import { Menu as MerchantMenu } from '../pages/Merchant/Menu/Menu';
+import { Restaurant as MerchantRestaurant } from '../pages/Merchant/Restaurant/Restaurant';
+import { SignUp as MerchantSignUp } from '../pages/Merchant/SignUp/SignUp';
 import * as actions from '../store/actions/index';
-
-import { Home } from '../pages/Home/Home';
-import { Login } from '../pages/Login/Login';
-import { SignUp } from '../pages/SignUp/SignUp';
-import { Profile } from '../pages/Profile/Profile';
-import { Navbar } from '../components/UI/Navbar/Navbar';
-import { BottomNav } from '../components/UI/BottomNav/BottomNav';
 
 export const Routes = () => {
   /* Redux Selectors */
-  const isAuthenticated = useSelector(state => state.auth.token !== null);
+  const authenticated = useSelector(state => state.auth.authenticated);
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
@@ -34,25 +38,45 @@ export const Routes = () => {
   }, [onCheckState]);
 
   let routes;
-  isAuthenticated
+  authenticated
     ? (routes = (
         <Fragment>
-          <Navbar />
+          {authenticated === 'customer' ? (
+            <Fragment>
+              <CustomerNavbar />
+              <Hidden mdUp>
+                <CustomerBottomNav />
+              </Hidden>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <MerchantNavbar />
+              <MerchantSideNav />
+            </Fragment>
+          )}
           <Switch>
-            <Route path="/home" component={Home} />
-            <Route path="/profile" component={Profile} />
-            <Redirect to="/home" />
+            <Route path="/customer/home" component={CustomerHome} />
+            <Route path="/customer/profile" component={CustomerProfile} />
+            <Route path="/merchant/home" component={MerchantHome} />
+            <Route path="/merchant/restaurant" component={MerchantRestaurant} />
+            <Route path="/merchant/menu" component={MerchantMenu} />
+            <Redirect to={`/${authenticated}/menu`} />
           </Switch>
-          <Hidden mdUp>
-            <BottomNav />
-          </Hidden>
         </Fragment>
       ))
     : (routes = (
         <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={withRouter(SignUp)} />
-          <Redirect to="/login" />
+          <Route path="/customer/login" component={withRouter(CustomerLogin)} />
+          <Route
+            path="/customer/signup"
+            component={withRouter(CustomerSignUp)}
+          />
+          <Route path="/merchant/login" component={withRouter(MerchantLogin)} />
+          <Route
+            path="/merchant/signup"
+            component={withRouter(MerchantSignUp)}
+          />
+          <Redirect to="/customer/login" />
         </Switch>
       ));
 

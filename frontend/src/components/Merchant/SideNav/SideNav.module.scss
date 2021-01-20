@@ -1,0 +1,13 @@
+.sidenav {
+  > div {
+    padding-top: 24px;
+  }
+
+  &_toolbar {
+    height: 85px;
+  }
+
+  &_list {
+    flex: 1;
+  }
+}

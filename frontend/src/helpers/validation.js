@@ -20,8 +20,18 @@ export const validateNumber = number => {
   return re.test(number.toLowerCase());
 };
 
+export const validatePrice = number => {
+  const re = /^(\d*[.])?\d+$/;
+  return re.test(number.toString().toLowerCase());
+};
+
 export const validateDocument = document => {
   const re = /^\d{11}$/;
+  return re.test(unmask(document));
+};
+
+export const validateCompanyDocument = document => {
+  const re = /^\d{14}$/;
   return re.test(unmask(document));
 };
 

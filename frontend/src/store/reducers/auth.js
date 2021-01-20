@@ -38,7 +38,7 @@ const authPasswordSuccess = (state, payload) => ({
   error: null,
   loading: false,
   token: payload.token,
-  authenticated: true,
+  authenticated: payload.type,
 });
 
 const authPasswordFail = (state, payload) => ({
