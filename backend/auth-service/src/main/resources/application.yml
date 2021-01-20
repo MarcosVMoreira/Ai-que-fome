@@ -3,7 +3,7 @@ spring:
     name: auth
   data:
     mongodb:
-      uri: ${MONGOURI}
+      uri: mongodb://root:mongolocalprotavao@localhost:27017/DeliveryApp?authSource=admin
 
 server:
   port: 8083

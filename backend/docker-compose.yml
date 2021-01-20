@@ -31,3 +31,11 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: mongolocalprotavao
+    ports:
+      - "27017:27017"

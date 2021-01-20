@@ -3,7 +3,6 @@ package com.ifood.customer.endpoint.controller;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.ifood.customer.endpoint.error.NotFoundException;
 import com.ifood.customer.endpoint.error.RestException;
-import com.ifood.customer.endpoint.error.UnprocessableEntityException;
 import com.ifood.customer.endpoint.model.dto.ErrorResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

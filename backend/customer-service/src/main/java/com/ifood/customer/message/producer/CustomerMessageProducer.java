@@ -19,7 +19,7 @@ public class CustomerMessageProducer {
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    private static final String EXCHANGE_NAME = "customer-created";
+    private static final String EXCHANGE_NAME = "user-created";
 
     public void sendCustomerDataToRabbit (CustomerDTO customer) {
         try {

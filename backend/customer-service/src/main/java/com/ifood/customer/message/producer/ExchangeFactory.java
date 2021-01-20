@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ExchangeFactory {
 
-    public static String EXCHANGE_NAME = "customer-created";
+    public static String EXCHANGE_NAME = "user-created";
 
     @Bean
     public Exchange declareExchange () {
