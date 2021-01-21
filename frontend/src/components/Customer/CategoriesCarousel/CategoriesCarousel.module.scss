@@ -55,10 +55,14 @@
   }
 
   & > button:nth-child(2) {
+    filter: invert(1);
+    border: 1px solid #ffffff10;
     left: 0%;
   }
 
   & > button:nth-child(3) {
+    filter: invert(1);
+    border: 1px solid #ffffff10;
     right: 0%;
   }
 }
