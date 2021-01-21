@@ -3,6 +3,7 @@ import authReducer from './auth';
 import customerReducer from './customer';
 import locateReducer from './locate';
 import merchantReducer from './merchant';
+import restaurantReducer from './restaurant';
 import signUpReducer from './signup';
 
 export const rootReducer = combineReducers({
@@ -11,4 +12,5 @@ export const rootReducer = combineReducers({
   customer: customerReducer,
   locate: locateReducer,
   merchant: merchantReducer,
+  restaurant: restaurantReducer,
 });

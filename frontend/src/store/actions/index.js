@@ -18,4 +18,5 @@ export {
   merchantEditData,
   merchantPutCategories,
 } from './merchant';
+export { fetchRestaurants } from './restaurant';
 export { customerSignUp, merchantSignUp, signUpReset } from './signup';

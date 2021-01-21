@@ -64,6 +64,11 @@ export const MERCHANT_PUT_CATEGORIES_SUCCESS =
   'MERCHANT_PUT_CATEGORIES_SUCCESS';
 export const MERCHANT_PUT_CATEGORIES_FAIL = 'MERCHANT_PUT_CATEGORIES_FAIL';
 
+/*------------------------------- RESTAURANTS -------------------------------*/
+export const FETCH_RESTAURANTS_START = 'FETCH_RESTAURANTS_START';
+export const FETCH_RESTAURANTS_SUCCESS = 'FETCH_RESTAURANTS_SUCCESS';
+export const FETCH_RESTAURANTS_FAIL = 'FETCH_RESTAURANTS_FAIL';
+
 /*--------------------------------- RESETS ---------------------------------*/
 export const AUTH_RESET = 'AUTH_RESET';
 export const SIGNUP_RESET = 'SIGNUP_RESET';
