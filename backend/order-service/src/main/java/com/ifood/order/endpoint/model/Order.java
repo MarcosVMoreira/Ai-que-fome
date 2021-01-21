@@ -24,11 +24,17 @@ public class Order {
     @Id
     private String id;
 
+    private long code;
+
     @NotEmpty(message = "400.003")
     private String idCustomer;
 
     @NotEmpty(message = "400.003")
-    private String createdAt;
+    private String idMerchant;
+
+    @NotNull(message = "400.003")
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime createdAt;
 
     @NotNull(message = "400.003")
     private Payment payment;
