@@ -59,7 +59,7 @@ export const CategoriesCarousel = () => {
         {aCategories.map(oCategory => (
           <Fragment key={oCategory.name}>
             <div>
-              <img src={oCategory.icon} />
+              <img src={oCategory.icon} alt={oCategory.name} />
             </div>
             <span>{oCategory.name}</span>
           </Fragment>
