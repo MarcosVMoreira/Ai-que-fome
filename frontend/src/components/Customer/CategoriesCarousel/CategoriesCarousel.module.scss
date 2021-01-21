@@ -1,0 +1,64 @@
+.carousel {
+  padding: 10px 0;
+
+  &_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    > div {
+      border-radius: 100%;
+      padding: 15px;
+      margin: 5px;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 100ms ease-in;
+
+      & > img {
+        width: 70px;
+        height: 70px;
+      }
+    }
+
+    &:nth-child(4n + 1) div {
+      background-color: #a7e8bd;
+    }
+
+    &:nth-child(4n + 2) div {
+      background-color: #efa7a7;
+    }
+
+    &:nth-child(4n + 3) div {
+      background-color: #ffd972;
+    }
+
+    &:nth-child(4n + 4) div {
+      background-color: #c7eae4;
+    }
+
+    > span {
+      color: #555;
+      font-weight: 500;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:hover > div {
+      transform: scale(1.1);
+    }
+  }
+
+  & > button:nth-child(2) {
+    left: 0%;
+  }
+
+  & > button:nth-child(3) {
+    right: 0%;
+  }
+}

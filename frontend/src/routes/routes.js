@@ -60,7 +60,7 @@ export const Routes = () => {
             <Route path="/merchant/home" component={MerchantHome} />
             <Route path="/merchant/restaurant" component={MerchantRestaurant} />
             <Route path="/merchant/menu" component={MerchantMenu} />
-            <Redirect to={`/${authenticated}/menu`} />
+            <Redirect to={`/${authenticated}/home`} />
           </Switch>
         </Fragment>
       ))
