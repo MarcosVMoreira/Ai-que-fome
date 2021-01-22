@@ -26,3 +26,7 @@ jwt:
 
 security:
   ignored: /swagger-resources/**
+
+google-maps:
+  access-key: ${REACT_APP_API_KEY}
+  distance-calculator: https://maps.googleapis.com/maps/api/distancematrix/json?

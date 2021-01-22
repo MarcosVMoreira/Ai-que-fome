@@ -7,6 +7,7 @@ import com.ifood.customer.endpoint.error.NotFoundException;
 import com.ifood.customer.endpoint.error.UnprocessableEntityException;
 import com.ifood.customer.endpoint.model.entity.AllowedPayment;
 import com.ifood.customer.endpoint.model.entity.Category;
+import com.ifood.customer.endpoint.model.entity.FindDistanceResponse;
 import com.ifood.customer.endpoint.model.entity.Merchant;
 import com.ifood.customer.endpoint.model.entity.SKU;
 import com.ifood.customer.endpoint.repository.MerchantRepository;
@@ -188,5 +189,10 @@ public class MerchantService {
 
         return merchantRepository.save(merchant.get());
     }
+
+    public FindDistanceResponse findCustomerDistanceFromMerchants (String customerCoords) {
+
+    }
+
 
 }

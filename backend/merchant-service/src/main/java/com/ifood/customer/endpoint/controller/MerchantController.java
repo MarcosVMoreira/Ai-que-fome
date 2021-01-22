@@ -4,6 +4,7 @@ import com.ifood.customer.endpoint.enumeration.AllowedPaymentEnum;
 import com.ifood.customer.endpoint.enumeration.MerchantTypeEnum;
 import com.ifood.customer.endpoint.model.entity.AllowedPayment;
 import com.ifood.customer.endpoint.model.entity.Category;
+import com.ifood.customer.endpoint.model.entity.FindDistanceResponse;
 import com.ifood.customer.endpoint.model.entity.Merchant;
 import com.ifood.customer.endpoint.model.entity.SKU;
 import com.ifood.customer.endpoint.service.MerchantService;
@@ -111,4 +112,10 @@ public class MerchantController {
         return merchantService.updateMerchantType(merchantId, merchantTypeEnums);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/nearMerchants/{customerCoords}")
+    public FindDistanceResponse findCustomerDistanceFromMerchants
+            (@PathVariable String customerCoords) {
+        return merchantService.findCustomerDistanceFromMerchants(customerCoords);
+    }
 }
