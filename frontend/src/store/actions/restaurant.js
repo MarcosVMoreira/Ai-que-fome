@@ -29,3 +29,32 @@ export const fetchRestaurants = () => {
       });
   };
 };
+
+export const fetchRestaurantStart = () => ({
+  type: actionTypes.FETCH_RESTAURANT_START,
+});
+
+export const fetchRestaurantSuccess = payload => ({
+  type: actionTypes.FETCH_RESTAURANT_SUCCESS,
+  payload,
+});
+
+export const fetchRestaurantFail = payload => ({
+  type: actionTypes.FETCH_RESTAURANT_FAIL,
+  payload,
+});
+
+export const fetchRestaurant = restaurantId => {
+  return dispatch => {
+    dispatch(fetchRestaurantStart());
+
+    axios
+      .get(`/merchant/merchants/${restaurantId}`)
+      .then(res => {
+        dispatch(fetchRestaurantSuccess({ restaurant: res.data }));
+      })
+      .catch(err => {
+        dispatch(fetchRestaurantFail({ error: err.response?.status || 500 }));
+      });
+  };
+};

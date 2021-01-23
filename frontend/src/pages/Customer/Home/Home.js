@@ -1,7 +1,7 @@
 import { Grid, Snackbar } from '@material-ui/core';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { CategoriesCarousel } from '../../../components/Customer/CategoriesCarousel/CategoriesCarousel';
 import { RestaurantCard } from '../../../components/Customer/RestaurantCard/RestaurantCard';
 import { Spinner } from '../../../components/Shared/Spinner/Spinner';
@@ -72,7 +72,13 @@ export const Home = () => {
         {loading || !restaurants ? (
           <Spinner />
         ) : (
-          restaurants.map(res => <RestaurantCard key={res.id} {...res} />)
+          restaurants.map(res => (
+            <Grid key={res.id} item xs={12} sm={6} lg={4}>
+              <Link to={`restaurant/${res.id}`}>
+                <RestaurantCard {...res} />
+              </Link>
+            </Grid>
+          ))
         )}
       </Grid>
     </div>

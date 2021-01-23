@@ -61,3 +61,11 @@ export const categories = {
   XIS: 'Xis',
   YAKISOBA: 'Yakisoba',
 };
+
+export const payments = {
+  DINHEIRO: 'Dinheiro',
+  VA: 'Vale-Alimentação',
+  CARTAO_DEBITO: 'Cartão de Débito',
+  CARTAO_CREDITO: 'Cartão de Crédito',
+  VR: 'Vale-Refeição',
+};

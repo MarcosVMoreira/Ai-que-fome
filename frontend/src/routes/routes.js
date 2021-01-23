@@ -15,6 +15,7 @@ import { SideNav as MerchantSideNav } from '../components/Merchant/SideNav/SideN
 import { Home as CustomerHome } from '../pages/Customer/Home/Home';
 import { Login as CustomerLogin } from '../pages/Customer/Login/Login';
 import { Profile as CustomerProfile } from '../pages/Customer/Profile/Profile';
+import { Restaurant as CustomerRestaurant } from '../pages/Customer/Restaurant/Restaurant';
 import { SignUp as CustomerSignUp } from '../pages/Customer/SignUp/SignUp';
 import { Home as MerchantHome } from '../pages/Merchant/Home/Home';
 import { Login as MerchantLogin } from '../pages/Merchant/Login/Login';
@@ -47,21 +48,31 @@ export const Routes = () => {
               <Hidden mdUp>
                 <CustomerBottomNav />
               </Hidden>
+              <Switch>
+                <Route path="/customer/home" component={CustomerHome} />
+                <Route path="/customer/profile" component={CustomerProfile} />
+                <Route
+                  path="/customer/restaurant/:id"
+                  component={CustomerRestaurant}
+                />
+                <Redirect to="/customer/home" />
+              </Switch>
             </Fragment>
           ) : (
             <Fragment>
               <MerchantNavbar />
               <MerchantSideNav />
+              <Switch>
+                <Route path="/merchant/home" component={MerchantHome} />
+                <Route
+                  path="/merchant/restaurant"
+                  component={MerchantRestaurant}
+                />
+                <Route path="/merchant/menu" component={MerchantMenu} />
+                <Redirect to="/merchant/home" />
+              </Switch>
             </Fragment>
           )}
-          <Switch>
-            <Route path="/customer/home" component={CustomerHome} />
-            <Route path="/customer/profile" component={CustomerProfile} />
-            <Route path="/merchant/home" component={MerchantHome} />
-            <Route path="/merchant/restaurant" component={MerchantRestaurant} />
-            <Route path="/merchant/menu" component={MerchantMenu} />
-            <Redirect to={`/${authenticated}/home`} />
-          </Switch>
         </Fragment>
       ))
     : (routes = (
@@ -76,7 +87,7 @@ export const Routes = () => {
             path="/merchant/signup"
             component={withRouter(MerchantSignUp)}
           />
-          <Redirect to="/customer/login" />
+          <Route path="/" component={withRouter(CustomerLogin)} />
         </Switch>
       ));
 
