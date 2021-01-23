@@ -1,15 +1,12 @@
 package com.ifood.customer.endpoint.service;
 
+import com.ifood.customer.client.IntegrationClient;
 import com.ifood.customer.endpoint.enumeration.AllowedPaymentEnum;
 import com.ifood.customer.endpoint.enumeration.MerchantTypeEnum;
 import com.ifood.customer.endpoint.error.BadRequestException;
 import com.ifood.customer.endpoint.error.NotFoundException;
 import com.ifood.customer.endpoint.error.UnprocessableEntityException;
-import com.ifood.customer.endpoint.model.entity.AllowedPayment;
-import com.ifood.customer.endpoint.model.entity.Category;
-import com.ifood.customer.endpoint.model.entity.FindDistanceResponse;
-import com.ifood.customer.endpoint.model.entity.Merchant;
-import com.ifood.customer.endpoint.model.entity.SKU;
+import com.ifood.customer.endpoint.model.entity.*;
 import com.ifood.customer.endpoint.repository.MerchantRepository;
 import com.ifood.customer.producer.MerchantMessageProducer;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,14 +33,15 @@ public class MerchantService {
 
     private final NextSequenceService nextSequenceService;
 
-    public List<Merchant> listAll(Pageable pageable) {
+    private final IntegrationClient integrationClient;
+
+    public List<FindDistanceResponse> listAll (Pageable pageable, String customerCoords) {
         logger.info("Recuperando da base de dados todos os restaurantes...");
-        return merchantRepository.findAll(pageable)
-                .stream()
-                .collect(Collectors.toList());
+
+        return findCustomerDistanceFromMerchants(pageable, customerCoords);
     }
 
-    public Merchant save(Merchant merchant) {
+    public Merchant save (Merchant merchant) {
         logger.info("Criando novo restaurante na base de dados...");
 
         Optional<Merchant> foundMerchantByDocument =
@@ -70,19 +69,19 @@ public class MerchantService {
         return savedMerchant;
     }
 
-    public Merchant getMerchantById(String id) {
+    public Merchant getMerchantById (String id) {
         logger.info("Recuperando da base de dados todos registros utilizando o id {}", id);
         return merchantRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Merchant getMerchantByEmail(String email) {
+    public Merchant getMerchantByEmail (String email) {
         logger.info("Recuperando da base de dados todos registros utilizando o email {}", email);
         return merchantRepository.findByEmail(email)
                 .orElseThrow(NotFoundException::new);
     }
 
-    public void delete(String id) {
+    public void delete (String id) {
         Optional<Merchant> entity = merchantRepository.findById(id);
 
         if (entity.isPresent()) {
@@ -90,7 +89,7 @@ public class MerchantService {
         }
     }
 
-    public Merchant update(Merchant merchant, String id) {
+    public Merchant update (Merchant merchant, String id) {
 
         if (!Optional.ofNullable(merchant.getDocument()).isPresent() ||
                 merchant.getDocument().isEmpty()) {
@@ -109,7 +108,7 @@ public class MerchantService {
 
     /* AllowedPayments */
 
-    public Merchant updateAllowedPayment(String merchantId, @Valid List<AllowedPaymentEnum> receivedAllowedPayment) {
+    public Merchant updateAllowedPayment (String merchantId, @Valid List<AllowedPaymentEnum> receivedAllowedPayment) {
         Optional<Merchant> merchant = merchantRepository.findById(merchantId);
 
         if (!merchant.isPresent()) {
@@ -127,7 +126,7 @@ public class MerchantService {
 
     /* Category */
 
-    public Merchant updateCategory(String merchantId, @Valid List<Category> receivedCategory) {
+    public Merchant updateCategory (String merchantId, @Valid List<Category> receivedCategory) {
         Optional<Merchant> merchant = merchantRepository.findById(merchantId);
 
         if (!merchant.isPresent()) {
@@ -147,7 +146,7 @@ public class MerchantService {
 
     /* SKU */
 
-    public Merchant updateSKU(String merchantId, String categoryId, @Valid List<SKU> receivedSKU) {
+    public Merchant updateSKU (String merchantId, String categoryId, @Valid List<SKU> receivedSKU) {
         Optional<Merchant> merchant = merchantRepository.findById(merchantId);
 
         if (!merchant.isPresent()) {
@@ -174,7 +173,7 @@ public class MerchantService {
 
     /* Merchant Type */
 
-    public Merchant updateMerchantType(String merchantId, @Valid List<MerchantTypeEnum> receivedMerchantType) {
+    public Merchant updateMerchantType (String merchantId, @Valid List<MerchantTypeEnum> receivedMerchantType) {
         Optional<Merchant> merchant = merchantRepository.findById(merchantId);
 
         if (!merchant.isPresent()) {
@@ -190,9 +189,24 @@ public class MerchantService {
         return merchantRepository.save(merchant.get());
     }
 
-    public FindDistanceResponse findCustomerDistanceFromMerchants (String customerCoords) {
+    public List<FindDistanceResponse> findCustomerDistanceFromMerchants (Pageable pageable, String customerCoords) {
 
+        integrationClient.findCityByCoord("-22.854848,-47.050967");
+
+        String city = "Campinas";
+        //requisicao pro google pra pegar a cidade com base na coords do customer
+
+        new ArrayList<>(merchantRepository.findByCity(pageable, city));
+
+        DistanceMatrixResponse googleMapsResponse = integrationClient.calculateDistance(Arrays.asList("-22.854848,-47.050967", "-22.855540,-47.048220"), customerCoords);
+
+
+
+        return (List<FindDistanceResponse>) FindDistanceResponse.builder().build();
+//        return FindDistanceResponse.builder()
+//                .distanceBasedMerchants(Arrays.asList(FindDistanceResponse.builder()
+//                        .distance("sad")
+//                        .build()))
+//                .build();
     }
-
-
 }

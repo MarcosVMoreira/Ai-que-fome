@@ -2,7 +2,6 @@ package com.ifood.customer.endpoint.controller;
 
 import com.ifood.customer.endpoint.enumeration.AllowedPaymentEnum;
 import com.ifood.customer.endpoint.enumeration.MerchantTypeEnum;
-import com.ifood.customer.endpoint.model.entity.AllowedPayment;
 import com.ifood.customer.endpoint.model.entity.Category;
 import com.ifood.customer.endpoint.model.entity.FindDistanceResponse;
 import com.ifood.customer.endpoint.model.entity.Merchant;
@@ -15,15 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -39,8 +30,8 @@ public class MerchantController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<Merchant> listAll(Pageable pageable) {
-        return new PageImpl<>(merchantService.listAll(pageable));
+    public Page<FindDistanceResponse> listAll(@RequestParam String customerCoords, Pageable pageable) {
+        return new PageImpl<>(merchantService.listAll(pageable, customerCoords));
     }
 
     @PostMapping
@@ -110,12 +101,5 @@ public class MerchantController {
     public Merchant saveMerchantType(@PathVariable String merchantId,
                                      @Valid @RequestBody List<MerchantTypeEnum> merchantTypeEnums) {
         return merchantService.updateMerchantType(merchantId, merchantTypeEnums);
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/nearMerchants/{customerCoords}")
-    public FindDistanceResponse findCustomerDistanceFromMerchants
-            (@PathVariable String customerCoords) {
-        return merchantService.findCustomerDistanceFromMerchants(customerCoords);
     }
 }

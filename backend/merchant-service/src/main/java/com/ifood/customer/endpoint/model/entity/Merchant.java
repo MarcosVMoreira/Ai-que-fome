@@ -41,6 +41,8 @@ public class Merchant {
     @NotEmpty(message = "400.003")
     private String logo;
 
+    private String image;
+
     @NotEmpty(message = "400.003")
     private String phone;
 
