@@ -78,6 +78,7 @@ public class Merchant {
     @JsonFormat(pattern = "HH:mm")
     private LocalTime businessEnd;
 
+    @NotNull(message = "400.003")
     private List<String> coordinates;
 
     private List<AllowedPaymentEnum> allowedPayments;

@@ -17,9 +17,10 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -191,22 +192,55 @@ public class MerchantService {
 
     public List<FindDistanceResponse> findCustomerDistanceFromMerchants (Pageable pageable, String customerCoords) {
 
-        integrationClient.findCityByCoord("-22.854848,-47.050967");
+        GeocodeResponse geocodeResponse = integrationClient.findCityByCoord(customerCoords);
 
-        String city = "Campinas";
-        //requisicao pro google pra pegar a cidade com base na coords do customer
+        if (geocodeResponse.getResults().isEmpty()) {
+            throw new NotFoundException("400.008");
+        }
 
-        new ArrayList<>(merchantRepository.findByCity(pageable, city));
+        List<GeocodeAddressComponent> foundAddress = geocodeResponse.getResults().get(0).getAddressComponents()
+                .stream()
+                .filter(item -> item.getTypes().stream().anyMatch(s -> s.equals("administrative_area_level_2")))
+                .collect(Collectors.toList());
 
-        DistanceMatrixResponse googleMapsResponse = integrationClient.calculateDistance(Arrays.asList("-22.854848,-47.050967", "-22.855540,-47.048220"), customerCoords);
+        String city = foundAddress.get(0).getLongName();
 
+        ArrayList<Merchant> merchantsPresentInCustomersCity = new ArrayList<>(merchantRepository.findByCity(pageable, city));
 
+        if (merchantsPresentInCustomersCity.isEmpty()) {
+            throw new NotFoundException("400.009");
+        }
 
-        return (List<FindDistanceResponse>) FindDistanceResponse.builder().build();
-//        return FindDistanceResponse.builder()
-//                .distanceBasedMerchants(Arrays.asList(FindDistanceResponse.builder()
-//                        .distance("sad")
-//                        .build()))
-//                .build();
+        List<String> merchantNames = merchantsPresentInCustomersCity.stream()
+                .map(merchant -> String.join(",", merchant.getCoordinates()))
+                .collect(Collectors.toList());
+
+        DistanceMatrixResponse googleMapsResponse = integrationClient.calculateDistance(merchantNames, customerCoords);
+
+        List<FindDistanceResponse> merchantList = new ArrayList<>();
+
+        List<DistanceMatrixElement> collect = googleMapsResponse.getRows()
+                .stream()
+                .map(distanceMatrixRow -> distanceMatrixRow.getElements())
+                .collect(Collectors.toList())
+                .stream()
+                .map(distanceMatrixElements -> distanceMatrixElements.get(0))
+                .collect(Collectors.toList());
+
+        collect.stream()
+                .map(item -> merchantList.add(FindDistanceResponse
+                        .builder()
+                        .distance(item.getDistance().getText())
+                        .duration(item.getDuration().getText())
+                        .build()))
+                .collect(Collectors.toList());
+
+        IntStream.range(0, merchantList.size())
+                .forEach(index -> {
+                    merchantList.get(index).setMerchantId(merchantsPresentInCustomersCity.get(index).getId());
+                    merchantList.get(index).setLogo(merchantsPresentInCustomersCity.get(index).getLogo());
+                });
+
+        return merchantList;
     }
 }

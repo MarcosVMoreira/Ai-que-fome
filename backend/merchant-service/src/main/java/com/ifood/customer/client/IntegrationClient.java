@@ -36,7 +36,7 @@ public class IntegrationClient {
                 .fromUriString(applicationConfig.getGoogleMapsDistanceCalculatorEndpoint() +
                         "origins=" + pipeSeparatedMerchantLocations +
                         "&destinations=" + customerLocation +
-                        "&key=" + "");
+                        "&key=" + applicationConfig.getGoogleMapsKey());
 
         HttpHeaders headers = new HttpHeaders();
 
@@ -59,7 +59,7 @@ public class IntegrationClient {
         UriBuilder builder = UriComponentsBuilder
                 .fromUriString(applicationConfig.getGoogleMapsGeocodeEndpoint() +
                         "latlng=" + customerLocation +
-                        "&key=" + "");
+                        "&key=" + applicationConfig.getGoogleMapsKey());
 
         HttpHeaders headers = new HttpHeaders();
 

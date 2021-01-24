@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ApplicationConfig {
 
-//    @Value("${google-maps.access-key}")
-//    public String googleMapsKey;
+    @Value("${google-maps.access-key}")
+    public String googleMapsKey;
 
     @Value("${google-maps.distance-calculator}")
     public String googleMapsDistanceCalculatorEndpoint;

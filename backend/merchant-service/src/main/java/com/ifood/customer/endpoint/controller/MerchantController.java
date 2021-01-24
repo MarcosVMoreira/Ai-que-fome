@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -30,7 +31,7 @@ public class MerchantController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<FindDistanceResponse> listAll(@RequestParam String customerCoords, Pageable pageable) {
+    public Page<FindDistanceResponse> listAll(@RequestParam @NotNull(message = "400.003") String customerCoords, Pageable pageable) {
         return new PageImpl<>(merchantService.listAll(pageable, customerCoords));
     }
 
