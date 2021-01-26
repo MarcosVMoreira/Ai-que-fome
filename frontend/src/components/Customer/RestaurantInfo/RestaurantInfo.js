@@ -5,7 +5,7 @@ import classes from './RestaurantInfo.module.scss';
 
 export const RestaurantInfo = ({ restaurant }) => {
   return (
-    <Grid container direction="column" item xs spacing={3}>
+    <Grid container direction="column" item xs className={classes.container}>
       <Grid item xs container className={classes.container_more}>
         <span>{categories[restaurant.merchantType[0]]}</span>
         <span> • </span>

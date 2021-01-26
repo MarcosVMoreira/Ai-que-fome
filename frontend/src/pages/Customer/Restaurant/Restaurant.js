@@ -1,9 +1,15 @@
-import { Button, Grid, Snackbar } from '@material-ui/core';
-import { ExpandLessRounded, ExpandMoreRounded } from '@material-ui/icons';
+import { Button, Grid, InputBase, Snackbar } from '@material-ui/core';
+import {
+  ExpandLessRounded,
+  ExpandMoreRounded,
+  Search,
+} from '@material-ui/icons';
 import { Rating } from '@material-ui/lab';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, useParams } from 'react-router-dom';
+import empty from '../../../assets/icons/empty.svg';
+import { MenuCard } from '../../../components/Customer/MenuCard/MenuCard';
 import { RestaurantInfo } from '../../../components/Customer/RestaurantInfo/RestaurantInfo';
 import { Spinner } from '../../../components/Shared/Spinner/Spinner';
 import { Toast } from '../../../components/Shared/Toast/Toast';
@@ -13,6 +19,8 @@ import classes from './Restaurant.module.scss';
 export const Restaurant = () => {
   /* State Hooks */
   const [showMore, setShowMore] = useState(false);
+  const [search, setSearch] = useState('');
+  const [categories, setCategories] = useState(null);
 
   /* Redux Selectors */
   const restaurant = useSelector(state => state.restaurant.restaurant);
@@ -28,12 +36,43 @@ export const Restaurant = () => {
     [dispatch],
   );
 
+  /* Functions */
   useEffect(() => {
     onFetchRestaurant(id);
   }, [onFetchRestaurant, id]);
 
+  useEffect(() => {
+    if (restaurant) {
+      setCategories(restaurant.categories);
+    }
+  }, [restaurant]);
+
+  /* Toggle Restaurant Info */
   const handleShowMore = () => {
     setShowMore(state => !state);
+  };
+
+  /* Search Input */
+  const handleSearch = event => {
+    let { value } = event.target;
+
+    setSearch(value);
+    filterResults(value);
+  };
+
+  /* Filter Results based on user Search */
+  const filterResults = value => {
+    setCategories(
+      restaurant.categories
+        .map(category => {
+          const filter = category.skus.filter(sku =>
+            sku.name.toLowerCase().includes(value),
+          );
+
+          return filter.length ? { ...category, skus: [...filter] } : null;
+        })
+        .filter(res => res),
+    );
   };
 
   // Set Toast
@@ -81,54 +120,105 @@ export const Restaurant = () => {
         <Spinner />
       ) : (
         <Fragment>
-          <div className={classes.container_detail}>
-            <Grid container>
-              <Grid item xs={12}>
-                <img
-                  className={classes.container_detail__image}
-                  src="https://static-images.ifood.com.br/image/upload//capa/201805241343_9f7ee192-ac96-4dca-9525-189c0b884036_capa1@2x.jpg"
-                  alt="restaurant"
-                />
-              </Grid>
-
-              <Grid container item xs={12}>
-                <Grid item xs={2}>
+          <Grid container justify="center">
+            <Grid
+              item
+              xs={11}
+              lg={9}
+              xl={7}
+              className={classes.container_detail}
+            >
+              <Grid container direction="column">
+                <Grid item xs={12}>
                   <img
-                    src={restaurant.logo}
-                    alt="restaurant logo"
-                    className={classes.container_detail__logo}
+                    className={classes.container_detail__image}
+                    src="https://static-images.ifood.com.br/image/upload//capa/201805241343_9f7ee192-ac96-4dca-9525-189c0b884036_capa1@2x.jpg"
+                    alt="restaurant"
                   />
                 </Grid>
 
-                <Grid container alignItems="center" item xs>
-                  <span className={classes.container_detail__title}>
-                    {restaurant.name}
-                  </span>
-
-                  <Grid container alignItems="center" item xs>
-                    <Rating max={1} readOnly value={1} />
-                    <span className={classes.container_detail__rate}>
-                      {restaurant.rate}
-                    </span>
+                <Grid container item xs={12}>
+                  <Grid item xs={3} sm={2}>
+                    <img
+                      src={restaurant.logo}
+                      alt="restaurant logo"
+                      className={classes.container_detail__logo}
+                    />
                   </Grid>
 
-                  <Button
-                    color="primary"
-                    size="small"
-                    endIcon={
-                      showMore ? <ExpandLessRounded /> : <ExpandMoreRounded />
-                    }
-                    onClick={handleShowMore}
-                  >
-                    Ver mais
-                  </Button>
+                  <Grid container alignItems="center" item xs={9} sm={7} md={8}>
+                    <span className={classes.container_detail__title}>
+                      {restaurant.name}
+                    </span>
+
+                    <Grid container alignItems="center" item xs>
+                      <Rating max={1} readOnly value={1} />
+                      <span className={classes.container_detail__rate}>
+                        {restaurant.rate}
+                      </span>
+                    </Grid>
+                  </Grid>
+
+                  <Grid container item xs={12} sm={3} md={2}>
+                    <Button
+                      color="primary"
+                      size="small"
+                      endIcon={
+                        showMore ? <ExpandLessRounded /> : <ExpandMoreRounded />
+                      }
+                      onClick={handleShowMore}
+                    >
+                      Ver mais
+                    </Button>
+                  </Grid>
                 </Grid>
+
+                <Grid item xs>
+                  {showMore && <RestaurantInfo restaurant={restaurant} />}
+                </Grid>
+
+                <Grid container justify="center" item xs>
+                  <InputBase
+                    className={classes.container_search}
+                    name="search"
+                    placeholder="Buscar no cardápio"
+                    value={search}
+                    onChange={handleSearch}
+                    startAdornment={
+                      <Search className={classes.container_search__icon} />
+                    }
+                  />
+                </Grid>
+
+                {categories && categories.length > 0 ? (
+                  categories.map(category => (
+                    <Grid
+                      key={category.id}
+                      container
+                      direction="column"
+                      item
+                      xs
+                    >
+                      <h2>{category.name}</h2>
+
+                      <Grid container wrap="wrap" spacing={3} item xs>
+                        {category.skus.map(sku => (
+                          <Grid key={sku.id} item xs={12} md={6}>
+                            <MenuCard {...sku} />
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </Grid>
+                  ))
+                ) : (
+                  <div className={classes.container_empty}>
+                    <img src={empty} alt="ilustração de carrinho vazio" />
+                    <h3>Nenhum produto encontrado!</h3>
+                  </div>
+                )}
               </Grid>
-
-              {showMore && <RestaurantInfo restaurant={restaurant} />}
             </Grid>
-          </div>
-
+          </Grid>
           <div className={classes.container_cart}>{restaurant.name}</div>
         </Fragment>
       )}

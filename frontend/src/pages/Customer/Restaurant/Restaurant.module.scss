@@ -6,9 +6,7 @@
   justify-items: center;
 
   &_detail {
-    min-width: 800px;
-    width: 60%;
-    margin: 40px 0;
+    margin: 40px 0 !important;
 
     &__image {
       width: 100%;
@@ -40,8 +38,58 @@
     }
   }
 
+  &_search {
+    width: 95%;
+    padding: 8px;
+    margin: 20px 0;
+    border-radius: 24px;
+    background-color: #e0e0e050;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.75;
+    letter-spacing: 0.02857em;
+
+    &__icon {
+      color: rgba(0, 0, 0, 0.54);
+      margin: 0 10px;
+    }
+  }
+
+  &_items {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    &__item {
+      display: flex;
+      justify-content: flex-start;
+      align-items: stretch;
+      flex-wrap: wrap;
+    }
+  }
+
+  &_empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    & img {
+      width: 250px;
+      height: 210px;
+    }
+  }
+
   &_cart {
     background-color: blue;
     width: 100%;
+  }
+}
+
+// Removes the Cart from Mobile/Tablet
+@media (max-width: 1024px) {
+  .container {
+    grid-template-columns: 1fr;
   }
 }
