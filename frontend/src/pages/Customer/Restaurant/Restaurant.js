@@ -41,7 +41,7 @@ export const Restaurant = () => {
     return (
       <Snackbar
         open={true}
-        autoHideDuration={10000}
+        autoHideDuration={2000}
         onClose={() => (toast = '')}
       >
         <Toast onClose={() => (toast = '')} severity="error">
@@ -53,9 +53,11 @@ export const Restaurant = () => {
 
   let toast;
   let redirect;
-  // If we get a 400 error, it means the user is trying to submit an incomplete form
+  // If we get a 400 error
   error === 400 &&
-    (toast = setToast('Erro de de formulário, preencha todos os campos!'));
+    (toast = setToast(
+      'Erro de requisição, contate um administrador caso continue vendo este erro!',
+    ));
   // If we get a 403 error, it means the user is trying to access something it doesn't have access
   error === 403 &&
     (toast = setToast(

@@ -13,28 +13,39 @@ import {
   Search,
   ShoppingCartRounded,
 } from '@material-ui/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import * as actions from '../../../store/actions/index';
 import { Logo } from '../../Shared/Logo/Logo';
 import { AddressModal } from '../AddressModal/AddressModal';
 import { ProfilePopover } from '../ProfilePopover/ProfilePopover';
 import classes from './Navbar.module.scss';
 
 export const Navbar = withRouter(props => {
+  /* React State Hooks */
   const [search, setSearch] = useState('');
   const [address, setAddress] = useState(null);
   const [modal, setModal] = useState(false);
   const [popover, setPopover] = useState(null);
+
+  /* Redux Dispatchers */
+  const dispatch = useDispatch();
+  const fetchRestaurants = useCallback(
+    payload => dispatch(actions.fetchRestaurants(payload)),
+    [dispatch],
+  );
 
   useEffect(() => {
     const storedAddress = localStorage.getItem('IFOOD_address');
 
     if (storedAddress) {
       setAddress(JSON.parse(storedAddress));
+      fetchRestaurants({ coordinates: JSON.parse(storedAddress).coordinates });
     } else {
       setModal(true);
     }
-  }, []);
+  }, [fetchRestaurants]);
 
   const handleSearch = event => setSearch(event.target.value);
 
@@ -42,6 +53,7 @@ export const Navbar = withRouter(props => {
     localStorage.setItem('IFOOD_address', JSON.stringify(address));
     setModal(false);
     setAddress(address);
+    fetchRestaurants({ coordinates: address.coordinates });
   };
 
   const handleModal = event => setModal(event);

@@ -15,12 +15,14 @@ export const fetchRestaurantsFail = payload => ({
   payload,
 });
 
-export const fetchRestaurants = () => {
+export const fetchRestaurants = payload => {
   return dispatch => {
     dispatch(fetchRestaurantsStart());
 
+    const coordinates = payload.coordinates.join(',');
+
     axios
-      .get(`/merchant/merchants`)
+      .get(`/merchant/merchants?customerCoords=${coordinates}`)
       .then(res => {
         dispatch(fetchRestaurantsSuccess({ restaurants: res.data.content }));
       })
