@@ -31,8 +31,15 @@ public class MerchantController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<FindDistanceResponse> listAll(@RequestParam @NotNull(message = "400.003") String customerCoords, Pageable pageable) {
-        return new PageImpl<>(merchantService.listAll(pageable, customerCoords));
+    public Page<FindDistanceResponse> listAll(@RequestParam @NotNull(message = "400.003") String customerCoords,
+                                              @RequestParam(required = false) String name,
+                                              @RequestParam(required = false) String type,
+                                              @RequestParam(required = false) String payment,
+                                              @RequestParam(required = false) String distance,
+                                              @RequestParam(required = false) String fee,
+                                              Pageable pageable) {
+        return new PageImpl<>(merchantService.listAll(pageable, customerCoords, name, type, payment,
+                distance, fee));
     }
 
     @PostMapping

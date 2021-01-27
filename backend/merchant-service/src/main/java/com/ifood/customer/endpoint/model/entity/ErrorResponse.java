@@ -3,6 +3,7 @@ package com.ifood.customer.endpoint.model.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.MessageSource;
 
 @Builder
 @Getter

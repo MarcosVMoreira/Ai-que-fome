@@ -6,7 +6,15 @@ import com.ifood.customer.endpoint.enumeration.MerchantTypeEnum;
 import com.ifood.customer.endpoint.error.BadRequestException;
 import com.ifood.customer.endpoint.error.NotFoundException;
 import com.ifood.customer.endpoint.error.UnprocessableEntityException;
-import com.ifood.customer.endpoint.model.entity.*;
+import com.ifood.customer.endpoint.model.entity.Category;
+import com.ifood.customer.endpoint.model.entity.DistanceMatrixElement;
+import com.ifood.customer.endpoint.model.entity.DistanceMatrixResponse;
+import com.ifood.customer.endpoint.model.entity.DistanceMatrixRow;
+import com.ifood.customer.endpoint.model.entity.FindDistanceResponse;
+import com.ifood.customer.endpoint.model.entity.GeocodeAddressComponent;
+import com.ifood.customer.endpoint.model.entity.GeocodeResponse;
+import com.ifood.customer.endpoint.model.entity.Merchant;
+import com.ifood.customer.endpoint.model.entity.SKU;
 import com.ifood.customer.endpoint.repository.MerchantRepository;
 import com.ifood.customer.producer.MerchantMessageProducer;
 import lombok.RequiredArgsConstructor;
@@ -36,13 +44,16 @@ public class MerchantService {
 
     private final IntegrationClient integrationClient;
 
-    public List<FindDistanceResponse> listAll (Pageable pageable, String customerCoords) {
+    public List<FindDistanceResponse> listAll(Pageable pageable, String customerCoords, String name,
+                                              String type, String payment,
+                                              String distance, String fee) {
         logger.info("Recuperando da base de dados todos os restaurantes...");
 
-        return findCustomerDistanceFromMerchants(pageable, customerCoords);
+        return findCustomerDistanceFromMerchants(pageable, customerCoords, name, type, payment,
+                                                    distance, fee);
     }
 
-    public Merchant save (Merchant merchant) {
+    public Merchant save(Merchant merchant) {
         logger.info("Criando novo restaurante na base de dados...");
 
         Optional<Merchant> foundMerchantByDocument =
@@ -70,19 +81,19 @@ public class MerchantService {
         return savedMerchant;
     }
 
-    public Merchant getMerchantById (String id) {
+    public Merchant getMerchantById(String id) {
         logger.info("Recuperando da base de dados todos registros utilizando o id {}", id);
         return merchantRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Merchant getMerchantByEmail (String email) {
+    public Merchant getMerchantByEmail(String email) {
         logger.info("Recuperando da base de dados todos registros utilizando o email {}", email);
         return merchantRepository.findByEmail(email)
                 .orElseThrow(NotFoundException::new);
     }
 
-    public void delete (String id) {
+    public void delete(String id) {
         Optional<Merchant> entity = merchantRepository.findById(id);
 
         if (entity.isPresent()) {
@@ -90,7 +101,7 @@ public class MerchantService {
         }
     }
 
-    public Merchant update (Merchant merchant, String id) {
+    public Merchant update(Merchant merchant, String id) {
 
         if (!Optional.ofNullable(merchant.getDocument()).isPresent() ||
                 merchant.getDocument().isEmpty()) {
@@ -109,7 +120,7 @@ public class MerchantService {
 
     /* AllowedPayments */
 
-    public Merchant updateAllowedPayment (String merchantId, @Valid List<AllowedPaymentEnum> receivedAllowedPayment) {
+    public Merchant updateAllowedPayment(String merchantId, @Valid List<AllowedPaymentEnum> receivedAllowedPayment) {
         Optional<Merchant> merchant = merchantRepository.findById(merchantId);
 
         if (!merchant.isPresent()) {
@@ -127,7 +138,7 @@ public class MerchantService {
 
     /* Category */
 
-    public Merchant updateCategory (String merchantId, @Valid List<Category> receivedCategory) {
+    public Merchant updateCategory(String merchantId, @Valid List<Category> receivedCategory) {
         Optional<Merchant> merchant = merchantRepository.findById(merchantId);
 
         if (!merchant.isPresent()) {
@@ -147,7 +158,7 @@ public class MerchantService {
 
     /* SKU */
 
-    public Merchant updateSKU (String merchantId, String categoryId, @Valid List<SKU> receivedSKU) {
+    public Merchant updateSKU(String merchantId, String categoryId, @Valid List<SKU> receivedSKU) {
         Optional<Merchant> merchant = merchantRepository.findById(merchantId);
 
         if (!merchant.isPresent()) {
@@ -174,7 +185,7 @@ public class MerchantService {
 
     /* Merchant Type */
 
-    public Merchant updateMerchantType (String merchantId, @Valid List<MerchantTypeEnum> receivedMerchantType) {
+    public Merchant updateMerchantType(String merchantId, @Valid List<MerchantTypeEnum> receivedMerchantType) {
         Optional<Merchant> merchant = merchantRepository.findById(merchantId);
 
         if (!merchant.isPresent()) {
@@ -190,28 +201,15 @@ public class MerchantService {
         return merchantRepository.save(merchant.get());
     }
 
-    public List<FindDistanceResponse> findCustomerDistanceFromMerchants (Pageable pageable, String customerCoords) {
+    public List<FindDistanceResponse> findCustomerDistanceFromMerchants(Pageable pageable, String customerCoords,
+                                                                        String name,
+                                                                        String type, String payment,
+                                                                        String distance, String fee) {
+        String city = findCityFromCoordinates(customerCoords);
 
-        GeocodeResponse geocodeResponse = integrationClient.findCityByCoord(customerCoords);
+        List<Merchant> merchantsFilteredByCityNameTypePayment = filterMerchantByGivenFilters(pageable, name, city, type, payment);
 
-        if (geocodeResponse.getResults().isEmpty()) {
-            throw new NotFoundException("400.008");
-        }
-
-        List<GeocodeAddressComponent> foundAddress = geocodeResponse.getResults().get(0).getAddressComponents()
-                .stream()
-                .filter(item -> item.getTypes().stream().anyMatch(s -> s.equals("administrative_area_level_2")))
-                .collect(Collectors.toList());
-
-        String city = foundAddress.get(0).getLongName();
-
-        ArrayList<Merchant> merchantsPresentInCustomersCity = new ArrayList<>(merchantRepository.findByCity(pageable, city));
-
-        if (merchantsPresentInCustomersCity.isEmpty()) {
-            throw new NotFoundException("400.009");
-        }
-
-        List<String> merchantNames = merchantsPresentInCustomersCity.stream()
+        List<String> merchantNames = merchantsFilteredByCityNameTypePayment.stream()
                 .map(merchant -> String.join(",", merchant.getCoordinates()))
                 .collect(Collectors.toList());
 
@@ -221,7 +219,7 @@ public class MerchantService {
 
         List<DistanceMatrixElement> collect = googleMapsResponse.getRows()
                 .stream()
-                .map(distanceMatrixRow -> distanceMatrixRow.getElements())
+                .map(DistanceMatrixRow::getElements)
                 .collect(Collectors.toList())
                 .stream()
                 .map(distanceMatrixElements -> distanceMatrixElements.get(0))
@@ -237,10 +235,35 @@ public class MerchantService {
 
         IntStream.range(0, merchantList.size())
                 .forEach(index -> {
-                    merchantList.get(index).setMerchantId(merchantsPresentInCustomersCity.get(index).getId());
-                    merchantList.get(index).setLogo(merchantsPresentInCustomersCity.get(index).getLogo());
+                    merchantList.get(index).setMerchantId(merchantsFilteredByCityNameTypePayment.get(index).getId());
+                    merchantList.get(index).setLogo(merchantsFilteredByCityNameTypePayment.get(index).getLogo());
                 });
 
         return merchantList;
+    }
+
+    private String findCityFromCoordinates(String coordinates) {
+        GeocodeResponse geocodeResponse = integrationClient.findCityByCoord(coordinates);
+
+        if (geocodeResponse.getResults().isEmpty()) {
+            throw new NotFoundException("400.008");
+        }
+
+        List<GeocodeAddressComponent> foundAddress = geocodeResponse.getResults().get(0).getAddressComponents()
+                .stream()
+                .filter(item -> item.getTypes().stream().anyMatch(s -> s.equals("administrative_area_level_2")))
+                .collect(Collectors.toList());
+
+        return foundAddress.get(0).getLongName();
+    }
+
+    private List<Merchant> filterMerchantByGivenFilters(Pageable pageable, String name, String city, String type, String payment) {
+        List<Merchant> merchantsFilteredNameCity = merchantRepository.findByNameAndCity(pageable, name, city);
+
+        if (merchantsFilteredNameCity.isEmpty()) {
+            throw new NotFoundException("400.009");
+        }
+
+        return merchantsFilteredNameCity;
     }
 }

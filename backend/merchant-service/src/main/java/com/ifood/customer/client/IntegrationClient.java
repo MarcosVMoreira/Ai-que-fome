@@ -3,6 +3,7 @@ package com.ifood.customer.client;
 import com.ifood.customer.configuration.ApplicationConfig;
 import com.ifood.customer.endpoint.error.UnprocessableEntityException;
 import com.ifood.customer.endpoint.model.entity.DistanceMatrixResponse;
+import com.ifood.customer.endpoint.model.entity.ErrorResponse;
 import com.ifood.customer.endpoint.model.entity.GeocodeResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
