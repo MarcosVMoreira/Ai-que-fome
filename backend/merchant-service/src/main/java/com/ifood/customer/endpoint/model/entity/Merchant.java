@@ -81,16 +81,17 @@ public class Merchant {
     @NotNull(message = "400.003")
     private List<String> coordinates;
 
+    @NotNull(message = "400.003")
+    private Integer basePreparationTime = 0;
+
     private List<AllowedPaymentEnum> allowedPayments;
 
     private List<Category> categories;
 
     private List<MerchantTypeEnum> merchantType;
 
-    private BigDecimal rate;
+    private Float rate;
 
     private String description;
-
-    private String basePreparationTime;
 
 }

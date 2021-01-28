@@ -1,13 +1,14 @@
 package com.ifood.customer.endpoint.model.entity;
 
+import com.ifood.customer.endpoint.enumeration.MerchantTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 
 @Data
 @Document
@@ -19,11 +20,15 @@ public class FindDistanceResponse {
 
     private String logo;
 
-    private String distance;
+    private Integer distance;
 
-    private String duration;
+    private Integer duration;
 
-    private BigInteger fee;
+    private Float fee;
 
-    private String rate;
+    private Float rate;
+
+    private List<MerchantTypeEnum> type;
+
+    private String name;
 }

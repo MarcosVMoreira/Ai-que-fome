@@ -35,8 +35,8 @@ public class MerchantController {
                                               @RequestParam(required = false) String name,
                                               @RequestParam(required = false) String type,
                                               @RequestParam(required = false) String payment,
-                                              @RequestParam(required = false) String distance,
-                                              @RequestParam(required = false) String fee,
+                                              @RequestParam(required = false) Integer distance,
+                                              @RequestParam(required = false) Float fee,
                                               Pageable pageable) {
         return new PageImpl<>(merchantService.listAll(pageable, customerCoords, name, type, payment,
                 distance, fee));

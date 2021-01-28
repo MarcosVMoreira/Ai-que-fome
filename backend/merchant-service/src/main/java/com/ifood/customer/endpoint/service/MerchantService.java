@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,11 +47,13 @@ public class MerchantService {
 
     public List<FindDistanceResponse> listAll(Pageable pageable, String customerCoords, String name,
                                               String type, String payment,
-                                              String distance, String fee) {
-        logger.info("Recuperando da base de dados todos os restaurantes...");
+                                              Integer distance, Float fee) {
+        logger.info("Recuperando da base de dados todos os restaurantes com base nos filtros passados...");
 
+        /*TODO REFAZER TODO ESSE CÓDIGO MACARRÔNICO. A FILTRAGEM ESTÁ PATÉTICA DE MAL FEITA. SOLID FOI PRO ESPAÇO
+        ACONSELHO VOCE A NÃO OLHAR O CÓDIGO QUE ESSE MÉTODO CHAMA PORQUE ESTÁ BEM TRISTE A SITUAÇÃO*/
         return findCustomerDistanceFromMerchants(pageable, customerCoords, name, type, payment,
-                                                    distance, fee);
+                distance, fee);
     }
 
     public Merchant save(Merchant merchant) {
@@ -204,7 +207,7 @@ public class MerchantService {
     public List<FindDistanceResponse> findCustomerDistanceFromMerchants(Pageable pageable, String customerCoords,
                                                                         String name,
                                                                         String type, String payment,
-                                                                        String distance, String fee) {
+                                                                        Integer distance, Float fee) {
         String city = findCityFromCoordinates(customerCoords);
 
         List<Merchant> merchantsFilteredByCityNameTypePayment = filterMerchantByGivenFilters(pageable, name, city, type, payment);
@@ -215,31 +218,39 @@ public class MerchantService {
 
         DistanceMatrixResponse googleMapsResponse = integrationClient.calculateDistance(merchantNames, customerCoords);
 
-        List<FindDistanceResponse> merchantList = new ArrayList<>();
+        List<FindDistanceResponse> merchantList = buildMerchantListFromGoogleResponse(googleMapsResponse);
 
-        List<DistanceMatrixElement> collect = googleMapsResponse.getRows()
-                .stream()
-                .map(DistanceMatrixRow::getElements)
-                .collect(Collectors.toList())
-                .stream()
-                .map(distanceMatrixElements -> distanceMatrixElements.get(0))
-                .collect(Collectors.toList());
-
-        collect.stream()
-                .map(item -> merchantList.add(FindDistanceResponse
-                        .builder()
-                        .distance(item.getDistance().getText())
-                        .duration(item.getDuration().getText())
-                        .build()))
-                .collect(Collectors.toList());
-
+        List<FindDistanceResponse> finalMerchantList = merchantList;
         IntStream.range(0, merchantList.size())
                 .forEach(index -> {
-                    merchantList.get(index).setMerchantId(merchantsFilteredByCityNameTypePayment.get(index).getId());
-                    merchantList.get(index).setLogo(merchantsFilteredByCityNameTypePayment.get(index).getLogo());
+                    finalMerchantList.get(index).setMerchantId(merchantsFilteredByCityNameTypePayment.get(index).getId());
+                    finalMerchantList.get(index).setLogo(merchantsFilteredByCityNameTypePayment.get(index).getLogo());
+                    finalMerchantList.get(index).setRate(merchantsFilteredByCityNameTypePayment.get(index).getRate());
+                    finalMerchantList.get(index).setName(merchantsFilteredByCityNameTypePayment.get(index).getName());
+                    finalMerchantList.get(index).setType(merchantsFilteredByCityNameTypePayment.get(index).getMerchantType());
+                    finalMerchantList.get(index).setDuration(deliveryTimeCalculation(finalMerchantList.get(index).getDistance(),
+                            merchantsFilteredByCityNameTypePayment.get(index).getBasePreparationTime()));
+                    finalMerchantList.get(index).setFee(feeCalculation(finalMerchantList.get(index).getDistance()));
                 });
 
-        return merchantList;
+        List<FindDistanceResponse> filteredMerchantList = finalMerchantList;
+
+        if (distance != null) {
+            filteredMerchantList = filteredMerchantList.stream()
+                    .filter(item -> (item.getDistance()
+                            <= distance))
+                    .collect(Collectors.toList());
+        }
+
+        if (fee != null) {
+            filteredMerchantList = filteredMerchantList.stream()
+                    .filter(item -> (item.getFee()
+                            <= fee))
+                    .collect(Collectors.toList());
+        }
+
+        //TODO EU AVISEI QUE TAVA ZOADO. VOU REFATORAR TUDO, MAS AGR ESTOU SEM TEMPO. TCC É TRISTE
+        return filteredMerchantList;
     }
 
     private String findCityFromCoordinates(String coordinates) {
@@ -258,12 +269,83 @@ public class MerchantService {
     }
 
     private List<Merchant> filterMerchantByGivenFilters(Pageable pageable, String name, String city, String type, String payment) {
-        List<Merchant> merchantsFilteredNameCity = merchantRepository.findByNameAndCity(pageable, name, city);
+        List<Merchant> merchantsFilteredByNameAndCity = merchantRepository.findByNameAndCity(pageable, name, city);
+        List<String> typeList = null;
+        List<String> paymentList = null;
 
-        if (merchantsFilteredNameCity.isEmpty()) {
+        if (merchantsFilteredByNameAndCity.isEmpty()) {
             throw new NotFoundException("400.009");
         }
 
-        return merchantsFilteredNameCity;
+        if (type != null && !type.isEmpty()) {
+            typeList = new ArrayList<>(Arrays.asList(type.split(",")));
+
+            List<String> finalTypeList = typeList;
+            merchantsFilteredByNameAndCity =
+                    merchantsFilteredByNameAndCity.stream()
+                            .filter(item -> merchantTypeCompare(item.getMerchantType(), finalTypeList))
+                            .collect(Collectors.toList());
+        }
+        if (payment != null && !payment.isEmpty()) {
+            paymentList = new ArrayList<>(Arrays.asList(payment.split(",")));
+
+            List<String> finalPaymentList = paymentList;
+            merchantsFilteredByNameAndCity =
+                    merchantsFilteredByNameAndCity.stream()
+                            .filter(item -> allowedPaymentsCompare(item.getAllowedPayments(), finalPaymentList))
+                            .collect(Collectors.toList());
+        }
+
+        return merchantsFilteredByNameAndCity;
+    }
+
+    private boolean merchantTypeCompare(List<MerchantTypeEnum> foundMerchantList, List<String> receivedFilter) {
+        if (foundMerchantList == null) {
+            return false;
+        }
+        return foundMerchantList.stream()
+                .anyMatch(item -> receivedFilter.contains(item.name()));
+    }
+
+    private boolean allowedPaymentsCompare(List<AllowedPaymentEnum> foundMerchantList, List<String> receivedFilter) {
+        if (foundMerchantList == null) {
+            return false;
+        }
+        return foundMerchantList.stream()
+                .anyMatch(item -> receivedFilter.contains(item.name()));
+    }
+
+    private List<FindDistanceResponse> buildMerchantListFromGoogleResponse(DistanceMatrixResponse googleMapsResponse) {
+        List<FindDistanceResponse> merchantList = new ArrayList<>();
+
+        List<DistanceMatrixElement> collect = googleMapsResponse.getRows()
+                .stream()
+                .map(DistanceMatrixRow::getElements)
+                .collect(Collectors.toList())
+                .stream()
+                .map(distanceMatrixElements -> distanceMatrixElements.get(0))
+                .collect(Collectors.toList());
+
+        collect.stream()
+                .map(item -> merchantList.add(FindDistanceResponse
+                        .builder()
+                        .distance(stringSplitterToInteger(item.getDistance().getText()))
+                        .duration(stringSplitterToInteger(item.getDuration().getText()))
+                        .build()))
+                .collect(Collectors.toList());
+
+        return merchantList;
+    }
+
+    private Integer stringSplitterToInteger(String receivedString) {
+        return Integer.parseInt(receivedString.split(" ")[0]);
+    }
+
+    private Integer deliveryTimeCalculation(Integer distance, Integer baseTime) {
+        return distance * 5 + baseTime;
+    }
+
+    private Float feeCalculation(Integer distance) {
+        return (float) (distance < 2 ? 0 : 1 + distance);
     }
 }
