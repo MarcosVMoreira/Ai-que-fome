@@ -30,6 +30,8 @@ public class SKU {
     @NotNull(message = "400.003")
     private BigDecimal price;
 
+    private String image;
+
     private String description;
 
     private List<Option> options;

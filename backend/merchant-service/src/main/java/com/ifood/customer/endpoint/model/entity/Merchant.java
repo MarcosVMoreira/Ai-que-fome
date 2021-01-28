@@ -41,6 +41,8 @@ public class Merchant {
     @NotEmpty(message = "400.003")
     private String logo;
 
+    private String image;
+
     @NotEmpty(message = "400.003")
     private String phone;
 
@@ -76,6 +78,7 @@ public class Merchant {
     @JsonFormat(pattern = "HH:mm")
     private LocalTime businessEnd;
 
+    @NotNull(message = "400.003")
     private List<String> coordinates;
 
     private List<AllowedPaymentEnum> allowedPayments;
