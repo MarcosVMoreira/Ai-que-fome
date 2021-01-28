@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, useParams } from 'react-router-dom';
 import empty from '../../../assets/icons/empty.svg';
 import { MenuCard } from '../../../components/Customer/MenuCard/MenuCard';
+import { MenuModal } from '../../../components/Customer/MenuModal/MenuModal';
 import { RestaurantInfo } from '../../../components/Customer/RestaurantInfo/RestaurantInfo';
 import { Spinner } from '../../../components/Shared/Spinner/Spinner';
 import { Toast } from '../../../components/Shared/Toast/Toast';
@@ -21,6 +22,7 @@ export const Restaurant = () => {
   const [showMore, setShowMore] = useState(false);
   const [search, setSearch] = useState('');
   const [categories, setCategories] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   /* Redux Selectors */
   const restaurant = useSelector(state => state.restaurant.restaurant);
@@ -66,13 +68,22 @@ export const Restaurant = () => {
       restaurant.categories
         .map(category => {
           const filter = category.skus.filter(sku =>
-            sku.name.toLowerCase().includes(value),
+            sku.name.toLowerCase().includes(value.toLowerCase()),
           );
 
           return filter.length ? { ...category, skus: [...filter] } : null;
         })
         .filter(res => res),
     );
+  };
+
+  const handleOpenMenuModal = item => {
+    console.log(item);
+    setSelectedItem(item);
+  };
+
+  const handleCloseMenuModal = () => {
+    setSelectedItem(null);
   };
 
   // Set Toast
@@ -137,7 +148,7 @@ export const Restaurant = () => {
                   />
                 </Grid>
 
-                <Grid container item xs={12}>
+                <Grid container alignItems="center" item xs={12}>
                   <Grid item xs={3} sm={2}>
                     <img
                       src={restaurant.logo}
@@ -204,7 +215,10 @@ export const Restaurant = () => {
                       <Grid container wrap="wrap" spacing={3} item xs>
                         {category.skus.map(sku => (
                           <Grid key={sku.id} item xs={12} md={6}>
-                            <MenuCard {...sku} />
+                            <MenuCard
+                              {...sku}
+                              onClick={() => handleOpenMenuModal(sku)}
+                            />
                           </Grid>
                         ))}
                       </Grid>
@@ -220,6 +234,14 @@ export const Restaurant = () => {
             </Grid>
           </Grid>
           <div className={classes.container_cart}>{restaurant.name}</div>
+
+          {selectedItem && (
+            <MenuModal
+              open={Boolean(selectedItem)}
+              item={selectedItem}
+              close={handleCloseMenuModal}
+            />
+          )}
         </Fragment>
       )}
     </div>

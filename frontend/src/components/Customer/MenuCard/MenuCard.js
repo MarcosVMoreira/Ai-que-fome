@@ -5,7 +5,7 @@ import classes from './MenuCard.module.scss';
 
 export const MenuCard = props => {
   return (
-    <Card className={classes.card} variant="outlined">
+    <Card className={classes.card} variant="outlined" onClick={props.onClick}>
       <div className={classes.card_grid}>
         <Grid
           container
