@@ -18,6 +18,8 @@ public class FindDistanceResponse {
 
     private String merchantId;
 
+    private String name;
+
     private String logo;
 
     private Integer distance;
@@ -30,5 +32,4 @@ public class FindDistanceResponse {
 
     private List<MerchantTypeEnum> type;
 
-    private String name;
 }

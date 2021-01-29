@@ -269,20 +269,27 @@ public class MerchantService {
     }
 
     private List<Merchant> filterMerchantByGivenFilters(Pageable pageable, String name, String city, String type, String payment) {
-        List<Merchant> merchantsFilteredByNameAndCity = merchantRepository.findByNameAndCity(pageable, name, city);
+        List<Merchant> merchantsFilteredByCity = merchantRepository.findByCity(pageable, city);
         List<String> typeList = null;
         List<String> paymentList = null;
 
-        if (merchantsFilteredByNameAndCity.isEmpty()) {
+        if (merchantsFilteredByCity.isEmpty()) {
             throw new NotFoundException("400.009");
+        }
+
+        if (name != null && !name.isEmpty()) {
+            merchantsFilteredByCity =
+                    merchantsFilteredByCity.stream()
+                            .filter(item -> item.getName().contains(name))
+                            .collect(Collectors.toList());
         }
 
         if (type != null && !type.isEmpty()) {
             typeList = new ArrayList<>(Arrays.asList(type.split(",")));
 
             List<String> finalTypeList = typeList;
-            merchantsFilteredByNameAndCity =
-                    merchantsFilteredByNameAndCity.stream()
+            merchantsFilteredByCity =
+                    merchantsFilteredByCity.stream()
                             .filter(item -> merchantTypeCompare(item.getMerchantType(), finalTypeList))
                             .collect(Collectors.toList());
         }
@@ -290,13 +297,13 @@ public class MerchantService {
             paymentList = new ArrayList<>(Arrays.asList(payment.split(",")));
 
             List<String> finalPaymentList = paymentList;
-            merchantsFilteredByNameAndCity =
-                    merchantsFilteredByNameAndCity.stream()
+            merchantsFilteredByCity =
+                    merchantsFilteredByCity.stream()
                             .filter(item -> allowedPaymentsCompare(item.getAllowedPayments(), finalPaymentList))
                             .collect(Collectors.toList());
         }
 
-        return merchantsFilteredByNameAndCity;
+        return merchantsFilteredByCity;
     }
 
     private boolean merchantTypeCompare(List<MerchantTypeEnum> foundMerchantList, List<String> receivedFilter) {
