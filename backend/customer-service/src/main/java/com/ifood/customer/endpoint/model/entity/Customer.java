@@ -42,6 +42,8 @@ public class Customer {
     @Valid
     private List<Address> addresses;
 
+    private List<MerchantRate> merchantRates;
+
     public Customer (@NotEmpty(message = "The field 'name' is mandatory") String name,
                      @NotEmpty(message = "The field 'cellphone' is mandatory") @Size(max = 11) String phone,
                      @NotEmpty(message = "The field 'email' is mandatory") @Email(message = "The email must be valid") String email,
