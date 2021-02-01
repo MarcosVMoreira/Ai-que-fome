@@ -80,14 +80,14 @@ export const MenuModal = props => {
     });
 
     handleTotalValue();
-  }, []);
+  }, [props.item]);
 
   return (
     <Dialog
       maxWidth={'md'}
       fullScreen={fullScreen}
       open={props.open}
-      onClose={props.close}
+      onClose={() => props.close()}
     >
       {item && (
         <Fragment>
@@ -112,58 +112,60 @@ export const MenuModal = props => {
                   <span>R${item.price?.toFixed(2).replace('.', ',')}</span>
                 </Grid>
 
-                <Grid item>
-                  <Grid
-                    container
-                    alignItems="center"
-                    className={classes.modal_extras__header}
-                  >
-                    <span>Escolha seus extras</span>
-                  </Grid>
-
-                  {item.options.map((option, index) => (
+                {item.options.length ? (
+                  <Grid item>
                     <Grid
                       container
-                      className={classes.modal_extras__items}
-                      key={option.id}
+                      alignItems="center"
+                      className={classes.modal_extras__header}
                     >
-                      <Grid
-                        item
-                        xs
-                        container
-                        direction="column"
-                        className={classes.modal_extras__items_info}
-                      >
-                        <span>{option.name}</span>
-                        <span>
-                          + R$ {option.price?.toFixed(2).replace('.', ',')}
-                        </span>
-                      </Grid>
-
-                      <Grid
-                        item
-                        xs
-                        container
-                        justify="flex-end"
-                        className={classes.modal_extras__items_buttons}
-                      >
-                        <IconButton
-                          onClick={() => handleOptionAmount('sub', index)}
-                        >
-                          <RemoveOutlined color="primary" />
-                        </IconButton>
-
-                        <span>{option.amount}</span>
-
-                        <IconButton
-                          onClick={() => handleOptionAmount('sum', index)}
-                        >
-                          <AddOutlined color="primary" />
-                        </IconButton>
-                      </Grid>
+                      <span>Escolha seus extras</span>
                     </Grid>
-                  ))}
-                </Grid>
+
+                    {item.options.map((option, index) => (
+                      <Grid
+                        container
+                        className={classes.modal_extras__items}
+                        key={option.id}
+                      >
+                        <Grid
+                          item
+                          xs
+                          container
+                          direction="column"
+                          className={classes.modal_extras__items_info}
+                        >
+                          <span>{option.name}</span>
+                          <span>
+                            + R$ {option.price?.toFixed(2).replace('.', ',')}
+                          </span>
+                        </Grid>
+
+                        <Grid
+                          item
+                          xs
+                          container
+                          justify="flex-end"
+                          className={classes.modal_extras__items_buttons}
+                        >
+                          <IconButton
+                            onClick={() => handleOptionAmount('sub', index)}
+                          >
+                            <RemoveOutlined color="primary" />
+                          </IconButton>
+
+                          <span>{option.amount}</span>
+
+                          <IconButton
+                            onClick={() => handleOptionAmount('sum', index)}
+                          >
+                            <AddOutlined color="primary" />
+                          </IconButton>
+                        </Grid>
+                      </Grid>
+                    ))}
+                  </Grid>
+                ) : null}
               </Grid>
             </Grid>
           </DialogContent>
@@ -181,7 +183,11 @@ export const MenuModal = props => {
               </IconButton>
             </Grid>
 
-            <Button onClick={props.close} variant="contained" color="primary">
+            <Button
+              onClick={() => props.close(item)}
+              variant="contained"
+              color="primary"
+            >
               <Grid className={classes.modal_actions__price}>
                 <span>Adicionar</span>
 

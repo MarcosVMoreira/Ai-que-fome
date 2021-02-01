@@ -10,7 +10,7 @@
   justify-items: center;
 
   &_detail {
-    margin: 40px 0 !important;
+    margin: 40px 0 100px !important;
 
     &__image {
       width: 100%;
@@ -86,8 +86,8 @@
   }
 
   &_cart {
-    background-color: blue;
-    width: 100%;
+    min-height: 100%;
+    box-shadow: -3px 0 10px -8px rgba(0, 0, 0, 20%);
   }
 }
 

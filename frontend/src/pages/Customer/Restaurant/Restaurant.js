@@ -1,4 +1,4 @@
-import { Button, Grid, InputBase, Snackbar } from '@material-ui/core';
+import { Button, Grid, Hidden, InputBase, Snackbar } from '@material-ui/core';
 import {
   ExpandLessRounded,
   ExpandMoreRounded,
@@ -9,6 +9,7 @@ import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, useParams } from 'react-router-dom';
 import empty from '../../../assets/icons/empty.svg';
+import { Cart } from '../../../components/Customer/Cart/Cart';
 import { MenuCard } from '../../../components/Customer/MenuCard/MenuCard';
 import { MenuModal } from '../../../components/Customer/MenuModal/MenuModal';
 import { RestaurantInfo } from '../../../components/Customer/RestaurantInfo/RestaurantInfo';
@@ -37,6 +38,7 @@ export const Restaurant = () => {
     restaurantId => dispatch(actions.fetchRestaurant(restaurantId)),
     [dispatch],
   );
+  const onAddCartItem = cart => dispatch(actions.addCartItem(cart));
 
   /* Functions */
   useEffect(() => {
@@ -78,11 +80,28 @@ export const Restaurant = () => {
   };
 
   const handleOpenMenuModal = item => {
-    console.log(item);
     setSelectedItem(item);
   };
 
-  const handleCloseMenuModal = () => {
+  const handleCloseMenuModal = item => {
+    if (item) {
+      onAddCartItem({
+        restaurant: restaurant.name,
+        restaurantFee: restaurant.fee || 0,
+        id: item.id,
+        itemName: item.name,
+        itemPrice: item.totalPrice,
+        itemAmount: item.amount,
+        subItems: item.options
+          .filter(el => el.amount)
+          .map(el => ({
+            subItemName: el.name,
+            subItemAmount: el.amount,
+            id: el.id,
+          })),
+      });
+    }
+
     setSelectedItem(null);
   };
 
@@ -233,7 +252,12 @@ export const Restaurant = () => {
               </Grid>
             </Grid>
           </Grid>
-          <div className={classes.container_cart}>{restaurant.name}</div>
+
+          <Hidden smDown>
+            <div className={classes.container_cart}>
+              <Cart />
+            </div>
+          </Hidden>
 
           {selectedItem && (
             <MenuModal
