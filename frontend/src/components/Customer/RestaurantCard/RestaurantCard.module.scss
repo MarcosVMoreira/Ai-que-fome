@@ -6,14 +6,14 @@
 
   &_grid {
     display: grid;
-    grid-template-columns: 30% 70%;
+    grid-template-columns: 25% 75%;
     grid-template-rows: 1fr;
     padding: 20px;
   }
 
   &_logo {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     border-radius: 100%;
     border: 1px solid #c3c3c350;
     object-fit: contain;

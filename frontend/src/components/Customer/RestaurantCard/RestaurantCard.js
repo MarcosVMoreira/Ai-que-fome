@@ -22,33 +22,35 @@ export const RestaurantCard = props => {
           className={classes.card_info}
         >
           <Grid item>
-            <span className={classes.card_title}>
-              {props.name ? props.name : 'PROPS.NAME'}
-            </span>
+            <span className={classes.card_title}>{props.name}</span>
           </Grid>
 
           <Grid item className={classes.card_subtitle}>
             <div className={classes.card_rating}>
               <Rating max={1} readOnly value={1} size="small" />
               <span className={classes.card_rate}>
-                {props.rate ? props.rate : 'PROPS.RATE'}
+                {props.rate.toFixed(2).replace('.', ',')}
               </span>
             </div>
             <span className={classes.card_separator}> • </span>
             <span className={classes.card_text}>
-              {categories[props.merchantType?.[0]] || 'PROPS.CATEGORY'}
+              {categories[props.type[0]]}
             </span>
             <span className={classes.card_separator}> • </span>
 
             <span className={classes.card_text}>
-              {props.distance ? props.distance : 'PROPS.DISTANCE'}
+              {props.distance.toFixed(1).replace('.', ',')} km
             </span>
           </Grid>
 
           <Grid item className={classes.card_subtitle}>
-            <span className={classes.card_text}>{props.duration}</span>
+            <span className={classes.card_text}>
+              {props.duration.toFixed(0).replace('.', ',')} min
+            </span>
             <span className={classes.card_separator}> • </span>
-            <span className={classes.card_text}>R$ 2,99</span>
+            <span className={classes.card_text}>
+              R${props.fee.toFixed(2).replace('.', ',')}
+            </span>
           </Grid>
         </Grid>
       </div>

@@ -184,7 +184,7 @@ export const Restaurant = () => {
                     <Grid container alignItems="center" item xs>
                       <Rating max={1} readOnly value={1} />
                       <span className={classes.container_detail__rate}>
-                        {restaurant.rate}
+                        {restaurant.rate.toFixed(2).replace('.', ',')}
                       </span>
                     </Grid>
                   </Grid>
