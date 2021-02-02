@@ -19,6 +19,7 @@ import { withRouter } from 'react-router-dom';
 import * as actions from '../../../store/actions/index';
 import { Logo } from '../../Shared/Logo/Logo';
 import { AddressModal } from '../AddressModal/AddressModal';
+import { CartPopover } from '../CartPopover/CartPopover';
 import { ProfilePopover } from '../ProfilePopover/ProfilePopover';
 import classes from './Navbar.module.scss';
 
@@ -27,7 +28,8 @@ export const Navbar = withRouter(props => {
   const [search, setSearch] = useState('');
   const [address, setAddress] = useState(null);
   const [modal, setModal] = useState(false);
-  const [popover, setPopover] = useState(null);
+  const [profilePopover, setProfilePopover] = useState(null);
+  const [cartPopover, setCartPopover] = useState(null);
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
@@ -58,7 +60,9 @@ export const Navbar = withRouter(props => {
 
   const handleModal = event => setModal(event);
 
-  const handlePopover = event => setPopover(event.currentTarget);
+  const handleProfilePopover = event => setProfilePopover(event.currentTarget);
+
+  const handleCartPopover = event => setCartPopover(event.currentTarget);
 
   const handleHome = () => props.history.push('/customer/home');
 
@@ -132,7 +136,7 @@ export const Navbar = withRouter(props => {
                 <Fab
                   variant="extended"
                   className={classes.navbar_fab}
-                  onClick={handlePopover}
+                  onClick={handleProfilePopover}
                 >
                   <AccountCircleRounded className={classes.navbar_fab__icon} />
                   Meu Perfil
@@ -140,7 +144,11 @@ export const Navbar = withRouter(props => {
               </Grid>
 
               <Grid item>
-                <Fab variant="extended" className={classes.navbar_fab}>
+                <Fab
+                  variant="extended"
+                  className={classes.navbar_fab}
+                  onClick={handleCartPopover}
+                >
                   <ShoppingCartRounded className={classes.navbar_fab__icon} />
                   Carrinho
                 </Fab>
@@ -157,7 +165,8 @@ export const Navbar = withRouter(props => {
         address={address}
       />
 
-      <ProfilePopover popover={popover} setPopover={setPopover} />
+      <ProfilePopover popover={profilePopover} setPopover={setProfilePopover} />
+      <CartPopover popover={cartPopover} setPopover={setCartPopover} />
     </AppBar>
   );
 });
