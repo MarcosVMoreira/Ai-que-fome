@@ -142,9 +142,13 @@ export const Cart = withRouter(() => {
 
           <Divider light />
 
-          <Grid item xs container justify="center">
-            <Button variant="contained" color="primary">
-              Escolher forma de pagamento
+          <Grid item xs>
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ width: '100%' }}
+            >
+              Fazer Pedido
             </Button>
           </Grid>
         </Grid>

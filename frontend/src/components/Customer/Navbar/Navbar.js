@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Badge,
   Fab,
   Grid,
   Hidden,
@@ -14,7 +15,7 @@ import {
   ShoppingCartRounded,
 } from '@material-ui/icons';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../../../store/actions/index';
 import { Logo } from '../../Shared/Logo/Logo';
@@ -30,6 +31,9 @@ export const Navbar = withRouter(props => {
   const [modal, setModal] = useState(false);
   const [profilePopover, setProfilePopover] = useState(null);
   const [cartPopover, setCartPopover] = useState(null);
+
+  /* Redux Selectors */
+  const cart = useSelector(state => state.cart.cart);
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
@@ -144,14 +148,21 @@ export const Navbar = withRouter(props => {
               </Grid>
 
               <Grid item>
-                <Fab
-                  variant="extended"
-                  className={classes.navbar_fab}
-                  onClick={handleCartPopover}
+                <Badge
+                  color="primary"
+                  invisible={cart?.length < 1}
+                  badgeContent={cart?.length}
+                  max={9}
                 >
-                  <ShoppingCartRounded className={classes.navbar_fab__icon} />
-                  Carrinho
-                </Fab>
+                  <Fab
+                    variant="extended"
+                    className={classes.navbar_fab}
+                    onClick={handleCartPopover}
+                  >
+                    <ShoppingCartRounded className={classes.navbar_fab__icon} />
+                    Carrinho
+                  </Fab>
+                </Badge>
               </Grid>
             </Grid>
           </Hidden>

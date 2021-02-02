@@ -87,6 +87,7 @@
 
   &_cart {
     min-height: 100%;
+    width: calc(100% - 16px);
     box-shadow: -3px 0 10px -8px rgba(0, 0, 0, 20%);
   }
 }

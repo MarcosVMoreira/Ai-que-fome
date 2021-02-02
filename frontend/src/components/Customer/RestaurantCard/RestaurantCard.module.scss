@@ -8,15 +8,16 @@
     display: grid;
     grid-template-columns: 25% 75%;
     grid-template-rows: 1fr;
-    padding: 20px;
+    padding: 20px 0;
   }
 
   &_logo {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 100%;
     border: 1px solid #c3c3c350;
     object-fit: contain;
+    justify-self: center;
   }
 
   &_info {

@@ -29,7 +29,7 @@ export const RestaurantCard = props => {
             <div className={classes.card_rating}>
               <Rating max={1} readOnly value={1} size="small" />
               <span className={classes.card_rate}>
-                {props.rate.toFixed(2).replace('.', ',')}
+                {props.rate.toFixed(1).replace('.', ',')}
               </span>
             </div>
             <span className={classes.card_separator}> • </span>

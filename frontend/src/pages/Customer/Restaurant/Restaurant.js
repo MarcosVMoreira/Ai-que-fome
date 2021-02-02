@@ -88,7 +88,7 @@ export const Restaurant = () => {
       onAddCartItem({
         restaurant: restaurant.name,
         restaurantFee: restaurant.fee || 0,
-        id: item.id,
+        id: item.id + Math.floor(Math.random() * (100 - 1) + 1),
         itemName: item.name,
         itemPrice: item.totalPrice,
         itemAmount: item.amount,

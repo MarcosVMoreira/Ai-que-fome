@@ -9,7 +9,7 @@ import {
   useMediaQuery,
   useTheme,
 } from '@material-ui/core';
-import { AddOutlined, RemoveOutlined } from '@material-ui/icons';
+import { AddOutlined, CloseRounded, RemoveOutlined } from '@material-ui/icons';
 import React, { Fragment, useEffect, useState } from 'react';
 import default_sku from '../../../assets/icons/default_sku.svg';
 import classes from './MenuModal.module.scss';
@@ -69,6 +69,10 @@ export const MenuModal = props => {
     }));
   };
 
+  const handleClose = () => {
+    props.close();
+  };
+
   useEffect(() => {
     setItem({
       ...props.item,
@@ -91,7 +95,24 @@ export const MenuModal = props => {
     >
       {item && (
         <Fragment>
-          <DialogTitle>{item.name}</DialogTitle>
+          <Grid container justify="space-between">
+            <Grid container item xs alignItems="center" justify="flex-start">
+              <DialogTitle>{item.name}</DialogTitle>
+            </Grid>
+
+            <Grid
+              container
+              item
+              xs={2}
+              sm={1}
+              alignItems="center"
+              justify="center"
+            >
+              <IconButton onClick={handleClose}>
+                <CloseRounded />
+              </IconButton>
+            </Grid>
+          </Grid>
 
           <DialogContent className={classes.modal}>
             <Grid container>
