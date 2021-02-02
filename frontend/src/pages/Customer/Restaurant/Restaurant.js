@@ -27,6 +27,8 @@ export const Restaurant = () => {
 
   /* Redux Selectors */
   const restaurant = useSelector(state => state.restaurant.restaurant);
+  const cart = useSelector(state => state.cart.cart);
+  const cartRestaurant = useSelector(state => state.cart.restaurant);
   const error = useSelector(state => state.signUp.error);
   const loading = useSelector(state => state.signUp.loading);
 
@@ -50,6 +52,13 @@ export const Restaurant = () => {
       setCategories(restaurant.categories);
     }
   }, [restaurant]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      'IFOOD_cart',
+      JSON.stringify({ cart: cart, restaurant: cartRestaurant }),
+    );
+  }, [cart, cartRestaurant]);
 
   /* Toggle Restaurant Info */
   const handleShowMore = () => {

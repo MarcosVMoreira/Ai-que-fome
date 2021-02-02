@@ -76,10 +76,11 @@ export const FETCH_RESTAURANT_FAIL = 'FETCH_RESTAURANT_FAIL';
 /*--------------------------------- CART ---------------------------------*/
 export const ADD_CART_ITEM = 'ADD_CART_ITEM';
 export const REMOVE_CART_ITEM = 'REMOVE_CART_ITEM';
-export const RESET_CART = 'RESET_CART';
+export const SET_CART = 'SET_CART';
 
 /*--------------------------------- RESETS ---------------------------------*/
 export const AUTH_RESET = 'AUTH_RESET';
 export const SIGNUP_RESET = 'SIGNUP_RESET';
 export const ERROR_RESET = 'ERROR_RESET';
 export const LOCATE_RESET = 'LOCATE_RESET';
+export const RESET_CART = 'RESET_CART';

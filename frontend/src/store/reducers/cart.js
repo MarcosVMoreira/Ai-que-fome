@@ -14,10 +14,20 @@ const removeCartItem = (state, payload) => {
   const cartCopy = [...state.cart];
   cartCopy.splice(payload, 1);
 
-  return { ...state, cart: [...cartCopy] };
+  if (cartCopy.length) {
+    return { ...state, cart: [...cartCopy] };
+  } else {
+    return initialState;
+  }
 };
 
+const setCart = (state, payload) => ({
+  restaurant: payload.restaurant,
+  cart: [...payload.cart],
+});
+
 const resetCart = () => ({
+  restaurant: null,
   cart: [],
 });
 
@@ -29,6 +39,8 @@ const reducer = (state = initialState, { type, payload }) => {
       return removeCartItem(state, payload);
     case actionTypes.RESET_CART:
       return resetCart();
+    case actionTypes.SET_CART:
+      return setCart(state, payload);
     default:
       return state;
   }

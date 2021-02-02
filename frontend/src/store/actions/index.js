@@ -5,7 +5,7 @@ export {
   authReset,
   errorReset,
 } from './auth';
-export { addCartItem, removeCartItem, resetCart } from './cart';
+export { addCartItem, cartCheckState, removeCartItem, resetCart } from './cart';
 export {
   customerData,
   customerEditAddress,

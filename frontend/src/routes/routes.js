@@ -30,13 +30,22 @@ export const Routes = () => {
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
-  const onCheckState = useCallback(() => dispatch(actions.authCheckState()), [
-    dispatch,
-  ]);
+  const onAuthCheckState = useCallback(
+    () => dispatch(actions.authCheckState()),
+    [dispatch],
+  );
+  const onCartCheckState = useCallback(
+    () => dispatch(actions.cartCheckState()),
+    [dispatch],
+  );
 
   useEffect(() => {
-    onCheckState();
-  }, [onCheckState]);
+    onCartCheckState();
+  }, [onCartCheckState]);
+
+  useEffect(() => {
+    onAuthCheckState();
+  }, [onAuthCheckState]);
 
   let routes;
   authenticated
