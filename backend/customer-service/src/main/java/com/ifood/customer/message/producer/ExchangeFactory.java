@@ -1,4 +1,4 @@
-package com.ifood.merchant.producer;
+package com.ifood.customer.message.producer;
 
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.core.ExchangeBuilder;

@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 public class MerchantAMQPConfig {
 
     public static final String QUEUE = "merchant-rated";
-    public static final String EXCHANGE_NAME = "merchant-rated";
+    public static final String EXCHANGE_NAME = "ifood-exchange";
     public static final String ROUTING_KEY = "";
 
     @Bean

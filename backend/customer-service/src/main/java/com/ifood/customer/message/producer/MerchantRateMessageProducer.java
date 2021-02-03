@@ -1,9 +1,9 @@
-package com.ifood.merchant.producer;
+package com.ifood.customer.message.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ifood.merchant.endpoint.model.entity.Merchant;
-import com.ifood.merchant.endpoint.model.entity.MerchantAsyncPayload;
+import com.ifood.customer.endpoint.model.entity.MerchantRate;
+import com.ifood.customer.endpoint.model.entity.MerchantRateAsyncPayload;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -13,25 +13,24 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 @NoArgsConstructor
-public class MerchantMessageProducer {
+public class MerchantRateMessageProducer {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    private static final String USER_EXCHANGE_NAME = "user-created";
+    private static final String EXCHANGE_NAME = "ifood-exchange";
 
-    public void sendMerchantDataToRabbit (Merchant merchant) {
+    public void sendRateDataToRabbit (MerchantRate merchantRate) {
         try {
-            MerchantAsyncPayload payload = MerchantAsyncPayload.builder()
-                    .email(merchant.getEmail())
-                    .id(merchant.getId())
+            MerchantRateAsyncPayload payload = MerchantRateAsyncPayload.builder()
+                    .merchantId(merchantRate.getMerchantId())
+                    .rate(merchantRate.getRate())
                     .build();
             String json = new ObjectMapper().writeValueAsString(payload);
-            rabbitTemplate.convertAndSend(USER_EXCHANGE_NAME, "", json);
+            rabbitTemplate.convertAndSend(EXCHANGE_NAME, "", json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
     }
-
 }

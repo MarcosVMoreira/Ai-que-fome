@@ -89,9 +89,9 @@ public class Merchant {
 
     private List<MerchantTypeEnum> merchantType;
 
-    private Float rate;
+    private Float rate = (float) 0;
 
-    private Integer rateAmount;
+    private Integer rateAmount = 0;
 
     private String description;
 

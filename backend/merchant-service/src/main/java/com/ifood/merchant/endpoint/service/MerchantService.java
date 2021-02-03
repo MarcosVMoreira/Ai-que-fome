@@ -362,6 +362,7 @@ public class MerchantService {
     /* Save received async rate */
 
     public void saveRate(String merchantId, Float rate) {
+        logger.info("Message consumed from merchant-rated queue.");
         Optional<Merchant> merchant = merchantRepository.findById(merchantId);
 
         if (!merchant.isPresent()) {
@@ -373,6 +374,10 @@ public class MerchantService {
         Float newRateValue = calculateRateValue(merchantObject.getRateAmount(), merchantObject.getRate(), rate);
 
         merchantObject.setRate(newRateValue);
+        merchantObject.setRateAmount(merchantObject.getRateAmount()+1);
+
+        logger.info("Saving new merchant rate... ");
+        merchantRepository.save(merchantObject);
     }
 
     private Float calculateRateValue(Integer rateAmount,
