@@ -52,7 +52,7 @@ public class MerchantService {
 
         /*TODO REFAZER TODO ESSE CÓDIGO MACARRÔNICO. A FILTRAGEM ESTÁ PATÉTICA DE MAL FEITA. SOLID FOI PRO ESPAÇO
         ACONSELHO VOCE A NÃO OLHAR O CÓDIGO QUE ESSE MÉTODO CHAMA PORQUE ESTÁ BEM TRISTE A SITUAÇÃO*/
-        return findCustomerDistanceFromMerchants(pageable, customerCoords, name, type, payment,
+        return findCustomerDistanceFromMerchantsInCity(pageable, customerCoords, name, type, payment,
                 distance, fee);
     }
 
@@ -84,10 +84,33 @@ public class MerchantService {
         return savedMerchant;
     }
 
-    public Merchant getMerchantById(String id) {
-        logger.info("Recuperando da base de dados todos registros utilizando o id {}", id);
-        return merchantRepository.findById(id)
+    public Merchant getMerchantById(String customerCoords, String id) {
+        logger.info("Recuperando da base de dados o merchant correspondente ao id {}", id);
+
+        Merchant merchant = merchantRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
+
+        if (merchant.getCoordinates().isEmpty()) {
+            throw new UnprocessableEntityException("400.009");
+        }
+
+        DistanceMatrixResponse googleMapsResponse =
+                integrationClient.calculateDistance(merchant.getCoordinates(), customerCoords);
+
+        List<DistanceMatrixElement> foundDistance = googleMapsResponse.getRows()
+                .stream()
+                .map(DistanceMatrixRow::getElements)
+                .collect(Collectors.toList())
+                .stream()
+                .map(distanceMatrixElements -> distanceMatrixElements.get(0))
+                .collect(Collectors.toList());
+
+        if (foundDistance.isEmpty()) {
+            throw new UnprocessableEntityException("400.008");
+        }
+
+        //montar aqui conversao do foundDistance para distance e fee e inserir no objeto do merchant
+        //e retornar esse obj
     }
 
     public Merchant getMerchantByEmail(String email) {
@@ -204,22 +227,19 @@ public class MerchantService {
         return merchantRepository.save(merchant.get());
     }
 
-
-    /* Infos calculation about delivery */
-
-    public List<FindDistanceResponse> findCustomerDistanceFromMerchants(Pageable pageable, String customerCoords,
-                                                                        String name,
-                                                                        String type, String payment,
-                                                                        Float distance, Float fee) {
+    public List<FindDistanceResponse> findCustomerDistanceFromMerchantsInCity(Pageable pageable, String customerCoords,
+                                                                              String name,
+                                                                              String type, String payment,
+                                                                              Float distance, Float fee) {
         String city = findCityFromCoordinates(customerCoords);
 
         List<Merchant> merchantsFilteredByCityNameTypePayment = filterMerchantByGivenFilters(pageable, name, city, type, payment);
 
-        List<String> merchantNames = merchantsFilteredByCityNameTypePayment.stream()
+        List<String> merchantsCoordinates = merchantsFilteredByCityNameTypePayment.stream()
                 .map(merchant -> String.join(",", merchant.getCoordinates()))
                 .collect(Collectors.toList());
 
-        DistanceMatrixResponse googleMapsResponse = integrationClient.calculateDistance(merchantNames, customerCoords);
+        DistanceMatrixResponse googleMapsResponse = integrationClient.calculateDistance(merchantsCoordinates, customerCoords);
 
         List<FindDistanceResponse> merchantList = buildMerchantListFromGoogleResponse(googleMapsResponse);
 
@@ -378,7 +398,7 @@ public class MerchantService {
         Float newRateValue = calculateRateValue(merchantObject.getRateAmount(), merchantObject.getRate(), rate);
 
         merchantObject.setRate(newRateValue);
-        merchantObject.setRateAmount(merchantObject.getRateAmount()+1);
+        merchantObject.setRateAmount(merchantObject.getRateAmount() + 1);
 
         logger.info("Saving new merchant rate... ");
         merchantRepository.save(merchantObject);

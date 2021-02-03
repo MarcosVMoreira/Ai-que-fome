@@ -95,4 +95,7 @@ public class Merchant {
 
     private String description;
 
+    private Float distance;
+
+    private Float fee;
 }
