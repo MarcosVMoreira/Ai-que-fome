@@ -47,7 +47,7 @@ public class MerchantService {
 
     public List<FindDistanceResponse> listAll(Pageable pageable, String customerCoords, String name,
                                               String type, String payment,
-                                              Integer distance, Float fee) {
+                                              Float distance, Float fee) {
         logger.info("Recuperando da base de dados todos os restaurantes com base nos filtros passados...");
 
         /*TODO REFAZER TODO ESSE CÓDIGO MACARRÔNICO. A FILTRAGEM ESTÁ PATÉTICA DE MAL FEITA. SOLID FOI PRO ESPAÇO
@@ -210,7 +210,7 @@ public class MerchantService {
     public List<FindDistanceResponse> findCustomerDistanceFromMerchants(Pageable pageable, String customerCoords,
                                                                         String name,
                                                                         String type, String payment,
-                                                                        Integer distance, Float fee) {
+                                                                        Float distance, Float fee) {
         String city = findCityFromCoordinates(customerCoords);
 
         List<Merchant> merchantsFilteredByCityNameTypePayment = filterMerchantByGivenFilters(pageable, name, city, type, payment);
@@ -268,6 +268,10 @@ public class MerchantService {
                 .filter(item -> item.getTypes().stream().anyMatch(s -> s.equals("administrative_area_level_2")))
                 .collect(Collectors.toList());
 
+        if (foundAddress.isEmpty()) {
+            throw new NotFoundException("400.008");
+        }
+
         return foundAddress.get(0).getLongName();
     }
 
@@ -277,7 +281,7 @@ public class MerchantService {
         List<String> paymentList = null;
 
         if (merchantsFilteredByCity.isEmpty()) {
-            throw new NotFoundException("400.009");
+            return merchantsFilteredByCity;
         }
 
         if (name != null && !name.isEmpty()) {
@@ -339,24 +343,24 @@ public class MerchantService {
         collect.stream()
                 .map(item -> merchantList.add(FindDistanceResponse
                         .builder()
-                        .distance(stringSplitterToInteger(item.getDistance().getText()))
-                        .duration(stringSplitterToInteger(item.getDuration().getText()))
+                        .distance(stringSplitterToFloat(item.getDistance().getText()))
+                        .duration(stringSplitterToFloat(item.getDuration().getText()))
                         .build()))
                 .collect(Collectors.toList());
 
         return merchantList;
     }
 
-    private Integer stringSplitterToInteger(String receivedString) {
-        return Integer.parseInt(receivedString.split(" ")[0]);
+    private Float stringSplitterToFloat(String receivedString) {
+        return Float.parseFloat(receivedString.split(" ")[0]);
     }
 
-    private Integer deliveryTimeCalculation(Integer distance, Integer baseTime) {
+    private Float deliveryTimeCalculation(Float distance, Float baseTime) {
         return distance * 5 + baseTime;
     }
 
-    private Float feeCalculation(Integer distance) {
-        return (float) (distance < 2 ? 0 : 1 + distance);
+    private Float feeCalculation(Float distance) {
+        return distance < 2 ? 0 : 1 + distance;
     }
 
     /* Save received async rate */

@@ -20,9 +20,9 @@ public class FindDistanceResponse {
 
     private String logo;
 
-    private Integer distance;
+    private Float distance;
 
-    private Integer duration;
+    private Float duration;
 
     private Float fee;
 
