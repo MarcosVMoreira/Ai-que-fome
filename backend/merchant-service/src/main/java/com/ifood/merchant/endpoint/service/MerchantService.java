@@ -265,6 +265,10 @@ public class MerchantService {
                 .filter(item -> item.getTypes().stream().anyMatch(s -> s.equals("administrative_area_level_2")))
                 .collect(Collectors.toList());
 
+        if (foundAddress.isEmpty()) {
+            throw new NotFoundException("400.008");
+        }
+
         return foundAddress.get(0).getLongName();
     }
 
@@ -274,7 +278,7 @@ public class MerchantService {
         List<String> paymentList = null;
 
         if (merchantsFilteredByCity.isEmpty()) {
-            throw new NotFoundException("400.009");
+            return merchantsFilteredByCity;
         }
 
         if (name != null && !name.isEmpty()) {
