@@ -24,7 +24,39 @@ export const fetchRestaurants = payload => {
     axios
       .get(`/merchant/merchants?customerCoords=${coordinates}`)
       .then(res => {
-        dispatch(fetchRestaurantsSuccess({ restaurants: res.data.content }));
+        dispatch(
+          fetchRestaurantsSuccess({
+            restaurants: res.data.content,
+            filter: false,
+          }),
+        );
+      })
+      .catch(err => {
+        dispatch(fetchRestaurantsFail({ error: err.response?.status || 500 }));
+      });
+  };
+};
+
+export const fetchRestaurantsFilter = payload => {
+  return dispatch => {
+    dispatch(fetchRestaurantsStart());
+
+    const coordinates = payload.coordinates.join(',');
+    let url = `/merchant/merchants?customerCoords=${coordinates}`;
+
+    if (payload.type) {
+      url += `&type=${payload.type}`;
+    }
+
+    axios
+      .get(url)
+      .then(res => {
+        dispatch(
+          fetchRestaurantsSuccess({
+            restaurants: res.data.content,
+            filter: true,
+          }),
+        );
       })
       .catch(err => {
         dispatch(fetchRestaurantsFail({ error: err.response?.status || 500 }));

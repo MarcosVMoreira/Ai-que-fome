@@ -37,7 +37,7 @@ export const Navbar = withRouter(props => {
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
-  const fetchRestaurants = useCallback(
+  const onFetchRestaurants = useCallback(
     payload => dispatch(actions.fetchRestaurants(payload)),
     [dispatch],
   );
@@ -47,11 +47,13 @@ export const Navbar = withRouter(props => {
 
     if (storedAddress) {
       setAddress(JSON.parse(storedAddress));
-      fetchRestaurants({ coordinates: JSON.parse(storedAddress).coordinates });
+      onFetchRestaurants({
+        coordinates: JSON.parse(storedAddress).coordinates,
+      });
     } else {
       setModal(true);
     }
-  }, [fetchRestaurants]);
+  }, [onFetchRestaurants]);
 
   const handleSearch = event => setSearch(event.target.value);
 
@@ -59,7 +61,7 @@ export const Navbar = withRouter(props => {
     localStorage.setItem('IFOOD_address', JSON.stringify(address));
     setModal(false);
     setAddress(address);
-    fetchRestaurants({ coordinates: address.coordinates });
+    onFetchRestaurants({ coordinates: address.coordinates });
   };
 
   const handleModal = event => setModal(event);

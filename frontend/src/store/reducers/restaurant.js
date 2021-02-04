@@ -5,6 +5,7 @@ const initialState = {
   loading: false,
   restaurants: null,
   restaurant: null,
+  filter: false,
 };
 
 const fetchRestaurantsStart = state => ({
@@ -17,6 +18,7 @@ const fetchRestaurantsSuccess = (state, payload) => ({
   ...state,
   error: null,
   loading: false,
+  filter: payload.filter,
   restaurants: payload.restaurants,
 });
 
