@@ -48,9 +48,14 @@
   }
 
   &_text {
-    font-weight: 100;
     font-size: 0.9em;
     color: #535353;
+  }
+
+  &_free {
+    font-weight: 700;
+    font-size: 0.9em;
+    color: #50a773;
   }
 
   &_separator {

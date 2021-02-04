@@ -48,9 +48,13 @@ export const RestaurantCard = props => {
               {props.duration.toFixed(0).replace('.', ',')} min
             </span>
             <span className={classes.card_separator}> • </span>
-            <span className={classes.card_text}>
-              R${props.fee.toFixed(2).replace('.', ',')}
-            </span>
+            {props.fee !== 0.0 ? (
+              <span className={classes.card_text}>
+                R${props.fee.toFixed(2).replace('.', ',')}
+              </span>
+            ) : (
+              <span className={classes.card_free}>Grátis</span>
+            )}
           </Grid>
         </Grid>
       </div>

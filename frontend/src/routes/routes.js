@@ -22,6 +22,7 @@ import { Login as MerchantLogin } from '../pages/Merchant/Login/Login';
 import { Menu as MerchantMenu } from '../pages/Merchant/Menu/Menu';
 import { Restaurant as MerchantRestaurant } from '../pages/Merchant/Restaurant/Restaurant';
 import { SignUp as MerchantSignUp } from '../pages/Merchant/SignUp/SignUp';
+import { NotFound } from '../pages/NotFound/NotFound';
 import * as actions from '../store/actions/index';
 
 export const Routes = () => {
@@ -64,6 +65,7 @@ export const Routes = () => {
                   path="/customer/restaurant/:id"
                   component={CustomerRestaurant}
                 />
+                <Route path="/not-found" component={NotFound} />
                 <Redirect to="/customer/home" />
               </Switch>
             </Fragment>
@@ -78,6 +80,7 @@ export const Routes = () => {
                   component={MerchantRestaurant}
                 />
                 <Route path="/merchant/menu" component={MerchantMenu} />
+                <Route path="/not-found" component={NotFound} />
                 <Redirect to="/merchant/home" />
               </Switch>
             </Fragment>
@@ -96,6 +99,7 @@ export const Routes = () => {
             path="/merchant/signup"
             component={withRouter(MerchantSignUp)}
           />
+          <Route path="/not-found" component={NotFound} />
           <Route path="/" component={withRouter(CustomerLogin)} />
         </Switch>
       ));
