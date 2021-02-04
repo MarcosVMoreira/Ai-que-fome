@@ -5,6 +5,7 @@ export {
   authReset,
   errorReset,
 } from './auth';
+export { addCartItem, cartCheckState, removeCartItem, resetCart } from './cart';
 export {
   customerData,
   customerEditAddress,
@@ -18,4 +19,5 @@ export {
   merchantEditData,
   merchantPutCategories,
 } from './merchant';
+export { fetchRestaurant, fetchRestaurants } from './restaurant';
 export { customerSignUp, merchantSignUp, signUpReset } from './signup';

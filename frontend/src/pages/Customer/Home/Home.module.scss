@@ -1,4 +1,11 @@
 .home {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 25px auto;
+  padding: 0 25px;
+}
+
+@media (max-width: 600px) {
+  .home {
+    min-height: 125vh;
+  }
 }
