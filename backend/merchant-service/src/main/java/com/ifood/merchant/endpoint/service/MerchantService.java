@@ -94,8 +94,10 @@ public class MerchantService {
             throw new UnprocessableEntityException("400.009");
         }
 
+        String merchantCoordsByComma = String.join(",", merchant.getCoordinates());
+
         DistanceMatrixResponse googleMapsResponse =
-                integrationClient.calculateDistance(merchant.getCoordinates(), customerCoords);
+                integrationClient.calculateDistance(Arrays.asList(merchantCoordsByComma), customerCoords);
 
         List<DistanceMatrixElement> foundDistance = googleMapsResponse.getRows()
                 .stream()
@@ -105,12 +107,17 @@ public class MerchantService {
                 .map(distanceMatrixElements -> distanceMatrixElements.get(0))
                 .collect(Collectors.toList());
 
-        if (foundDistance.isEmpty()) {
+        if (foundDistance.isEmpty() || foundDistance.get(0).getStatus().equals("NOT_FOUND")) {
             throw new UnprocessableEntityException("400.008");
         }
 
-        //montar aqui conversao do foundDistance para distance e fee e inserir no objeto do merchant
-        //e retornar esse obj
+        Float distance = stringSplitterToFloat(foundDistance.get(0).getDistance().getText());
+
+        merchant.setDistance(distance);
+
+        merchant.setFee(feeCalculation(distance));
+
+        return merchant;
     }
 
     public Merchant getMerchantByEmail(String email) {
