@@ -81,7 +81,6 @@ export const Navbar = withRouter(props => {
     const storedAddress = localStorage.getItem('IFOOD_address');
 
     if (storedAddress) {
-      setAddress(JSON.parse(storedAddress));
       onFetchRestaurants({
         coordinates: JSON.parse(storedAddress).coordinates,
       });
