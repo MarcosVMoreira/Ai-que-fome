@@ -1,0 +1,44 @@
+.modal {
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+
+  &_input {
+    width: 100%;
+    padding: 8px;
+    margin: 20px;
+    border-radius: 24px;
+    background-color: #e0e0e0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.75;
+    letter-spacing: 0.02857em;
+
+    &__icon {
+      color: rgba(0, 0, 0, 0.54);
+      margin: 0 10px;
+    }
+  }
+
+  &_empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    & img {
+      width: 250px;
+      height: 210px;
+    }
+
+    & > span:first-of-type {
+      font-weight: 600;
+    }
+
+    & > span:last-child {
+      font-size: 0.8em;
+      font-weight: 100;
+      color: #535353;
+    }
+  }
+}

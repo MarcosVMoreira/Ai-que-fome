@@ -2,8 +2,10 @@ import { Grid, Snackbar } from '@material-ui/core';
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
+import empty_restaurants from '../../../assets/icons/empty_restaurants.svg';
 import { CategoriesCarousel } from '../../../components/Customer/CategoriesCarousel/CategoriesCarousel';
 import { RestaurantCard } from '../../../components/Customer/RestaurantCard/RestaurantCard';
+import { RestaurantFilter } from '../../../components/Customer/RestaurantFilter/RestaurantFilter';
 import { Spinner } from '../../../components/Shared/Spinner/Spinner';
 import { Toast } from '../../../components/Shared/Toast/Toast';
 import classes from './Home.module.scss';
@@ -55,22 +57,46 @@ export const Home = () => {
       {redirect}
       {toast}
 
+      <CategoriesCarousel />
+
+      <Grid container className={classes.home_title}>
+        <h3>Restaurantes e Mercados</h3>
+      </Grid>
+
+      <Grid
+        container
+        alignItems="center"
+        justify="flex-start"
+        wrap="nowrap"
+        className={classes.home_filter}
+      >
+        <RestaurantFilter />
+      </Grid>
+
       {loading || !restaurants ? (
         <Spinner />
       ) : (
         <Fragment>
-          <CategoriesCarousel />
-
-          <h3>Restaurantes e Mercados</h3>
-          <Grid container spacing={3}>
-            {restaurants.map(res => (
-              <Grid key={res.merchantId} item xs={12} sm={6} lg={4}>
-                <Link to={`restaurant/${res.merchantId}`}>
-                  <RestaurantCard {...res} />
-                </Link>
-              </Grid>
-            ))}
-          </Grid>
+          {restaurants.length ? (
+            <Grid container spacing={3}>
+              {restaurants.map(res => (
+                <Grid key={res.merchantId} item xs={12} sm={6} lg={4}>
+                  <Link to={`restaurant/${res.merchantId}`}>
+                    <RestaurantCard {...res} />
+                  </Link>
+                </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <div className={classes.home_empty}>
+              <img
+                src={empty_restaurants}
+                alt="ilustração de chefe de cozinha"
+              />
+              <span>Nenhum restaurante encontrado</span>
+              <span>Tente pesquisar com outros termos</span>
+            </div>
+          )}
         </Fragment>
       )}
     </div>

@@ -9,6 +9,7 @@
     grid-template-columns: 25% 75%;
     grid-template-rows: 1fr;
     padding: 20px 0;
+    align-items: center;
   }
 
   &_logo {
@@ -52,6 +53,14 @@
     color: #535353;
   }
 
+  &_category {
+    font-size: 0.9em;
+    color: #535353;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   &_free {
     font-weight: 700;
     font-size: 0.9em;
@@ -60,5 +69,26 @@
 
   &_separator {
     color: #606060;
+  }
+}
+
+@media (max-width: 1024px) {
+  .card {
+    &_grid {
+      display: grid;
+      grid-template-columns: 20% 80%;
+      grid-template-rows: 1fr;
+      padding: 10px 0;
+    }
+
+    &_logo {
+      width: 50px;
+      height: 50px;
+    }
+
+    &_info {
+      border-left: 1px solid #c3c3c350;
+      padding-left: 10px;
+    }
   }
 }

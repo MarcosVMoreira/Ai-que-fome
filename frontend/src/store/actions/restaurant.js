@@ -24,7 +24,55 @@ export const fetchRestaurants = payload => {
     axios
       .get(`/merchant/merchants?customerCoords=${coordinates}`)
       .then(res => {
-        dispatch(fetchRestaurantsSuccess({ restaurants: res.data.content }));
+        dispatch(
+          fetchRestaurantsSuccess({
+            restaurants: res.data.content,
+            filter: false,
+          }),
+        );
+      })
+      .catch(err => {
+        dispatch(fetchRestaurantsFail({ error: err.response?.status || 500 }));
+      });
+  };
+};
+
+export const fetchRestaurantsFilter = payload => {
+  return dispatch => {
+    dispatch(fetchRestaurantsStart());
+
+    const coordinates = payload.coordinates.join(',');
+    let url = `/merchant/merchants?customerCoords=${coordinates}`;
+
+    if (payload.name) {
+      url += `&name=${payload.name}`;
+    }
+
+    if (payload.type) {
+      url += `&type=${payload.type}`;
+    }
+
+    if (payload.fee === 0 || payload.fee) {
+      url += `&fee=${payload.fee}`;
+    }
+
+    if (payload.payment) {
+      url += `&payment=${payload.payment}`;
+    }
+
+    if (payload.distance) {
+      url += `&distance=${payload.distance}`;
+    }
+
+    axios
+      .get(url)
+      .then(res => {
+        dispatch(
+          fetchRestaurantsSuccess({
+            restaurants: res.data.content,
+            filter: true,
+          }),
+        );
       })
       .catch(err => {
         dispatch(fetchRestaurantsFail({ error: err.response?.status || 500 }));
@@ -46,12 +94,15 @@ export const fetchRestaurantFail = payload => ({
   payload,
 });
 
-export const fetchRestaurant = restaurantId => {
+export const fetchRestaurant = payload => {
   return dispatch => {
     dispatch(fetchRestaurantStart());
 
+    const coordinates = payload.coordinates.join(',');
+    let url = `/merchant/merchants/${payload.id}?customerCoords=${coordinates}`;
+
     axios
-      .get(`/merchant/merchants/${restaurantId}`)
+      .get(url)
       .then(res => {
         dispatch(fetchRestaurantSuccess({ restaurant: res.data }));
       })

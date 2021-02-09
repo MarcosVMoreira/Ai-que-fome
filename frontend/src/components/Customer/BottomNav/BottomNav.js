@@ -14,12 +14,14 @@ import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { CartModal } from '../CartModal/CartModal';
 import { ProfileModal } from '../ProfileModal/ProfileModal';
+import { SearchModal } from '../SearchModal/SearchModal';
 import classes from './BottomNav.module.scss';
 
 export const BottomNav = withRouter(props => {
   const [value, setValue] = useState(0);
   const [profileModal, setProfileModal] = useState(false);
   const [cartModal, setCartModal] = useState(false);
+  const [searchModal, setSearchModal] = useState(false);
 
   /* Redux Selectors */
   const cart = useSelector(state => state.cart.cart);
@@ -28,11 +30,16 @@ export const BottomNav = withRouter(props => {
 
   const handleCartModal = event => setCartModal(event);
 
+  const handleSearchModal = event => setSearchModal(event);
+
   const handleChange = (event, value) => {
     switch (value) {
       case 0:
         setValue(value);
         props.history.push('/customer/home');
+        break;
+      case 1:
+        handleSearchModal(true);
         break;
       case 2:
         handleProfileModal(true);
@@ -41,7 +48,7 @@ export const BottomNav = withRouter(props => {
         handleCartModal(true);
         break;
       default:
-        handleProfileModal(false);
+        setValue(0);
         break;
     }
   };
@@ -78,6 +85,7 @@ export const BottomNav = withRouter(props => {
 
       <ProfileModal handleModal={handleProfileModal} modal={profileModal} />
       <CartModal handleModal={handleCartModal} modal={cartModal} />
+      <SearchModal handleModal={handleSearchModal} modal={searchModal} />
     </Fragment>
   );
 });
