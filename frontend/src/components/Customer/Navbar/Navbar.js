@@ -4,9 +4,11 @@ import {
   Fab,
   Grid,
   Hidden,
+  IconButton,
   InputBase,
   Toolbar,
 } from '@material-ui/core';
+import { CloseIcon } from '@material-ui/data-grid';
 import {
   AccountCircleRounded,
   ExpandMoreRounded,
@@ -41,6 +43,8 @@ export const Navbar = withRouter(props => {
     payload => dispatch(actions.fetchRestaurants(payload)),
     [dispatch],
   );
+  const onFetchRestaurantsFilter = payload =>
+    dispatch(actions.fetchRestaurantsFilter(payload));
 
   useEffect(() => {
     const storedAddress = localStorage.getItem('IFOOD_address');
@@ -55,7 +59,34 @@ export const Navbar = withRouter(props => {
     }
   }, [onFetchRestaurants]);
 
-  const handleSearch = event => setSearch(event.target.value);
+  const handleSearch = event => {
+    setSearch(event.target.value);
+  };
+
+  const handleFilter = event => {
+    if (event.key === 'Enter') {
+      const storedAddress = localStorage.getItem('IFOOD_address');
+
+      if (storedAddress) {
+        onFetchRestaurantsFilter({
+          coordinates: JSON.parse(storedAddress).coordinates,
+          name: search,
+        });
+      }
+    }
+  };
+
+  const handleResetFilter = () => {
+    setSearch('');
+    const storedAddress = localStorage.getItem('IFOOD_address');
+
+    if (storedAddress) {
+      setAddress(JSON.parse(storedAddress));
+      onFetchRestaurants({
+        coordinates: JSON.parse(storedAddress).coordinates,
+      });
+    }
+  };
 
   const handleAddress = address => {
     localStorage.setItem('IFOOD_address', JSON.stringify(address));
@@ -99,8 +130,16 @@ export const Navbar = withRouter(props => {
                   placeholder="Procurar..."
                   value={search}
                   onChange={handleSearch}
+                  onKeyDown={handleFilter}
                   startAdornment={
                     <Search className={classes.navbar_input__icon} />
+                  }
+                  endAdornment={
+                    search && (
+                      <IconButton size="small" onClick={handleResetFilter}>
+                        <CloseIcon />
+                      </IconButton>
+                    )
                   }
                 />
               </Grid>

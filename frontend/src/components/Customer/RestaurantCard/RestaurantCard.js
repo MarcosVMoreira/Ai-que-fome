@@ -33,7 +33,7 @@ export const RestaurantCard = props => {
               </span>
             </div>
             <span className={classes.card_separator}> • </span>
-            <span className={classes.card_text}>
+            <span className={classes.card_category}>
               {categories[props.type[0]]}
             </span>
             <span className={classes.card_separator}> • </span>
