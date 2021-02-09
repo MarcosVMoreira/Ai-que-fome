@@ -11,9 +11,13 @@ export const RestaurantInfo = ({ restaurant }) => {
         <span> • </span>
         <span>{restaurant.basePreparationTime} min</span>
         <span> • </span>
-        <span>1,1 km</span>
+        <span>{restaurant.distance.toFixed(1).replace('.', ',')} km</span>
         <span> • </span>
-        <span>R$ 2,99</span>
+        {restaurant.fee !== 0.0 ? (
+          <span>R$ {restaurant.fee.toFixed(2).replace('.', ',')}</span>
+        ) : (
+          <span>Entrega Grátis</span>
+        )}
       </Grid>
 
       <Divider light />

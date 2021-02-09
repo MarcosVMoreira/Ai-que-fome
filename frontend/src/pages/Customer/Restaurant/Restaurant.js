@@ -44,7 +44,14 @@ export const Restaurant = () => {
 
   /* Functions */
   useEffect(() => {
-    onFetchRestaurant(id);
+    const storedAddress = localStorage.getItem('IFOOD_address');
+
+    if (storedAddress) {
+      onFetchRestaurant({
+        coordinates: JSON.parse(storedAddress).coordinates,
+        id: id,
+      });
+    }
   }, [onFetchRestaurant, id]);
 
   useEffect(() => {

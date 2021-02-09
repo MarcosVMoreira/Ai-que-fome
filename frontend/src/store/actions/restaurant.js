@@ -94,12 +94,15 @@ export const fetchRestaurantFail = payload => ({
   payload,
 });
 
-export const fetchRestaurant = restaurantId => {
+export const fetchRestaurant = payload => {
   return dispatch => {
     dispatch(fetchRestaurantStart());
 
+    const coordinates = payload.coordinates.join(',');
+    let url = `/merchant/merchants/${payload.id}?customerCoords=${coordinates}`;
+
     axios
-      .get(`/merchant/merchants/${restaurantId}`)
+      .get(url)
       .then(res => {
         dispatch(fetchRestaurantSuccess({ restaurant: res.data }));
       })
