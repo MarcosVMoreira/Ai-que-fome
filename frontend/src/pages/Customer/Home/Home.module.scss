@@ -7,6 +7,12 @@
     margin-bottom: 12px;
   }
 
+  &_filter {
+    margin-bottom: calc(12px + 1em);
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+
   &_empty {
     display: flex;
     flex-direction: column;

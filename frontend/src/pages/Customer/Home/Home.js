@@ -1,37 +1,20 @@
-import { Button, Grid, Snackbar } from '@material-ui/core';
+import { Grid, Snackbar } from '@material-ui/core';
 import React, { Fragment } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import empty_restaurants from '../../../assets/icons/empty_restaurants.svg';
 import { CategoriesCarousel } from '../../../components/Customer/CategoriesCarousel/CategoriesCarousel';
 import { RestaurantCard } from '../../../components/Customer/RestaurantCard/RestaurantCard';
+import { RestaurantFilter } from '../../../components/Customer/RestaurantFilter/RestaurantFilter';
 import { Spinner } from '../../../components/Shared/Spinner/Spinner';
 import { Toast } from '../../../components/Shared/Toast/Toast';
-import * as actions from '../../../store/actions/index';
 import classes from './Home.module.scss';
 
 export const Home = () => {
   /* Redux Selectors */
   const restaurants = useSelector(state => state.restaurant.restaurants);
-  const filter = useSelector(state => state.restaurant.filter);
   const error = useSelector(state => state.restaurant.error);
   const loading = useSelector(state => state.restaurant.loading);
-
-  /* Redux Dispatchers */
-  const dispatch = useDispatch();
-  const onFetchRestaurants = payload =>
-    dispatch(actions.fetchRestaurants(payload));
-
-  /* Functions */
-  const handleRestaurantsReset = () => {
-    const storedAddress = localStorage.getItem('IFOOD_address');
-
-    if (storedAddress) {
-      onFetchRestaurants({
-        coordinates: JSON.parse(storedAddress).coordinates,
-      });
-    }
-  };
 
   // Set Toast
   const setToast = message => {
@@ -74,32 +57,26 @@ export const Home = () => {
       {redirect}
       {toast}
 
+      <CategoriesCarousel />
+
+      <Grid container className={classes.home_title}>
+        <h3>Restaurantes e Mercados</h3>
+      </Grid>
+
+      <Grid
+        container
+        alignItems="center"
+        justify="flex-start"
+        wrap="nowrap"
+        className={classes.home_filter}
+      >
+        <RestaurantFilter />
+      </Grid>
+
       {loading || !restaurants ? (
         <Spinner />
       ) : (
         <Fragment>
-          <CategoriesCarousel />
-
-          <Grid
-            container
-            alignItems="center"
-            justify="space-between"
-            className={classes.home_title}
-          >
-            <h3>Restaurantes e Mercados</h3>
-
-            {filter && (
-              <Button
-                size="small"
-                color="primary"
-                variant="contained"
-                onClick={handleRestaurantsReset}
-              >
-                Limpar Filtros
-              </Button>
-            )}
-          </Grid>
-
           {restaurants.length ? (
             <Grid container spacing={3}>
               {restaurants.map(res => (

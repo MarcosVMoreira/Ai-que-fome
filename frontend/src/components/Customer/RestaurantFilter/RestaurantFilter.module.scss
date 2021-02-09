@@ -1,0 +1,31 @@
+.container {
+  &_fab {
+    box-shadow: none !important;
+  }
+
+  &_popover {
+    padding: 10px 5px 20px;
+    min-width: 250px;
+    max-width: 300px;
+    overflow: hidden;
+
+    &__title,
+    &__slider {
+      padding: 0 20px;
+    }
+
+    &__subtitle {
+      color: #a0a0a0;
+      font-size: 0.9em;
+      font-weight: 500;
+      padding: 0 20px;
+      margin-bottom: 1em;
+    }
+
+    &__list {
+      padding-left: 20px;
+      max-height: 20vh;
+      overflow-y: scroll;
+    }
+  }
+}

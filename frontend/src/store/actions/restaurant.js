@@ -44,8 +44,24 @@ export const fetchRestaurantsFilter = payload => {
     const coordinates = payload.coordinates.join(',');
     let url = `/merchant/merchants?customerCoords=${coordinates}`;
 
+    if (payload.name) {
+      url += `&name=${payload.name}`;
+    }
+
     if (payload.type) {
       url += `&type=${payload.type}`;
+    }
+
+    if (payload.fee === 0 || payload.fee) {
+      url += `&fee=${payload.fee}`;
+    }
+
+    if (payload.payment) {
+      url += `&payment=${payload.payment}`;
+    }
+
+    if (payload.distance) {
+      url += `&distance=${payload.distance}`;
     }
 
     axios
