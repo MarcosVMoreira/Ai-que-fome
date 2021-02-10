@@ -204,9 +204,12 @@ public class MerchantService {
         return merchantRepository.save(merchant.get());
     }
 
+<<<<<<< HEAD
 
     /* Infos calculation about delivery */
 
+=======
+>>>>>>> 42b9f924f709c3ef06cfd3feb91a8670d7e9c682
     public List<FindDistanceResponse> findCustomerDistanceFromMerchants(Pageable pageable, String customerCoords,
                                                                         String name,
                                                                         String type, String payment,
@@ -362,6 +365,7 @@ public class MerchantService {
     private Float feeCalculation(Float distance) {
         return distance < 2 ? 0 : 1 + distance;
     }
+<<<<<<< HEAD
 
     /* Save received async rate */
 
@@ -388,4 +392,6 @@ public class MerchantService {
                                      Float actualMerchantRateValue, Float rateGivenByCustomer) {
         return (actualMerchantRateValue + rateGivenByCustomer) / (rateAmount + 1);
     }
+=======
+>>>>>>> 42b9f924f709c3ef06cfd3feb91a8670d7e9c682
 }

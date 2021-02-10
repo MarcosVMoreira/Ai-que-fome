@@ -1,0 +1,43 @@
+.cart {
+  padding: 20px;
+
+  &_title {
+    font-weight: 700;
+    font-size: 1.3em;
+  }
+
+  &_subtitle {
+    font-size: 0.8em;
+    color: #666;
+  }
+
+  &_item {
+    &__title {
+      font-size: 0.9em;
+    }
+
+    &__subtitle {
+      font-size: 0.8em;
+      color: #666;
+    }
+  }
+
+  &_price {
+    font-size: 0.9em;
+
+    &__title {
+      font-size: 1em;
+      font-weight: 700;
+    }
+  }
+
+  &_image {
+    width: 90%;
+  }
+
+  &_empty {
+    font-weight: 700;
+    font-size: 0.9em;
+    padding: 20px 0;
+  }
+}

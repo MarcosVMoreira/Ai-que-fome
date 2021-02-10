@@ -1,11 +1,14 @@
 import {
   AppBar,
+  Badge,
   Fab,
   Grid,
   Hidden,
+  IconButton,
   InputBase,
   Toolbar,
 } from '@material-ui/core';
+import { CloseIcon } from '@material-ui/data-grid';
 import {
   AccountCircleRounded,
   ExpandMoreRounded,
@@ -13,40 +16,89 @@ import {
   Search,
   ShoppingCartRounded,
 } from '@material-ui/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import * as actions from '../../../store/actions/index';
 import { Logo } from '../../Shared/Logo/Logo';
 import { AddressModal } from '../AddressModal/AddressModal';
+import { CartPopover } from '../CartPopover/CartPopover';
 import { ProfilePopover } from '../ProfilePopover/ProfilePopover';
 import classes from './Navbar.module.scss';
 
 export const Navbar = withRouter(props => {
+  /* React State Hooks */
   const [search, setSearch] = useState('');
   const [address, setAddress] = useState(null);
   const [modal, setModal] = useState(false);
-  const [popover, setPopover] = useState(null);
+  const [profilePopover, setProfilePopover] = useState(null);
+  const [cartPopover, setCartPopover] = useState(null);
+
+  /* Redux Selectors */
+  const cart = useSelector(state => state.cart.cart);
+
+  /* Redux Dispatchers */
+  const dispatch = useDispatch();
+  const onFetchRestaurants = useCallback(
+    payload => dispatch(actions.fetchRestaurants(payload)),
+    [dispatch],
+  );
+  const onFetchRestaurantsFilter = payload =>
+    dispatch(actions.fetchRestaurantsFilter(payload));
 
   useEffect(() => {
     const storedAddress = localStorage.getItem('IFOOD_address');
 
     if (storedAddress) {
       setAddress(JSON.parse(storedAddress));
+      onFetchRestaurants({
+        coordinates: JSON.parse(storedAddress).coordinates,
+      });
     } else {
       setModal(true);
     }
-  }, []);
+  }, [onFetchRestaurants]);
 
-  const handleSearch = event => setSearch(event.target.value);
+  const handleSearch = event => {
+    setSearch(event.target.value);
+  };
+
+  const handleFilter = event => {
+    if (event.key === 'Enter') {
+      const storedAddress = localStorage.getItem('IFOOD_address');
+
+      if (storedAddress) {
+        onFetchRestaurantsFilter({
+          coordinates: JSON.parse(storedAddress).coordinates,
+          name: search,
+        });
+      }
+    }
+  };
+
+  const handleResetFilter = () => {
+    setSearch('');
+    const storedAddress = localStorage.getItem('IFOOD_address');
+
+    if (storedAddress) {
+      onFetchRestaurants({
+        coordinates: JSON.parse(storedAddress).coordinates,
+      });
+    }
+  };
 
   const handleAddress = address => {
     localStorage.setItem('IFOOD_address', JSON.stringify(address));
     setModal(false);
     setAddress(address);
+    onFetchRestaurants({ coordinates: address.coordinates });
   };
 
   const handleModal = event => setModal(event);
 
-  const handlePopover = event => setPopover(event.currentTarget);
+  const handleProfilePopover = event => setProfilePopover(event.currentTarget);
+
+  const handleCartPopover = event => setCartPopover(event.currentTarget);
 
   const handleHome = () => props.history.push('/customer/home');
 
@@ -77,8 +129,16 @@ export const Navbar = withRouter(props => {
                   placeholder="Procurar..."
                   value={search}
                   onChange={handleSearch}
+                  onKeyDown={handleFilter}
                   startAdornment={
                     <Search className={classes.navbar_input__icon} />
+                  }
+                  endAdornment={
+                    search && (
+                      <IconButton size="small" onClick={handleResetFilter}>
+                        <CloseIcon />
+                      </IconButton>
+                    )
                   }
                 />
               </Grid>
@@ -120,7 +180,7 @@ export const Navbar = withRouter(props => {
                 <Fab
                   variant="extended"
                   className={classes.navbar_fab}
-                  onClick={handlePopover}
+                  onClick={handleProfilePopover}
                 >
                   <AccountCircleRounded className={classes.navbar_fab__icon} />
                   Meu Perfil
@@ -128,10 +188,21 @@ export const Navbar = withRouter(props => {
               </Grid>
 
               <Grid item>
-                <Fab variant="extended" className={classes.navbar_fab}>
-                  <ShoppingCartRounded className={classes.navbar_fab__icon} />
-                  Carrinho
-                </Fab>
+                <Badge
+                  color="primary"
+                  invisible={cart?.length < 1}
+                  badgeContent={cart?.length}
+                  max={9}
+                >
+                  <Fab
+                    variant="extended"
+                    className={classes.navbar_fab}
+                    onClick={handleCartPopover}
+                  >
+                    <ShoppingCartRounded className={classes.navbar_fab__icon} />
+                    Carrinho
+                  </Fab>
+                </Badge>
               </Grid>
             </Grid>
           </Hidden>
@@ -145,7 +216,8 @@ export const Navbar = withRouter(props => {
         address={address}
       />
 
-      <ProfilePopover popover={popover} setPopover={setPopover} />
+      <ProfilePopover popover={profilePopover} setPopover={setProfilePopover} />
+      <CartPopover popover={cartPopover} setPopover={setCartPopover} />
     </AppBar>
   );
 });

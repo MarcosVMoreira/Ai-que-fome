@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 package com.ifood.merchant.configuration;
+=======
+package com.ifood.customer.configuration;
+>>>>>>> 42b9f924f709c3ef06cfd3feb91a8670d7e9c682
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

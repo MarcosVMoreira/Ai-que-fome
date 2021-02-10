@@ -10,6 +10,9 @@
     width: 75px;
     height: 75px;
     margin: 10px 0;
+    object-fit: contain;
+    border-radius: 100%;
+    border: 1px solid #c3c3c350;
   }
 
   &_title {

@@ -13,7 +13,7 @@ import {
   KeyboardArrowLeftRounded,
 } from '@material-ui/icons';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
-import { geocodeByPlaceId } from 'react-places-autocomplete';
+import { geocodeByPlaceId, getLatLng } from 'react-places-autocomplete';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../../store/actions/index';
 import { Spinner } from '../../Shared/Spinner/Spinner';
@@ -83,9 +83,14 @@ export const AddressModal = withWidth()(props => {
 
   // Get selected address information
   const handleSelect = (address, placeId) => {
-    geocodeByPlaceId(placeId).then(res =>
-      setSearchAddress({ value: res[0], submitted: true }),
-    );
+    geocodeByPlaceId(placeId).then(res => {
+      getLatLng(res[0]).then(({ lat, lng }) => {
+        console.log(lat, lng);
+      });
+      console.log(res[0].geometry.location.lat());
+      console.log(res[0].geometry.location.lng());
+      setSearchAddress({ value: res[0], submitted: true });
+    });
   };
 
   // On modal close we verify if the user has ate least one selected address,
