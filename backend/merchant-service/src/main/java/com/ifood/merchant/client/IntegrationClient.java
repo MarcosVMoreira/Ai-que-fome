@@ -1,10 +1,15 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 78be23350b70b2e90459fecaa93e25c1b658de6b
 package com.ifood.merchant.client;
 
 import com.ifood.merchant.configuration.ApplicationConfig;
 import com.ifood.merchant.endpoint.error.UnprocessableEntityException;
 import com.ifood.merchant.endpoint.model.entity.DistanceMatrixResponse;
 import com.ifood.merchant.endpoint.model.entity.GeocodeResponse;
+<<<<<<< HEAD
+=======
 =======
 package com.ifood.customer.client;
 
@@ -13,6 +18,7 @@ import com.ifood.customer.endpoint.error.UnprocessableEntityException;
 import com.ifood.customer.endpoint.model.entity.DistanceMatrixResponse;
 import com.ifood.customer.endpoint.model.entity.GeocodeResponse;
 >>>>>>> 42b9f924f709c3ef06cfd3feb91a8670d7e9c682
+>>>>>>> 78be23350b70b2e90459fecaa93e25c1b658de6b
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
