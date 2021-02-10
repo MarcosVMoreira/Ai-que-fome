@@ -89,30 +89,13 @@ public class Merchant {
 
     private List<MerchantTypeEnum> merchantType;
 
-<<<<<<< HEAD:backend/merchant-service/src/main/java/com/ifood/merchant/endpoint/model/entity/Merchant.java
     private Float rate = (float) 0;
 
     private Integer rateAmount = 0;
-=======
-<<<<<<< HEAD:backend/merchant-service/src/main/java/com/ifood/merchant/endpoint/model/entity/Merchant.java
-    private Float rate = (float) 0;
-=======
-    private Float rate;
->>>>>>> 42b9f924f709c3ef06cfd3feb91a8670d7e9c682:backend/merchant-service/src/main/java/com/ifood/customer/endpoint/model/entity/Merchant.java
->>>>>>> 78be23350b70b2e90459fecaa93e25c1b658de6b:backend/merchant-service/src/main/java/com/ifood/customer/endpoint/model/entity/Merchant.java
 
-    private Integer rateAmount = 0;
-
-<<<<<<< HEAD:backend/merchant-service/src/main/java/com/ifood/merchant/endpoint/model/entity/Merchant.java
     private Float distance;
 
     private Float fee;
-}
-=======
-<<<<<<< HEAD:backend/merchant-service/src/main/java/com/ifood/merchant/endpoint/model/entity/Merchant.java
-    private String description;
 
-=======
->>>>>>> 42b9f924f709c3ef06cfd3feb91a8670d7e9c682:backend/merchant-service/src/main/java/com/ifood/customer/endpoint/model/entity/Merchant.java
+    private String description;
 }
->>>>>>> 78be23350b70b2e90459fecaa93e25c1b658de6b:backend/merchant-service/src/main/java/com/ifood/customer/endpoint/model/entity/Merchant.java

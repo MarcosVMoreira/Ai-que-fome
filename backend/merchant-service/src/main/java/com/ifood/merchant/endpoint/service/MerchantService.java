@@ -7,6 +7,7 @@ import com.ifood.merchant.endpoint.error.BadRequestException;
 import com.ifood.merchant.endpoint.error.NotFoundException;
 import com.ifood.merchant.endpoint.error.UnprocessableEntityException;
 import com.ifood.merchant.endpoint.model.entity.Category;
+
 import com.ifood.merchant.endpoint.model.entity.DistanceMatrixElement;
 import com.ifood.merchant.endpoint.model.entity.DistanceMatrixResponse;
 import com.ifood.merchant.endpoint.model.entity.DistanceMatrixRow;
@@ -52,11 +53,7 @@ public class MerchantService {
 
         /*TODO REFAZER TODO ESSE CÓDIGO MACARRÔNICO. A FILTRAGEM ESTÁ PATÉTICA DE MAL FEITA. SOLID FOI PRO ESPAÇO
         ACONSELHO VOCE A NÃO OLHAR O CÓDIGO QUE ESSE MÉTODO CHAMA PORQUE ESTÁ BEM TRISTE A SITUAÇÃO*/
-<<<<<<< HEAD
-        return findCustomerDistanceFromMerchantsInCity(pageable, customerCoords, name, type, payment,
-=======
         return findCustomerDistanceFromMerchants(pageable, customerCoords, name, type, payment,
->>>>>>> 78be23350b70b2e90459fecaa93e25c1b658de6b
                 distance, fee);
     }
 
@@ -88,7 +85,6 @@ public class MerchantService {
         return savedMerchant;
     }
 
-<<<<<<< HEAD
     public Merchant getMerchantById(String customerCoords, String id) {
         logger.info("Recuperando da base de dados o merchant correspondente ao id {}", id);
 
@@ -123,12 +119,6 @@ public class MerchantService {
         merchant.setFee(feeCalculation(distance));
 
         return merchant;
-=======
-    public Merchant getMerchantById(String id) {
-        logger.info("Recuperando da base de dados todos registros utilizando o id {}", id);
-        return merchantRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
->>>>>>> 78be23350b70b2e90459fecaa93e25c1b658de6b
     }
 
     public Merchant getMerchantByEmail(String email) {
@@ -245,40 +235,20 @@ public class MerchantService {
         return merchantRepository.save(merchant.get());
     }
 
-<<<<<<< HEAD
-    public List<FindDistanceResponse> findCustomerDistanceFromMerchantsInCity(Pageable pageable, String customerCoords,
-                                                                              String name,
-                                                                              String type, String payment,
-                                                                              Float distance, Float fee) {
-=======
-<<<<<<< HEAD
-
-    /* Infos calculation about delivery */
-
-=======
->>>>>>> 42b9f924f709c3ef06cfd3feb91a8670d7e9c682
     public List<FindDistanceResponse> findCustomerDistanceFromMerchants(Pageable pageable, String customerCoords,
                                                                         String name,
                                                                         String type, String payment,
                                                                         Float distance, Float fee) {
->>>>>>> 78be23350b70b2e90459fecaa93e25c1b658de6b
         String city = findCityFromCoordinates(customerCoords);
 
         List<Merchant> merchantsFilteredByCityNameTypePayment = filterMerchantByGivenFilters(pageable, name, city, type, payment);
 
-<<<<<<< HEAD
-        List<String> merchantsCoordinates = merchantsFilteredByCityNameTypePayment.stream()
-                .map(merchant -> String.join(",", merchant.getCoordinates()))
-                .collect(Collectors.toList());
 
-        DistanceMatrixResponse googleMapsResponse = integrationClient.calculateDistance(merchantsCoordinates, customerCoords);
-=======
         List<String> merchantNames = merchantsFilteredByCityNameTypePayment.stream()
                 .map(merchant -> String.join(",", merchant.getCoordinates()))
                 .collect(Collectors.toList());
 
         DistanceMatrixResponse googleMapsResponse = integrationClient.calculateDistance(merchantNames, customerCoords);
->>>>>>> 78be23350b70b2e90459fecaa93e25c1b658de6b
 
         List<FindDistanceResponse> merchantList = buildMerchantListFromGoogleResponse(googleMapsResponse);
 
@@ -421,10 +391,6 @@ public class MerchantService {
     private Float feeCalculation(Float distance) {
         return distance < 2 ? 0 : 1 + distance;
     }
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 78be23350b70b2e90459fecaa93e25c1b658de6b
 
     /* Save received async rate */
 
@@ -441,11 +407,8 @@ public class MerchantService {
         Float newRateValue = calculateRateValue(merchantObject.getRateAmount(), merchantObject.getRate(), rate);
 
         merchantObject.setRate(newRateValue);
-<<<<<<< HEAD
-        merchantObject.setRateAmount(merchantObject.getRateAmount() + 1);
-=======
+
         merchantObject.setRateAmount(merchantObject.getRateAmount()+1);
->>>>>>> 78be23350b70b2e90459fecaa93e25c1b658de6b
 
         logger.info("Saving new merchant rate... ");
         merchantRepository.save(merchantObject);
@@ -455,9 +418,4 @@ public class MerchantService {
                                      Float actualMerchantRateValue, Float rateGivenByCustomer) {
         return (actualMerchantRateValue + rateGivenByCustomer) / (rateAmount + 1);
     }
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 42b9f924f709c3ef06cfd3feb91a8670d7e9c682
->>>>>>> 78be23350b70b2e90459fecaa93e25c1b658de6b
 }
