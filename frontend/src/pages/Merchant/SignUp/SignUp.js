@@ -719,7 +719,7 @@ export const SignUp = props => {
                     <FormControl
                       className={classes.card_select}
                       variant="outlined"
-                      error={!valid.categories && submitted}
+                      error={!valid.merchantType && submitted}
                     >
                       <InputLabel>Categorias</InputLabel>
                       <Select

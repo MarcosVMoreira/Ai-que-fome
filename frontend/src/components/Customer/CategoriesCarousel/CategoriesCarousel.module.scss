@@ -1,5 +1,5 @@
 .carousel {
-  padding: 10px 0;
+  padding: 25px 0 50px;
 
   &_item {
     display: flex;
@@ -41,7 +41,7 @@
     }
 
     > span {
-      color: #555;
+      color: #535353;
       font-weight: 500;
     }
 
@@ -55,10 +55,14 @@
   }
 
   & > button:nth-child(2) {
+    filter: invert(1);
+    border: 1px solid #ffffff10;
     left: 0%;
   }
 
   & > button:nth-child(3) {
+    filter: invert(1);
+    border: 1px solid #ffffff10;
     right: 0%;
   }
 }
