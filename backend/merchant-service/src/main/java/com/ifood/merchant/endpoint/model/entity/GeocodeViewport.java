@@ -1,4 +1,4 @@
-package com.ifood.merchant.endpoint.model.entity;
+package com.ifood.customer.endpoint.model.entity;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

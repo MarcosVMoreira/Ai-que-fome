@@ -1,4 +1,4 @@
-package com.ifood.merchant.endpoint.model.entity;
+package com.ifood.customer.endpoint.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -63,7 +63,6 @@ export const merchantSignUp = payload => {
       businessEnd: new Date(payload.businessEnd).toLocaleTimeString(),
       country: 'BR',
       availability: true,
-      rate: 5.0,
     };
 
     axios

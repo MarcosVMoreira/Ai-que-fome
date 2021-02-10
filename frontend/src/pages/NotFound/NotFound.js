@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Logo } from '../../components/UI/Logo/Logo';
+import { Logo } from '../../components/Shared/Logo/Logo';
 import * as actions from '../../store/actions/index';
 import classes from './NotFound.module.scss';
 
@@ -31,7 +31,7 @@ export const NotFound = props => {
 
               <Grid container item justify="center">
                 <span className={classes.card_title}>
-                  Sua fome foi parar em locais desconhecidos!
+                  Algo deu errado, verifique sua conexão e tente novamente
                 </span>
               </Grid>
             </CardContent>

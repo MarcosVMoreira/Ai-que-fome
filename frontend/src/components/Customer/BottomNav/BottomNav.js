@@ -1,4 +1,8 @@
-import { BottomNavigation, BottomNavigationAction } from '@material-ui/core';
+import {
+  Badge,
+  BottomNavigation,
+  BottomNavigationAction,
+} from '@material-ui/core';
 import {
   AccountCircleRounded,
   HomeRounded,
@@ -6,24 +10,45 @@ import {
   ShoppingCartRounded,
 } from '@material-ui/icons';
 import React, { Fragment, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { CartModal } from '../CartModal/CartModal';
 import { ProfileModal } from '../ProfileModal/ProfileModal';
+import { SearchModal } from '../SearchModal/SearchModal';
 import classes from './BottomNav.module.scss';
 
-export const BottomNav = () => {
+export const BottomNav = withRouter(props => {
   const [value, setValue] = useState(0);
-  const [modal, setModal] = useState(false);
+  const [profileModal, setProfileModal] = useState(false);
+  const [cartModal, setCartModal] = useState(false);
+  const [searchModal, setSearchModal] = useState(false);
 
-  const handleModal = event => setModal(event);
+  /* Redux Selectors */
+  const cart = useSelector(state => state.cart.cart);
+
+  const handleProfileModal = event => setProfileModal(event);
+
+  const handleCartModal = event => setCartModal(event);
+
+  const handleSearchModal = event => setSearchModal(event);
 
   const handleChange = (event, value) => {
-    setValue(value);
-
     switch (value) {
+      case 0:
+        setValue(value);
+        props.history.push('/customer/home');
+        break;
+      case 1:
+        handleSearchModal(true);
+        break;
       case 2:
-        handleModal(true);
+        handleProfileModal(true);
+        break;
+      case 3:
+        handleCartModal(true);
         break;
       default:
-        handleModal(false);
+        setValue(0);
         break;
     }
   };
@@ -42,13 +67,25 @@ export const BottomNav = () => {
           label="Meu Perfil"
           icon={<AccountCircleRounded />}
         />
+
         <BottomNavigationAction
           label="Carrinho"
-          icon={<ShoppingCartRounded />}
+          icon={
+            <Badge
+              color="primary"
+              invisible={cart?.length < 1}
+              badgeContent={cart?.length}
+              max={9}
+            >
+              <ShoppingCartRounded />
+            </Badge>
+          }
         />
       </BottomNavigation>
 
-      <ProfileModal handleModal={handleModal} modal={modal} />
+      <ProfileModal handleModal={handleProfileModal} modal={profileModal} />
+      <CartModal handleModal={handleCartModal} modal={cartModal} />
+      <SearchModal handleModal={handleSearchModal} modal={searchModal} />
     </Fragment>
   );
-};
+});
