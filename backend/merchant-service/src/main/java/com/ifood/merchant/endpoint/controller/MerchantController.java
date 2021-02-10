@@ -1,4 +1,7 @@
 <<<<<<< HEAD:backend/merchant-service/src/main/java/com/ifood/merchant/endpoint/controller/MerchantController.java
+=======
+<<<<<<< HEAD:backend/merchant-service/src/main/java/com/ifood/merchant/endpoint/controller/MerchantController.java
+>>>>>>> 42b9f924f709c3ef06cfd3feb91a8670d7e9c682:backend/merchant-service/src/main/java/com/ifood/customer/endpoint/controller/MerchantController.java
 package com.ifood.merchant.endpoint.controller;
 
 import com.ifood.merchant.endpoint.enumeration.AllowedPaymentEnum;
@@ -8,6 +11,8 @@ import com.ifood.merchant.endpoint.model.entity.FindDistanceResponse;
 import com.ifood.merchant.endpoint.model.entity.Merchant;
 import com.ifood.merchant.endpoint.model.entity.SKU;
 import com.ifood.merchant.endpoint.service.MerchantService;
+<<<<<<< HEAD:backend/merchant-service/src/main/java/com/ifood/merchant/endpoint/controller/MerchantController.java
+=======
 =======
 package com.ifood.customer.endpoint.controller;
 
@@ -19,6 +24,7 @@ import com.ifood.customer.endpoint.model.entity.Merchant;
 import com.ifood.customer.endpoint.model.entity.SKU;
 import com.ifood.customer.endpoint.service.MerchantService;
 >>>>>>> ea1da27764fdd5fab48aaa0ba609a94f47206181:backend/merchant-service/src/main/java/com/ifood/customer/endpoint/controller/MerchantController.java
+>>>>>>> 42b9f924f709c3ef06cfd3feb91a8670d7e9c682:backend/merchant-service/src/main/java/com/ifood/customer/endpoint/controller/MerchantController.java
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -44,6 +50,9 @@ public class MerchantController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
 <<<<<<< HEAD:backend/merchant-service/src/main/java/com/ifood/merchant/endpoint/controller/MerchantController.java
+=======
+<<<<<<< HEAD:backend/merchant-service/src/main/java/com/ifood/merchant/endpoint/controller/MerchantController.java
+>>>>>>> 42b9f924f709c3ef06cfd3feb91a8670d7e9c682:backend/merchant-service/src/main/java/com/ifood/customer/endpoint/controller/MerchantController.java
     public Page<FindDistanceResponse> listAll(@RequestParam @NotNull(message = "400.003") String customerCoords,
                                               @RequestParam(required = false) String name,
                                               @RequestParam(required = false) String type,
@@ -53,10 +62,13 @@ public class MerchantController {
                                               Pageable pageable) {
         return new PageImpl<>(merchantService.listAll(pageable, customerCoords, name, type, payment,
                 distance, fee));
+<<<<<<< HEAD:backend/merchant-service/src/main/java/com/ifood/merchant/endpoint/controller/MerchantController.java
+=======
 =======
     public Page<FindDistanceResponse> listAll(@RequestParam @NotNull(message = "400.003") String customerCoords, Pageable pageable) {
         return new PageImpl<>(merchantService.listAll(pageable, customerCoords));
 >>>>>>> ea1da27764fdd5fab48aaa0ba609a94f47206181:backend/merchant-service/src/main/java/com/ifood/customer/endpoint/controller/MerchantController.java
+>>>>>>> 42b9f924f709c3ef06cfd3feb91a8670d7e9c682:backend/merchant-service/src/main/java/com/ifood/customer/endpoint/controller/MerchantController.java
     }
 
     @PostMapping

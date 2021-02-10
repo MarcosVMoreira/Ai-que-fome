@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class MerchantAsyncPayload {
+public class MerchantRateAsyncPayload {
 
-    private String email;
+    private String merchantId;
 
-    private String id;
+    private Float rate;
 }

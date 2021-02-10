@@ -56,10 +56,10 @@ public class CustomerServiceTest {
             "Campinas", "Taquaral", "Brasil", "87654321",
             null, false, "", "");
 
-    private final Customer customer1 = new Customer("customer1Id", "joaozinho", "37991234567",
+    private final Customer customer1 = new Customer("joaozinho", "37991234567",
             "marcos.teste@email.com", "018931231283", asList(addressOne));
 
-    private final Customer customer2 = new Customer("customer2Id", "mariazinha", "35987123456",
+    private final Customer customer2 = new Customer("mariazinha", "35987123456",
             "maria.teste@email.com", "01891234567", asList(addressTwo));
 
     @Test
@@ -91,7 +91,7 @@ public class CustomerServiceTest {
     @Test
     public void whenFindCustomerByEmail_thenReturnCustomer() {
 
-        Optional<Customer> customer = Optional.of(new Customer("customerId", "mariazinha", "35987123459",
+        Optional<Customer> customer = Optional.of(new Customer("mariazinha", "35987123459",
                 "mariazinha.teste@email.com", "018673238477", asList(addressOne)));
 
         when(customerRepository.findByEmailIgnoreCaseContaining("mariazinha.teste@email.com")).

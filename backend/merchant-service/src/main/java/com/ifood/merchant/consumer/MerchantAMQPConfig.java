@@ -1,4 +1,4 @@
-package com.ifood.auth.message.consumer;
+package com.ifood.merchant.consumer;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class CustomerAMQPConfig {
+public class MerchantAMQPConfig {
 
-    public static final String QUEUE = "user-created";
+    public static final String QUEUE = "merchant-rated";
     public static final String EXCHANGE_NAME = "ifood-exchange";
     public static final String ROUTING_KEY = "";
 

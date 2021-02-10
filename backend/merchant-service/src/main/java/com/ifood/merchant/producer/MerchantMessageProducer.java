@@ -19,7 +19,7 @@ public class MerchantMessageProducer {
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    private static final String EXCHANGE_NAME = "user-created";
+    private static final String USER_EXCHANGE_NAME = "user-created";
 
     public void sendMerchantDataToRabbit (Merchant merchant) {
         try {
@@ -28,7 +28,7 @@ public class MerchantMessageProducer {
                     .id(merchant.getId())
                     .build();
             String json = new ObjectMapper().writeValueAsString(payload);
-            rabbitTemplate.convertAndSend(EXCHANGE_NAME, "", json);
+            rabbitTemplate.convertAndSend(USER_EXCHANGE_NAME, "", json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

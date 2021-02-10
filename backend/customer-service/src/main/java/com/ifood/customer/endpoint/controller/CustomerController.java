@@ -2,6 +2,7 @@ package com.ifood.customer.endpoint.controller;
 
 import com.ifood.customer.endpoint.model.dto.AddressDTO;
 import com.ifood.customer.endpoint.model.dto.CustomerDTO;
+import com.ifood.customer.endpoint.model.entity.MerchantRate;
 import com.ifood.customer.endpoint.service.CustomerServiceImpl;
 import io.swagger.annotations.Api;
 import org.springframework.data.domain.Page;
@@ -101,5 +102,10 @@ public class CustomerController {
 
     /****************** END ADDRESS ENDPOINTS ******************/
 
-
+    @PostMapping("/{customerId}/rates")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CustomerDTO saveRate (@PathVariable String customerId,
+                                 @Valid @RequestBody MerchantRate merchantRate) {
+        return customerServiceImpl.saveRate(customerId, merchantRate);
+    }
 }
