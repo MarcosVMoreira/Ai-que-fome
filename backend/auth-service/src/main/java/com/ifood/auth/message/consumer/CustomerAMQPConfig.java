@@ -13,24 +13,24 @@ import org.springframework.context.annotation.Configuration;
 public class CustomerAMQPConfig {
 
     public static final String QUEUE = "user-created";
-    public static final String EXCHANGE_NAME = "user-created";
+    public static final String EXCHANGE_NAME = "ifood-exchange";
     public static final String ROUTING_KEY = "";
 
     @Bean
-    public Exchange declareExchange () {
+    public Exchange declareExchange() {
         return ExchangeBuilder.directExchange(EXCHANGE_NAME)
                 .durable(true)
                 .build();
     }
 
     @Bean
-    public Queue declareQueue () {
+    public Queue declareQueue() {
         return QueueBuilder.durable(QUEUE)
                 .build();
     }
 
     @Bean
-    public Binding declareBinding (Exchange exchange, Queue queue) {
+    public Binding declareBinding(Exchange exchange, Queue queue) {
         return BindingBuilder.bind(queue)
                 .to(exchange)
                 .with(ROUTING_KEY)

@@ -117,7 +117,7 @@ public class CustomerRepositoryTest {
                 "Campinas", "Mansoes Sto Antonio", "Brasil", "12345678",
                 null, false, "", "");
 
-        Customer customer = new Customer("customer2Id", "Marcos", "35987123456",
+        Customer customer = new Customer("Marcos", "35987123456",
                 "maria.teste@email.com", "01891234567", asList(address));
 
         Exception exception = assertThrows(
@@ -134,7 +134,7 @@ public class CustomerRepositoryTest {
                 "Campinas", "Mansoes Sto Antonio", "Brasil", "12345678",
                 null, false, "", "");
 
-        Customer customer = new Customer("customer2Id", "", "35987123456",
+        Customer customer = new Customer("", "35987123456",
                 "maria.teste@email.com", "01891234567", asList(address));
 
         Exception exception = assertThrows(
@@ -151,7 +151,7 @@ public class CustomerRepositoryTest {
                 "Campinas", "Mansoes Sto Antonio", "Brasil", "12345678",
                 null, false, "", "");
 
-        Customer customer = new Customer("customer2Id", "", "35987123456",
+        Customer customer = new Customer("", "35987123456",
                 "maria.teste@email.com", "01891234567", asList(address));
 
         Exception exception = assertThrows(
@@ -168,7 +168,7 @@ public class CustomerRepositoryTest {
                 "", "Mansoes Sto Antonio", "Brasil", "12345678",
                 null, false, "", "");
 
-        Customer customer = new Customer("customer2Id", "", "35987123456",
+        Customer customer = new Customer("", "35987123456",
                 "maria.teste@email.com", "01891234567", asList(address));
 
         Exception exception = assertThrows(
@@ -185,7 +185,7 @@ public class CustomerRepositoryTest {
                 "Campinas", "", "Brasil", "12345678",
                 null, false, "", "");
 
-        Customer customer = new Customer("customer2Id", "", "35987123456",
+        Customer customer = new Customer("", "35987123456",
                 "maria.teste@email.com", "01891234567", asList(address));
 
         Exception exception = assertThrows(
@@ -202,7 +202,7 @@ public class CustomerRepositoryTest {
                 "Campinas", "Mansoes St Antonio", "", "12345678",
                 null, false, "", "");
 
-        Customer customer = new Customer("customer2Id", "", "35987123456",
+        Customer customer = new Customer("", "35987123456",
                 "maria.teste@email.com", "01891234567", asList(address));
 
         Exception exception = assertThrows(
@@ -219,7 +219,7 @@ public class CustomerRepositoryTest {
                 "Campinas", "Mansoes St Antonio", "Brasil", "",
                 null, false, "", "");
 
-        Customer customer = new Customer("customer2Id", "", "35987123456",
+        Customer customer = new Customer("", "35987123456",
                 "maria.teste@email.com", "01891234567", asList(address));
 
         Exception exception = assertThrows(

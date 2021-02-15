@@ -2,15 +2,17 @@ package com.ifood.customer.endpoint.service;
 
 import com.ifood.customer.endpoint.error.BadRequestException;
 import com.ifood.customer.endpoint.error.NotFoundException;
-import com.ifood.customer.endpoint.error.UnprocessableEntityException;
 import com.ifood.customer.endpoint.model.dto.AddressDTO;
 import com.ifood.customer.endpoint.model.dto.CustomerDTO;
 import com.ifood.customer.endpoint.model.entity.Address;
 import com.ifood.customer.endpoint.model.entity.Customer;
+import com.ifood.customer.endpoint.model.entity.MerchantRate;
 import com.ifood.customer.endpoint.model.mapper.AddressMapper;
 import com.ifood.customer.endpoint.model.mapper.CustomerMapper;
 import com.ifood.customer.endpoint.repository.CustomerRepository;
 import com.ifood.customer.message.producer.CustomerMessageProducer;
+import com.ifood.customer.message.producer.MerchantRateMessageProducer;
+import com.ifood.customer.endpoint.error.UnprocessableEntityException;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -18,9 +20,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -39,16 +45,21 @@ public class CustomerServiceImpl implements CustomerService {
 
     private CustomerMessageProducer messageProducer;
 
+    private MerchantRateMessageProducer merchantRateMessageProducer;
+
     @Autowired
-    public CustomerServiceImpl (CustomerRepository customerRepository, CustomerMapper customerMapper, AddressMapper addressMapper, CustomerMessageProducer messageProducer) {
+    public CustomerServiceImpl(CustomerRepository customerRepository,
+                               CustomerMapper customerMapper, AddressMapper addressMapper,
+                               CustomerMessageProducer messageProducer, MerchantRateMessageProducer merchantRateMessageProducer) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
         this.addressMapper = addressMapper;
         this.messageProducer = messageProducer;
+        this.merchantRateMessageProducer = merchantRateMessageProducer;
     }
 
     @Override
-    public List<CustomerDTO> listAll (Pageable pageable) {
+    public List<CustomerDTO> listAll(Pageable pageable) {
         logger.info("Recuperando da base de dados todos os clientes...");
         return customerRepository.findAll(pageable)
                 .stream()
@@ -57,7 +68,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO getCustomerById (String id) {
+    public CustomerDTO getCustomerById(String id) {
         logger.info("Recuperando da base de dados todos registros utilizando o id {}", id);
         return customerRepository.findById(id)
                 .map(customerMapper::customerToCustomerDTO)
@@ -65,14 +76,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO findCustomerByEmail (String email) {
+    public CustomerDTO findCustomerByEmail(String email) {
         return customerMapper.customerToCustomerDTO
                 (customerRepository.findByEmailIgnoreCaseContaining(email)
                         .orElseThrow(NotFoundException::new));
     }
 
     @Override
-    public CustomerDTO save (@Valid CustomerDTO customerDTO) {
+    public CustomerDTO save(@Valid CustomerDTO customerDTO) {
         logger.info("Criando nova entrada na base de dados...");
 
         //verificacao antiga se o customerDTO veio com email.
@@ -100,7 +111,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void delete (String id) {
+    public void delete(String id) {
         Optional<Customer> entity = customerRepository.findById(id);
 
         if (entity.isPresent()) {
@@ -109,7 +120,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO update (CustomerDTO customerDTO, String id) {
+    public CustomerDTO update(CustomerDTO customerDTO, String id) {
 
         //Lógica:
         //Se existe o id passado, então é possível fazer o update do elemento.
@@ -144,7 +155,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<String> saveAddress (String customerId, @Valid AddressDTO addressDTO) {
+    public List<String> saveAddress(String customerId, @Valid AddressDTO addressDTO) {
 
         List<String> list = new ArrayList<>();
 
@@ -174,7 +185,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<AddressDTO> listAllAddress (String idCustomer) {
+    public List<AddressDTO> listAllAddress(String idCustomer) {
 
         if (!customerRepository.findById(idCustomer).isPresent()) {
             throw new NotFoundException();
@@ -187,7 +198,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public AddressDTO getAddressById (String idCustomer, String idAddress) {
+    public AddressDTO getAddressById(String idCustomer, String idAddress) {
         Optional<Customer> customer = customerRepository.findById(idCustomer);
 
         if (!customer.isPresent()) {
@@ -203,7 +214,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO updateAddress (String idCustomer, String idAddress, @Valid AddressDTO address) {
+    public CustomerDTO updateAddress(String idCustomer, String idAddress, @Valid AddressDTO address) {
         Optional<Customer> customer = customerRepository.findById(idCustomer);
 
         if (!customer.isPresent()) {
@@ -225,7 +236,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteAddress (String idCustomer, String idAddress) {
+    public void deleteAddress(String idCustomer, String idAddress) {
         Optional<Customer> customer = customerRepository.findById(idCustomer);
 
         if (!customer.isPresent()) {
@@ -239,5 +250,47 @@ public class CustomerServiceImpl implements CustomerService {
             customer.get().setAddresses(addresses);
             customerRepository.save(customer.get());
         }
+    }
+
+    @Override
+    public CustomerDTO saveRate(String idCustomer, @Valid @RequestBody MerchantRate merchantRate) {
+        log.info("Saving new rate for customer {} and merchant {}", idCustomer, merchantRate.getId());
+        Optional<Customer> customer = customerRepository.findById(idCustomer);
+
+        if (!customer.isPresent()) {
+            log.info("Customer {} not found.", idCustomer);
+            throw new NotFoundException();
+        }
+
+        merchantRate.setId(new MerchantRate().getId());
+
+        if (Optional.ofNullable(customer.get().getMerchantRates())
+                .isPresent()) {
+            if (customer.get().getMerchantRates()
+                    .stream()
+                    .anyMatch(merchantRateItem -> merchantRate.getMerchantId()
+                            .equals(merchantRateItem.getMerchantId()))) {
+                log.info("Merchant {} already rated by customer.", merchantRate.getId());
+                throw new UnprocessableEntityException("422.005");
+            }
+
+            if (merchantRate.getRate() < 0 && merchantRate.getRate() > 5) {
+                log.info("Wrong rate value.");
+                throw new UnprocessableEntityException("422.006");
+            }
+
+            customer.get().getMerchantRates().add(merchantRate);
+        }
+
+        if (!Optional.ofNullable(customer.get().getMerchantRates()).isPresent()) {
+            customer.get()
+                    .setMerchantRates(Collections.singletonList(merchantRate));
+        }
+
+        log.info("Sending rate for RabbitMQ.");
+        merchantRateMessageProducer.sendRateDataToRabbit(merchantRate);
+
+        log.info("Saving rate.");
+        return customerMapper.customerToCustomerDTO(customerRepository.save(customer.get()));
     }
 }

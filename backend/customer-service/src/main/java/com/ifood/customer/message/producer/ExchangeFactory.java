@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ExchangeFactory {
 
-    public static String EXCHANGE_NAME = "user-created";
+    public static String EXCHANGE_NAME = "ifood-exchange";
 
     @Bean
-    public Exchange declareExchange () {
+    public Exchange declareExchange() {
         return ExchangeBuilder.directExchange(EXCHANGE_NAME)
                 .durable(true)
                 .build();

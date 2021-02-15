@@ -1,6 +1,7 @@
 package com.ifood.customer.endpoint.model.dto;
 
 import com.ifood.customer.endpoint.model.entity.Address;
+import com.ifood.customer.endpoint.model.entity.MerchantRate;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -27,4 +28,5 @@ public class CustomerDTO {
 
     private List<Address> addresses;
 
+    private List<MerchantRate> merchantRates;
 }
