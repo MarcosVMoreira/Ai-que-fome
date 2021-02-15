@@ -26,7 +26,7 @@ export const CartPopover = withRouter(props => {
         }}
       >
         <div className={classes.popover}>
-          <Cart />
+          <Cart button />
         </div>
       </Popover>
     </div>

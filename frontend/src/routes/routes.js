@@ -14,6 +14,7 @@ import { Navbar as MerchantNavbar } from '../components/Merchant/Navbar/Navbar';
 import { SideNav as MerchantSideNav } from '../components/Merchant/SideNav/SideNav';
 import { Home as CustomerHome } from '../pages/Customer/Home/Home';
 import { Login as CustomerLogin } from '../pages/Customer/Login/Login';
+import { Order } from '../pages/Customer/Order/Order';
 import { Profile as CustomerProfile } from '../pages/Customer/Profile/Profile';
 import { Restaurant as CustomerRestaurant } from '../pages/Customer/Restaurant/Restaurant';
 import { SignUp as CustomerSignUp } from '../pages/Customer/SignUp/SignUp';
@@ -55,9 +56,11 @@ export const Routes = () => {
           {authenticated === 'customer' ? (
             <Fragment>
               <CustomerNavbar />
+
               <Hidden mdUp>
                 <CustomerBottomNav />
               </Hidden>
+
               <Switch>
                 <Route path="/customer/home" component={CustomerHome} />
                 <Route path="/customer/profile" component={CustomerProfile} />
@@ -65,6 +68,7 @@ export const Routes = () => {
                   path="/customer/restaurant/:id"
                   component={CustomerRestaurant}
                 />
+                <Route path="/customer/order" component={Order} />
                 <Route path="/not-found" component={NotFound} />
                 <Redirect to="/customer/home" />
               </Switch>

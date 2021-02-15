@@ -102,19 +102,25 @@ export const Restaurant = () => {
   const handleCloseMenuModal = item => {
     if (item) {
       onAddCartItem({
-        restaurant: restaurant.name,
-        restaurantFee: restaurant.fee || 0,
-        id: item.id + Math.floor(Math.random() * (100 - 1) + 1),
-        itemName: item.name,
-        itemPrice: item.totalPrice,
-        itemAmount: item.amount,
-        subItems: item.options
-          .filter(el => el.amount)
-          .map(el => ({
-            subItemName: el.name,
-            subItemAmount: el.amount,
-            id: el.id,
-          })),
+        restaurant: {
+          id: restaurant.id,
+          restaurant: restaurant.name,
+          payments: restaurant.allowedPayments,
+          fee: restaurant.fee || 0,
+        },
+        cart: {
+          id: item.id + Math.floor(Math.random() * (100 - 1) + 1),
+          itemName: item.name,
+          itemPrice: item.totalPrice,
+          itemAmount: item.amount,
+          subItems: item.options
+            .filter(el => el.amount)
+            .map(el => ({
+              subItemName: el.name,
+              subItemAmount: el.amount,
+              id: el.id,
+            })),
+        },
       });
     }
 
@@ -271,7 +277,7 @@ export const Restaurant = () => {
 
           <Hidden smDown>
             <div className={classes.container_cart}>
-              <Cart />
+              <Cart button />
             </div>
           </Hidden>
 

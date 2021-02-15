@@ -6,8 +6,13 @@ const initialState = {
 };
 
 const addCartItem = (state, payload) => ({
-  restaurant: { name: payload.restaurant, fee: payload.restaurantFee },
-  cart: [...state.cart, { ...payload }],
+  restaurant: {
+    id: payload.restaurant.id,
+    name: payload.restaurant.restaurant,
+    fee: payload.restaurant.fee,
+    payments: payload.restaurant.payments,
+  },
+  cart: [...state.cart, { ...payload.cart }],
 });
 
 const removeCartItem = (state, payload) => {

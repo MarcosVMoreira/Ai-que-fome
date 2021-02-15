@@ -43,6 +43,7 @@ export const Navbar = withRouter(props => {
     payload => dispatch(actions.fetchRestaurants(payload)),
     [dispatch],
   );
+  const onResetCart = () => dispatch(actions.resetCart());
   const onFetchRestaurantsFilter = payload =>
     dispatch(actions.fetchRestaurantsFilter(payload));
 
@@ -92,6 +93,7 @@ export const Navbar = withRouter(props => {
     setModal(false);
     setAddress(address);
     onFetchRestaurants({ coordinates: address.coordinates });
+    onResetCart();
   };
 
   const handleModal = event => setModal(event);
