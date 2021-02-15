@@ -22,9 +22,8 @@ Atualmente, essas são as tecnologias que já foram utilizadas no backend, assim
 ✅ MongoDB  
 ✅ Docker  
 ✅ JUnit e Mockito  
-⬜️ RabbitMQ  
-⬜️ Kubernetes  
-⬜️ AWS EC2  
+✅ RabbitMQ  
+✅ Kubernetes   
 ⬜️ Redis
 
 Além disso, serão ou já foram usadas as seguintes _design patterns_ e técnicas:
@@ -35,8 +34,8 @@ Além disso, serão ou já foram usadas as seguintes _design patterns_ e técnic
 ✅ RestFUL APIs  
 ✅ Inversão de controle / Injeção de dependência  
 ✅ Mock object  
-⬜️ Produtor-consumidor  
-⬜️ Princípios SOLID
+✅ Produtor-consumidor  
+✅ Princípios SOLID
 
 # 📊 Frontend
 
