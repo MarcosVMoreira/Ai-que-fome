@@ -84,3 +84,4 @@ export const SIGNUP_RESET = 'SIGNUP_RESET';
 export const ERROR_RESET = 'ERROR_RESET';
 export const LOCATE_RESET = 'LOCATE_RESET';
 export const RESET_CART = 'RESET_CART';
+export const RESET_RESTAURANT = 'RESET_RESTAURANT';

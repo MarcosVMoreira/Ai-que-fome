@@ -49,6 +49,11 @@ const fetchRestaurantFail = (state, payload) => ({
   states: null,
 });
 
+const resetRestaurant = state => ({
+  ...state,
+  restaurant: null,
+});
+
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case actionTypes.FETCH_RESTAURANTS_START:
@@ -63,6 +68,8 @@ const reducer = (state = initialState, { type, payload }) => {
       return fetchRestaurantSuccess(state, payload);
     case actionTypes.FETCH_RESTAURANT_FAIL:
       return fetchRestaurantFail(state, payload);
+    case actionTypes.RESET_RESTAURANT:
+      return resetRestaurant(state);
     default:
       return state;
   }

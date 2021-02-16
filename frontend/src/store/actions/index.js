@@ -23,5 +23,6 @@ export {
   fetchRestaurant,
   fetchRestaurants,
   fetchRestaurantsFilter,
+  resetRestaurant,
 } from './restaurant';
 export { customerSignUp, merchantSignUp, signUpReset } from './signup';

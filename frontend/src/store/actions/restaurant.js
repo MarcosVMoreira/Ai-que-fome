@@ -111,3 +111,7 @@ export const fetchRestaurant = payload => {
       });
   };
 };
+
+export const resetRestaurant = () => ({
+  type: actionTypes.RESET_RESTAURANT,
+});
