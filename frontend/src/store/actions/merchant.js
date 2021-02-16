@@ -105,6 +105,7 @@ export const merchantPutCategories = categories => {
         description: sku.description,
         name: sku.name,
         price: sku.price,
+        image: sku.image,
         options: sku.options?.map(option => ({
           name: option.name,
           price: option.price,
