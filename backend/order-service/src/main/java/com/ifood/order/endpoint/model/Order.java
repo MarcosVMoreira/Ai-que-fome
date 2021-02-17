@@ -2,12 +2,12 @@ package com.ifood.order.endpoint.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ifood.order.endpoint.enumeration.OrderStatusEnum;
-import com.ifood.order.endpoint.enumeration.PaymentStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -19,6 +19,7 @@ import java.util.List;
 @Document
 @AllArgsConstructor
 @Builder
+@Validated
 public class Order {
 
     @Id
@@ -51,8 +52,7 @@ public class Order {
     @NotNull(message = "400.003")
     private BigDecimal deliveryFee;
 
-    @NotEmpty(message = "400.003")
-    private String deliveryAddress;
+    private Address deliveryAddress;
 
     @NotNull(message = "400.003")
     @JsonFormat(pattern = "HH:mm")
@@ -60,5 +60,4 @@ public class Order {
 
     @NotNull(message = "400.003")
     private OrderStatusEnum orderStatus;
-
 }

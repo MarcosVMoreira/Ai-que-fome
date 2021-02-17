@@ -1,6 +1,5 @@
 package com.ifood.order.endpoint.model;
 
-import com.ifood.order.endpoint.enumeration.PaymentStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +29,4 @@ public class Item {
 
     @NotEmpty(message = "400.003")
     private String comment;
-
-
-
 }

@@ -1,5 +1,6 @@
 package com.ifood.order.endpoint.model;
 
+import com.ifood.order.endpoint.enumeration.AllowedPaymentEnum;
 import com.ifood.order.endpoint.enumeration.PaymentStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,12 +18,11 @@ import java.math.BigDecimal;
 public class Payment {
 
     @NotEmpty(message = "400.003")
-    private String paymentName;
+    private AllowedPaymentEnum paymentName;
 
     @NotNull(message = "400.003")
     private BigDecimal value;
 
     @NotNull(message = "400.003")
     private PaymentStatusEnum paymentStatus;
-
 }

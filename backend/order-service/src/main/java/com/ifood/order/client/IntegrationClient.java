@@ -44,7 +44,7 @@ public class IntegrationClient {
             if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
                 return false;
             }
-            throw new UnprocessableEntityException("422.000");
+            throw new UnprocessableEntityException("422.002");
         }
     }
 
@@ -69,7 +69,7 @@ public class IntegrationClient {
             if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
                 return false;
             }
-            throw new UnprocessableEntityException("422.000");
+            throw new UnprocessableEntityException("422.003");
         }
     }
 }
