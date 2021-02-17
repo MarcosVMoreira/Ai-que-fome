@@ -59,7 +59,7 @@ public class MerchantController {
 
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Merchant getMerchantById(@RequestParam @NotNull(message = "400.003") String
+    public Merchant getMerchantById(@RequestParam(required = false) String
                                             customerCoords, @PathVariable String id) {
         return merchantService.getMerchantById(customerCoords, id);
     }

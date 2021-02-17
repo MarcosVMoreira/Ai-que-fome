@@ -40,5 +40,4 @@ public class OrderController {
         return ResponseEntity.created(componentsBuilder.path("order/orders/{id}").
                 buildAndExpand(orderService.save(order).getId()).toUri()).build();
     }
-
 }

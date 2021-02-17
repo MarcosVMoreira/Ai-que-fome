@@ -90,34 +90,36 @@ public class MerchantService {
         Merchant merchant = merchantRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
 
-        if (merchant.getCoordinates().isEmpty()) {
-            throw new UnprocessableEntityException("400.009");
+        if (customerCoords != null) {
+            if (merchant.getCoordinates().isEmpty()) {
+                throw new UnprocessableEntityException("400.009");
+            }
+
+            String merchantCoordsByComma = String.join(",", merchant.getCoordinates());
+
+            DistanceMatrixResponse googleMapsResponse =
+                    integrationClient.calculateDistance(Arrays.asList(merchantCoordsByComma), customerCoords);
+
+            List<DistanceMatrixElement> foundDistance = googleMapsResponse.getRows()
+                    .stream()
+                    .map(DistanceMatrixRow::getElements)
+                    .collect(Collectors.toList())
+                    .stream()
+                    .map(distanceMatrixElements -> distanceMatrixElements.get(0))
+                    .collect(Collectors.toList());
+
+            if (foundDistance.isEmpty() || foundDistance.get(0).getStatus().equals("NOT_FOUND")) {
+                throw new UnprocessableEntityException("400.008");
+            }
+
+            Float distance = stringSplitterToFloat(foundDistance.get(0).getDistance().getText());
+
+            merchant.setDistance(distance);
+
+            merchant.setFee(feeCalculation(distance));
+
+            merchant.setDuration(deliveryTimeCalculation(distance, merchant.getBasePreparationTime()));
         }
-
-        String merchantCoordsByComma = String.join(",", merchant.getCoordinates());
-
-        DistanceMatrixResponse googleMapsResponse =
-                integrationClient.calculateDistance(Arrays.asList(merchantCoordsByComma), customerCoords);
-
-        List<DistanceMatrixElement> foundDistance = googleMapsResponse.getRows()
-                .stream()
-                .map(DistanceMatrixRow::getElements)
-                .collect(Collectors.toList())
-                .stream()
-                .map(distanceMatrixElements -> distanceMatrixElements.get(0))
-                .collect(Collectors.toList());
-
-        if (foundDistance.isEmpty() || foundDistance.get(0).getStatus().equals("NOT_FOUND")) {
-            throw new UnprocessableEntityException("400.008");
-        }
-
-        Float distance = stringSplitterToFloat(foundDistance.get(0).getDistance().getText());
-
-        merchant.setDistance(distance);
-
-        merchant.setFee(feeCalculation(distance));
-
-        merchant.setDuration(deliveryTimeCalculation(distance, merchant.getBasePreparationTime()));
 
         return merchant;
     }
