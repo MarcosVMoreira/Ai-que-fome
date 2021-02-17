@@ -28,6 +28,9 @@ public class OrderService {
 
     public List<Order> listAll(Pageable pageable) {
         logger.info("Recuperando da base de dados todos os pedidos...");
+
+        //TODO CRIAR UM OrderResponse
+        //TODO PREENCHER O OBJETO MERCHANT COM LOGO E NOME DO MERCHANT
         return orderRepository.findAll(pageable)
                 .stream()
                 .collect(Collectors.toList());
