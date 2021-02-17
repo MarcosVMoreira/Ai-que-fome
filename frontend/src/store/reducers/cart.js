@@ -10,6 +10,7 @@ const addCartItem = (state, payload) => ({
     id: payload.restaurant.id,
     name: payload.restaurant.restaurant,
     fee: payload.restaurant.fee,
+    eta: payload.restaurant.eta,
     payments: payload.restaurant.payments,
   },
   cart: [...state.cart, { ...payload.cart }],

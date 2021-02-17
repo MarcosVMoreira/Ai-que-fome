@@ -4,6 +4,7 @@ import cartReducer from './cart';
 import customerReducer from './customer';
 import locateReducer from './locate';
 import merchantReducer from './merchant';
+import orderReducer from './order';
 import restaurantReducer from './restaurant';
 import signUpReducer from './signup';
 
@@ -15,4 +16,5 @@ export const rootReducer = combineReducers({
   merchant: merchantReducer,
   restaurant: restaurantReducer,
   cart: cartReducer,
+  order: orderReducer,
 });

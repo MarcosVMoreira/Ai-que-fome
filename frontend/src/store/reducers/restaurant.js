@@ -54,6 +54,13 @@ const resetRestaurant = state => ({
   restaurant: null,
 });
 
+const resetRestaurants = state => ({
+  ...state,
+  restaurants: null,
+  restaurant: null,
+  filter: false,
+});
+
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case actionTypes.FETCH_RESTAURANTS_START:
@@ -70,6 +77,8 @@ const reducer = (state = initialState, { type, payload }) => {
       return fetchRestaurantFail(state, payload);
     case actionTypes.RESET_RESTAURANT:
       return resetRestaurant(state);
+    case actionTypes.RESET_RESTAURANTS:
+      return resetRestaurants(state);
     default:
       return state;
   }

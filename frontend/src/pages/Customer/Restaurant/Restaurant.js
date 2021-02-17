@@ -48,12 +48,12 @@ export const Restaurant = () => {
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
+  const onAddCartItem = cart => dispatch(actions.addCartItem(cart));
+  const onResetCart = () => dispatch(actions.resetCart());
   const onFetchRestaurant = useCallback(
     restaurantId => dispatch(actions.fetchRestaurant(restaurantId)),
     [dispatch],
   );
-  const onAddCartItem = cart => dispatch(actions.addCartItem(cart));
-  const onResetCart = () => dispatch(actions.resetCart());
   const onResetRestaurant = useCallback(
     () => dispatch(actions.resetRestaurant()),
     [dispatch],
@@ -128,6 +128,7 @@ export const Restaurant = () => {
             id: restaurant.id,
             restaurant: restaurant.name,
             payments: restaurant.allowedPayments,
+            eta: restaurant.basePreparationTime + (restaurant.duration || 0),
             fee: restaurant.fee || 0,
           },
           cart: {

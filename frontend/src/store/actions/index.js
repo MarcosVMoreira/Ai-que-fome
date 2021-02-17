@@ -19,10 +19,12 @@ export {
   merchantEditData,
   merchantPutCategories,
 } from './merchant';
+export { newOrder } from './order';
 export {
   fetchRestaurant,
   fetchRestaurants,
   fetchRestaurantsFilter,
   resetRestaurant,
+  resetRestaurants,
 } from './restaurant';
 export { customerSignUp, merchantSignUp, signUpReset } from './signup';

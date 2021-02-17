@@ -20,11 +20,11 @@ export const merchantData = () => {
   return dispatch => {
     dispatch(merchantDataStart());
 
-    const merchantEmail = localStorage.getItem('IFOOD_email');
+    const merchantId = localStorage.getItem('IFOOD_udid');
 
-    if (merchantEmail) {
+    if (merchantId) {
       axios
-        .get(`/merchant/merchants/email/${merchantEmail}`)
+        .get(`/merchant/merchants/${merchantId}`)
         .then(res => {
           dispatch(merchantDataSuccess({ merchant: res.data }));
         })

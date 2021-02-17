@@ -78,6 +78,11 @@ export const ADD_CART_ITEM = 'ADD_CART_ITEM';
 export const REMOVE_CART_ITEM = 'REMOVE_CART_ITEM';
 export const SET_CART = 'SET_CART';
 
+/*--------------------------------- ORDER ---------------------------------*/
+export const NEW_ORDER_START = 'NEW_ORDER_START';
+export const NEW_ORDER_SUCCESS = 'NEW_ORDER_SUCCESS';
+export const NEW_ORDER_FAIL = 'NEW_ORDER_FAIL';
+
 /*--------------------------------- RESETS ---------------------------------*/
 export const AUTH_RESET = 'AUTH_RESET';
 export const SIGNUP_RESET = 'SIGNUP_RESET';
@@ -85,3 +90,4 @@ export const ERROR_RESET = 'ERROR_RESET';
 export const LOCATE_RESET = 'LOCATE_RESET';
 export const RESET_CART = 'RESET_CART';
 export const RESET_RESTAURANT = 'RESET_RESTAURANT';
+export const RESET_RESTAURANTS = 'RESET_RESTAURANTS';

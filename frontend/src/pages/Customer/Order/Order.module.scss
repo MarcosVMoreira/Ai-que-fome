@@ -90,3 +90,10 @@
     }
   }
 }
+
+// Changes the background on mobile
+@media (max-width: 600px) {
+  .container {
+    margin: 36px 20px 100px;
+  }
+}

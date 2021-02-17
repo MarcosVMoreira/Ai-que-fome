@@ -3,14 +3,15 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Divider,
   Grid,
   Tab,
   Tabs,
 } from '@material-ui/core';
 import { RoomTwoTone } from '@material-ui/icons';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import alelo from '../../../assets/icons/alelo.png';
 import dinheiro from '../../../assets/icons/dinheiro.png';
@@ -19,22 +20,23 @@ import sodexo from '../../../assets/icons/sodexo.png';
 import visa from '../../../assets/icons/visa.png';
 import vr from '../../../assets/icons/vr.png';
 import { Cart } from '../../../components/Customer/Cart/Cart';
+import * as actions from '../../../store/actions/index';
 import classes from './Order.module.scss';
 
-export const Order = withRouter(() => {
+export const Order = withRouter(props => {
   /* Redux Selectors */
   const cart = useSelector(state => state.cart.cart);
   const cartRestaurant = useSelector(state => state.cart.restaurant);
-  // const error = useSelector(state => state.order.error);
-  // const loading = useSelector(state => state.order.loading);
+  const error = useSelector(state => state.order.error);
+  const loading = useSelector(state => state.order.loading);
+  const orderId = useSelector(state => state.order.orderId);
 
   /* Redux Dispatchers */
-  // const dispatch = useDispatch();
-  // const onCustomerData = useCallback(() => dispatch(actions.customerData()), [
-  //   dispatch,
-  // ]);
-  // const onCustomerEditData = customer =>
-  //   dispatch(actions.customerEditData(customer));
+  const dispatch = useDispatch();
+  const onNewOrder = order => dispatch(actions.newOrder(order));
+  const onResetCart = useCallback(() => dispatch(actions.resetCart()), [
+    dispatch,
+  ]);
 
   /* React State Hooks */
   const [order, setOrder] = useState({
@@ -115,7 +117,7 @@ export const Order = withRouter(() => {
   ];
 
   /* Functions */
-  // Loads customer Data on page enter
+  // Set order and restaurant data on page enter
   useEffect(() => {
     const order = JSON.parse(localStorage.getItem('IFOOD_cart'));
     const address = JSON.parse(localStorage.getItem('IFOOD_address'));
@@ -130,6 +132,7 @@ export const Order = withRouter(() => {
     }
   }, []);
 
+  // Update cart on local Storage if the user interacts with it on order page
   useEffect(() => {
     localStorage.setItem(
       'IFOOD_cart',
@@ -137,7 +140,14 @@ export const Order = withRouter(() => {
     );
   }, [cart, cartRestaurant]);
 
-  // Changes each field state value when user types
+  // Redirects user to order status page on successful order and resets its cart
+  useEffect(() => {
+    if (orderId) {
+      onResetCart();
+    }
+  }, [orderId, onResetCart]);
+
+  // Set payment method upon payment click
   const handleChange = payment => {
     setOrder({
       ...order,
@@ -145,62 +155,63 @@ export const Order = withRouter(() => {
     });
   };
 
-  // On submit we first check if there are any invalid fields, if any we show the
-  // invalid fields with their respective errors, otherwise we proceed to edit the user information
+  // On submit we first check if payment method was selected then proceed to submit order
   const handleSubmit = () => {
     if (order.paymentMethod) {
-      console.log(order);
+      onNewOrder(order);
+
+      props.history.push(`/status/${orderId}`);
     }
   };
 
-  // let errorBlock;
-  // // If we get a 400 error, it means the user is trying to submit an incomplete form
-  // error === 400 &&
-  //   (errorBlock = (
-  //     <div className={classes.card_subtitle}>
-  //       Erro de de formulário, preencha todos os campos!
-  //     </div>
-  //   ));
-  // // Authentication error
-  // error === 401 &&
-  //   (errorBlock = (
-  //     <div className={classes.card_subtitle}>
-  //       Erro de autenticação, faça login novamente!
-  //     </div>
-  //   ));
-  // // Permission error
-  // error === 403 &&
-  //   (errorBlock = (
-  //     <div className={classes.card_subtitle}>
-  //       Erro de permissão, contate um administrador caso continue vendo este
-  //       erro!
-  //     </div>
-  //   ));
-  // // Customer error
-  // error === 404 &&
-  //   (errorBlock = (
-  //     <div className={classes.card_subtitle}>
-  //       Erro ao obter informações de usuário, tente novamente mais tarde
-  //     </div>
-  //   ));
-  // // Processing error
-  // error === 422 &&
-  //   (errorBlock = (
-  //     <div className={classes.card_subtitle}>
-  //       Erro de processamento, por favor contate um administrador!
-  //     </div>
-  //   ));
-  // // Server error
-  // (error === 500 || error === 503 || error === 504) &&
-  //   (errorBlock = (
-  //     <div className={classes.card_subtitle}>
-  //       Erro de servidor, por favor contate um administrador!
-  //     </div>
-  //   ));
+  let errorBlock;
+  // If we get a 400 error, it means the user is trying to submit an incomplete form
+  error === 400 &&
+    (errorBlock = (
+      <div className={classes.card_subtitle}>
+        Erro de de formulário, preencha todos os campos!
+      </div>
+    ));
+  // Authentication error
+  error === 401 &&
+    (errorBlock = (
+      <div className={classes.card_subtitle}>
+        Erro de autenticação, faça login novamente!
+      </div>
+    ));
+  // Permission error
+  error === 403 &&
+    (errorBlock = (
+      <div className={classes.card_subtitle}>
+        Erro de permissão, contate um administrador caso continue vendo este
+        erro!
+      </div>
+    ));
+  // Customer error
+  error === 404 &&
+    (errorBlock = (
+      <div className={classes.card_subtitle}>
+        Erro ao obter informações de usuário, tente novamente mais tarde
+      </div>
+    ));
+  // Processing error
+  error === 422 &&
+    (errorBlock = (
+      <div className={classes.card_subtitle}>
+        Erro de processamento, por favor contate um administrador!
+      </div>
+    ));
+  // Server error
+  (error === 500 || error === 503 || error === 504) &&
+    (errorBlock = (
+      <div className={classes.card_subtitle}>
+        Erro de servidor, por favor contate um administrador!
+      </div>
+    ));
 
   return (
     <div className={classes.container}>
-      {/* {errorBlock} */}
+      {errorBlock}
 
       <Grid
         container
@@ -220,6 +231,7 @@ export const Order = withRouter(() => {
           item
           md={5}
           sm={12}
+          xs={12}
         >
           <Tabs value={0} indicatorColor="primary" textColor="primary">
             <Tab label="Entrega" />
@@ -281,7 +293,7 @@ export const Order = withRouter(() => {
           <Divider light className={classes.container_divider} />
         </Grid>
 
-        <Grid item md={5} sm={12}>
+        <Grid item md={5} sm={12} xs={12}>
           <Card className={classes.card}>
             <CardContent>
               <Grid container justify="center" item sm={12}>
@@ -293,7 +305,7 @@ export const Order = withRouter(() => {
           <Divider light className={classes.container_divider} />
         </Grid>
 
-        <Grid item md={5} sm={12}>
+        <Grid item md={5} sm={12} xs={12}>
           <Button
             variant="contained"
             size="large"
@@ -301,7 +313,7 @@ export const Order = withRouter(() => {
             style={{ width: '100%' }}
             onClick={handleSubmit}
           >
-            Fazer Pedido
+            {loading ? <CircularProgress color="secondary" /> : 'Fazer Pedido'}
           </Button>
         </Grid>
       </Grid>

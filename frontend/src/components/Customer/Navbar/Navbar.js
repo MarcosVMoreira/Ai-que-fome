@@ -39,11 +39,15 @@ export const Navbar = withRouter(props => {
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
+  const onResetCart = () => dispatch(actions.resetCart());
+  const onResetRestaurants = useCallback(
+    () => dispatch(actions.resetRestaurants()),
+    [dispatch],
+  );
   const onFetchRestaurants = useCallback(
     payload => dispatch(actions.fetchRestaurants(payload)),
     [dispatch],
   );
-  const onResetCart = () => dispatch(actions.resetCart());
   const onFetchRestaurantsFilter = payload =>
     dispatch(actions.fetchRestaurantsFilter(payload));
 
@@ -58,7 +62,11 @@ export const Navbar = withRouter(props => {
     } else {
       setModal(true);
     }
-  }, [onFetchRestaurants]);
+
+    return () => {
+      onResetRestaurants();
+    };
+  }, [onFetchRestaurants, onResetRestaurants]);
 
   const handleSearch = event => {
     setSearch(event.target.value);
