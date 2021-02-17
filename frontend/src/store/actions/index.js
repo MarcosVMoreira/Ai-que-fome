@@ -19,7 +19,7 @@ export {
   merchantEditData,
   merchantPutCategories,
 } from './merchant';
-export { newOrder } from './order';
+export { newOrder, resetOrderId } from './order';
 export {
   fetchRestaurant,
   fetchRestaurants,

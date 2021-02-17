@@ -91,3 +91,6 @@ export const LOCATE_RESET = 'LOCATE_RESET';
 export const RESET_CART = 'RESET_CART';
 export const RESET_RESTAURANT = 'RESET_RESTAURANT';
 export const RESET_RESTAURANTS = 'RESET_RESTAURANTS';
+export const RESET_ORDER = 'RESET_ORDER';
+export const RESET_ORDERS = 'RESET_ORDERS';
+export const RESET_ORDER_ID = 'RESET_ORDER_ID';

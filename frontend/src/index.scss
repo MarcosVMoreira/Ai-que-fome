@@ -30,6 +30,10 @@ a {
   overflow-x: hidden !important;
 }
 
+.MuiTimelineItem-missingOppositeContent:before {
+  display: none;
+}
+
 /* custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

@@ -1,0 +1,39 @@
+.container {
+  height: calc(100vh - 236px);
+  margin: 36px auto 100px;
+  max-width: 1400px;
+
+  &_restaurant {
+    background: url('../../../assets/icons/delivery.png') no-repeat center;
+    background-blend-mode: color;
+    background-size: cover;
+    height: calc(100vh - 236px);
+    padding-left: 60px;
+
+    &__title {
+      font-size: 3em;
+      font-weight: 700;
+    }
+  }
+
+  &_status {
+    &__title {
+      font-size: 1.5em;
+      font-weight: 700;
+    }
+
+    &__item {
+      padding: 0 20px 80px !important;
+      text-align: left !important;
+    }
+  }
+}
+
+// Changes the background on mobile
+@media (max-width: 960px) {
+  .container {
+    &_status {
+      margin: 0 36px !important;
+    }
+  }
+}

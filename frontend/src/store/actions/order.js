@@ -73,3 +73,7 @@ export const newOrder = payload => {
     }
   };
 };
+
+export const resetOrderId = () => ({
+  type: actionTypes.RESET_ORDER_ID,
+});

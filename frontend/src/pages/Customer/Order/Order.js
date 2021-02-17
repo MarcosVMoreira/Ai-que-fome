@@ -31,10 +31,15 @@ export const Order = withRouter(props => {
   const loading = useSelector(state => state.order.loading);
   const orderId = useSelector(state => state.order.orderId);
 
+  const { history } = props;
+
   /* Redux Dispatchers */
   const dispatch = useDispatch();
   const onNewOrder = order => dispatch(actions.newOrder(order));
   const onResetCart = useCallback(() => dispatch(actions.resetCart()), [
+    dispatch,
+  ]);
+  const onResetOrderId = useCallback(() => dispatch(actions.resetOrderId()), [
     dispatch,
   ]);
 
@@ -144,8 +149,17 @@ export const Order = withRouter(props => {
   useEffect(() => {
     if (orderId) {
       onResetCart();
+      localStorage.setItem(
+        'IFOOD_cart',
+        JSON.stringify({ cart: [], restaurant: null }),
+      );
+      history.push(`/customer/order/status/${orderId}`);
     }
-  }, [orderId, onResetCart]);
+
+    return () => {
+      onResetOrderId();
+    };
+  }, [orderId, history, onResetCart, onResetOrderId]);
 
   // Set payment method upon payment click
   const handleChange = payment => {
@@ -159,8 +173,6 @@ export const Order = withRouter(props => {
   const handleSubmit = () => {
     if (order.paymentMethod) {
       onNewOrder(order);
-
-      props.history.push(`/status/${orderId}`);
     }
   };
 

@@ -26,6 +26,11 @@ const newOrderFail = (state, payload) => ({
   loading: false,
 });
 
+const resetOrderId = state => ({
+  ...state,
+  orderId: null,
+});
+
 const reducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case actionTypes.NEW_ORDER_START:
@@ -34,6 +39,8 @@ const reducer = (state = initialState, { type, payload }) => {
       return newOrderSuccess(state, payload);
     case actionTypes.NEW_ORDER_FAIL:
       return newOrderFail(state, payload);
+    case actionTypes.RESET_ORDER_ID:
+      return resetOrderId(state);
     default:
       return state;
   }

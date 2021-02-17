@@ -60,6 +60,7 @@ export const Restaurant = () => {
   );
 
   /* Functions */
+  // Fetch restaurant based on url id
   useEffect(() => {
     const storedAddress = localStorage.getItem('IFOOD_address');
 
@@ -75,12 +76,14 @@ export const Restaurant = () => {
     };
   }, [onFetchRestaurant, onResetRestaurant, id]);
 
+  // Set categories form fetched restaurant
   useEffect(() => {
     if (restaurant) {
       setCategories(restaurant.categories);
     }
   }, [restaurant]);
 
+  // Set local storage cart every time the user changes it
   useEffect(() => {
     localStorage.setItem(
       'IFOOD_cart',
@@ -88,12 +91,12 @@ export const Restaurant = () => {
     );
   }, [cart, cartRestaurant]);
 
-  /* Toggle Restaurant Info */
+  // Toggle Restaurant Info
   const handleShowMore = () => {
     setShowMore(state => !state);
   };
 
-  /* Search Input */
+  // Search Input
   const handleSearch = event => {
     let { value } = event.target;
 
@@ -101,7 +104,7 @@ export const Restaurant = () => {
     filterResults(value);
   };
 
-  /* Filter Results based on user Search */
+  // Filter Results based on user Search
   const filterResults = value => {
     setCategories(
       restaurant.categories
@@ -116,10 +119,12 @@ export const Restaurant = () => {
     );
   };
 
+  // Open Restaurant Item Menu Modal
   const handleOpenMenuModal = item => {
     setSelectedItem(item);
   };
 
+  // Adds item to cart and closes item menu modal
   const handleCloseMenuModal = item => {
     if (item) {
       if (!cartRestaurant || cartRestaurant.id === restaurant.id) {
@@ -153,6 +158,7 @@ export const Restaurant = () => {
     setSelectedItem(null);
   };
 
+  // Clears Cart if trying to add item from another restaurant
   const handleClearCart = clear => {
     if (clear) {
       onResetCart();
