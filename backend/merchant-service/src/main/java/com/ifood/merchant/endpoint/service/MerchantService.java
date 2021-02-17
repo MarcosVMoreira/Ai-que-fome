@@ -117,6 +117,8 @@ public class MerchantService {
 
         merchant.setFee(feeCalculation(distance));
 
+        merchant.setDuration(deliveryTimeCalculation(distance, merchant.getBasePreparationTime()));
+
         return merchant;
     }
 

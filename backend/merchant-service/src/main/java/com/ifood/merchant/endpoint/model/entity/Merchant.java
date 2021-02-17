@@ -96,4 +96,6 @@ public class Merchant {
     private Float distance;
 
     private Float fee;
+
+    private Float duration = 0F;
 }
