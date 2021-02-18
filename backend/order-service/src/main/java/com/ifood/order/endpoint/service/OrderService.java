@@ -1,7 +1,6 @@
 package com.ifood.order.endpoint.service;
 
 import com.ifood.order.client.IntegrationClient;
-import com.ifood.order.configuration.ApplicationConfig;
 import com.ifood.order.endpoint.error.UnprocessableEntityException;
 import com.ifood.order.endpoint.model.Order;
 import com.ifood.order.endpoint.repository.OrderRepository;
@@ -26,14 +25,33 @@ public class OrderService {
 
     private final IntegrationClient integrationClient;
 
-    public List<Order> listAll(Pageable pageable) {
+    public List<Order> listAll(Pageable pageable, String merchantId, String customerId) {
         logger.info("Recuperando da base de dados todos os pedidos...");
 
         //TODO CRIAR UM OrderResponse
         //TODO PREENCHER O OBJETO MERCHANT COM LOGO E NOME DO MERCHANT
-        return orderRepository.findAll(pageable)
-                .stream()
-                .collect(Collectors.toList());
+        List<Order> orders = null;
+
+        if (merchantId == null && customerId == null) {
+            orders = orderRepository.findAll(pageable)
+                    .stream()
+                    .collect(Collectors.toList());
+        }
+
+        if (merchantId != null) {
+            orders = orderRepository.findByIdMerchant(merchantId);
+        }
+
+        if (customerId != null) {
+            orders = orderRepository.findByIdCustomer(customerId);
+        }
+
+        if (merchantId != null && customerId != null ) {
+            orders = orderRepository
+                    .findByIdMerchantAndIdCustomer(merchantId, customerId);
+        }
+
+        return orders;
     }
 
     public Order save(Order order) {
