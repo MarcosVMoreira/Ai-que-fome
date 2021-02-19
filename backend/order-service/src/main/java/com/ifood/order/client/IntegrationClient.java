@@ -2,7 +2,7 @@ package com.ifood.order.client;
 
 import com.ifood.order.configuration.ApplicationConfig;
 import com.ifood.order.endpoint.error.UnprocessableEntityException;
-import lombok.NonNull;
+import com.ifood.order.endpoint.model.Merchant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -23,7 +23,7 @@ public class IntegrationClient {
     private final ApplicationConfig applicationConfig;
     private final RestTemplateBuilder restTemplateBuilder;
 
-    public boolean findMerchantById (String idMerchant) {
+    public Merchant findMerchantById (String idMerchant) {
         log.info("[Merchant Integration] Finding merchant by id");
         UriBuilder builder = UriComponentsBuilder.fromUriString(applicationConfig.getMerchantFindById() + idMerchant);
 
@@ -34,20 +34,19 @@ public class IntegrationClient {
         RequestEntity<?> requestEntity = RequestEntity.get(builder.build()).headers(headers).build();
 
         try {
-            ResponseEntity<Object> responseEntity = restTemplateBuilder.build()
-                    .exchange(requestEntity, Object.class);
-            return responseEntity.getStatusCode().equals(HttpStatus.OK);
+            ResponseEntity<Merchant> responseEntity = restTemplateBuilder.build()
+                    .exchange(requestEntity, Merchant.class);
+            return responseEntity.getBody();
         } catch (HttpStatusCodeException e) {
             log.error("[CSU] Error while trying to check if merchant exist. Status: {} \n Message: {}", e.getStatusCode(),
                     e.getResponseBodyAsString(),
                     e);
-            if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
-                return false;
-            }
-            throw new UnprocessableEntityException("422.002");
+            throw new UnprocessableEntityException("422.001");
         }
     }
 
+    //TODO refazer o esquema do findCustomerById para ficar parecido com
+    //findMerchantById, sem retornar boolean
     public boolean findCustomerById (String idCustomer) {
         log.info("[Customer Integration] Finding customer by id");
         UriBuilder builder = UriComponentsBuilder.fromUriString(applicationConfig.getCustomerFindById() + idCustomer);
@@ -66,10 +65,7 @@ public class IntegrationClient {
             log.error("[CSU] Error while trying to check if customer exist. Status: {} \n Message: {}", e.getStatusCode(),
                     e.getResponseBodyAsString(),
                     e);
-            if (e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
-                return false;
-            }
-            throw new UnprocessableEntityException("422.003");
+            throw new UnprocessableEntityException("422.002");
         }
     }
 }

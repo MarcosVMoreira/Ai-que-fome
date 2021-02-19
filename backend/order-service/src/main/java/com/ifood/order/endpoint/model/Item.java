@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Document
@@ -29,4 +30,6 @@ public class Item {
 
     @NotEmpty(message = "400.003")
     private String comment;
+
+    private List<SubItem> subItens;
 }

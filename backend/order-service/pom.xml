@@ -9,9 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>order-service</artifactId>
+    <artifactId>orderRequest-service</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>order-service</name>
+    <name>orderRequest-service</name>
     <description>Order microservice</description>
 
     <properties>
@@ -92,7 +92,7 @@
     </dependencyManagement>
 
     <build>
-        <finalName>order</finalName>
+        <finalName>orderRequest</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
