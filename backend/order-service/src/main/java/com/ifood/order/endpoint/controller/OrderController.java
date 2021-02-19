@@ -1,6 +1,7 @@
 package com.ifood.order.endpoint.controller;
 
 import com.ifood.order.endpoint.model.Order;
+import com.ifood.order.endpoint.model.request.OrderRequest;
 import com.ifood.order.endpoint.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,9 +33,9 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> save(@Valid @RequestBody Order order,
+    public ResponseEntity<Void> save(@Valid @RequestBody OrderRequest orderRequest,
                                      UriComponentsBuilder componentsBuilder) {
-        return ResponseEntity.created(componentsBuilder.path("order/orders/{id}").
-                buildAndExpand(orderService.save(order).getId()).toUri()).build();
+        return ResponseEntity.created(componentsBuilder.path("order/orderRequests/{id}").
+                buildAndExpand(orderService.save(orderRequest).getId()).toUri()).build();
     }
 }

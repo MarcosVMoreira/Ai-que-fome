@@ -1,8 +1,10 @@
-package com.ifood.order.endpoint.model;
+package com.ifood.order.endpoint.model.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ifood.order.endpoint.enumeration.OrderStatusEnum;
-import com.ifood.order.endpoint.model.request.OrderRequest;
+import com.ifood.order.endpoint.model.Address;
+import com.ifood.order.endpoint.model.Item;
+import com.ifood.order.endpoint.model.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,51 +23,39 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Validated
-public class Order {
-    @Id
-    private String id;
+public class OrderRequest {
 
-    private long code;
-
+    @NotEmpty(message = "400.003")
     private String idCustomer;
 
+    @NotEmpty(message = "400.003")
     private String idMerchant;
 
-    private String merchantLogo;
-
-    private String merchantName;
-
+    @NotNull(message = "400.003")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime createdAt;
 
+    @NotNull(message = "400.003")
     private Payment payment;
 
+    @NotNull(message = "400.003")
     private List<Item> items;
 
+    @NotNull(message = "400.003")
     private BigDecimal subTotal;
 
+    @NotNull(message = "400.003")
     private BigDecimal totalPrice;
 
+    @NotNull(message = "400.003")
     private BigDecimal deliveryFee;
 
     private Address deliveryAddress;
 
+    @NotNull(message = "400.003")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime deliveryDateTime;
 
+    @NotNull(message = "400.003")
     private OrderStatusEnum orderStatus;
-
-    public static Order valueOf(OrderRequest orderRequest) {
-        return Order.builder()
-            .idCustomer(orderRequest.getIdCustomer())
-            .idMerchant(orderRequest.getIdMerchant())
-            .createdAt(orderRequest.getCreatedAt())
-            .payment(orderRequest.getPayment())
-            .items(orderRequest.getItems())
-            .subTotal(orderRequest.getSubTotal())
-            .totalPrice(orderRequest.getTotalPrice())
-            .deliveryFee(orderRequest.getDeliveryFee())
-            .deliveryAddress(orderRequest.getDeliveryAddress())
-            .deliveryDateTime(orderRequest.getDeliveryDateTime())
-            .orderStatus(orderRequest.getOrderStatus())
-            .build();
-    }
 }

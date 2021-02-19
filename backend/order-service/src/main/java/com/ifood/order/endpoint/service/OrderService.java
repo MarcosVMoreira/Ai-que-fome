@@ -2,7 +2,9 @@ package com.ifood.order.endpoint.service;
 
 import com.ifood.order.client.IntegrationClient;
 import com.ifood.order.endpoint.error.UnprocessableEntityException;
+import com.ifood.order.endpoint.model.Merchant;
 import com.ifood.order.endpoint.model.Order;
+import com.ifood.order.endpoint.model.request.OrderRequest;
 import com.ifood.order.endpoint.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -30,41 +32,42 @@ public class OrderService {
 
         //TODO CRIAR UM OrderResponse
         //TODO PREENCHER O OBJETO MERCHANT COM LOGO E NOME DO MERCHANT
-        List<Order> orders = null;
+        List<Order> orderRequests = null;
 
         if (merchantId == null && customerId == null) {
-            orders = orderRepository.findAll(pageable)
+            orderRequests = orderRepository.findAll(pageable)
                     .stream()
                     .collect(Collectors.toList());
         }
 
         if (merchantId != null) {
-            orders = orderRepository.findByIdMerchant(merchantId);
+            orderRequests = orderRepository.findByIdMerchant(merchantId);
         }
 
         if (customerId != null) {
-            orders = orderRepository.findByIdCustomer(customerId);
+            orderRequests = orderRepository.findByIdCustomer(customerId);
         }
 
         if (merchantId != null && customerId != null ) {
-            orders = orderRepository
+            orderRequests = orderRepository
                     .findByIdMerchantAndIdCustomer(merchantId, customerId);
         }
 
-        return orders;
+        return orderRequests;
     }
 
-    public Order save(Order order) {
+    public Order save(OrderRequest orderRequest) {
         logger.info("Criando novo pedido na base de dados...");
 
-        boolean merchantExist = integrationClient.findMerchantById(order.getIdMerchant());
-        boolean customerExist = integrationClient.findCustomerById(order.getIdCustomer());
+        //TO DO ver o que aconteceu agora qnd passo um merchant q nao existe
+        Merchant merchantById = integrationClient.findMerchantById(orderRequest.getIdMerchant());
+        integrationClient.findCustomerById(orderRequest.getIdCustomer());
 
-        if (!merchantExist || !customerExist) {
-            throw new UnprocessableEntityException("422.001");
-        }
+        Order order = Order.valueOf(orderRequest);
 
         order.setCode(nextSequenceService.getNextSequence("DatabaseSequence"));
+        order.setMerchantLogo(merchantById.getLogo());
+        order.setMerchantName(merchantById.getName());
 
         return orderRepository.save(order);
     }
