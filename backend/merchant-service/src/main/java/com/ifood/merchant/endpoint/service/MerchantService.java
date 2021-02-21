@@ -52,7 +52,7 @@ public class MerchantService {
 
         /*TODO REFAZER TODO ESSE CÓDIGO MACARRÔNICO. A FILTRAGEM ESTÁ PATÉTICA DE MAL FEITA. SOLID FOI PRO ESPAÇO
         ACONSELHO VOCE A NÃO OLHAR O CÓDIGO QUE ESSE MÉTODO CHAMA PORQUE ESTÁ BEM TRISTE A SITUAÇÃO*/
-        return findCustomerDistanceFromMerchants(pageable, customerCoords, name, type, payment,
+        return findCustomerDistanceFromMerchants(pageable, customerCoords, name.toLowerCase(), type, payment,
                 distance, fee);
     }
 
@@ -306,8 +306,9 @@ public class MerchantService {
         return foundAddress.get(0).getLongName();
     }
 
-    private List<Merchant> filterMerchantByGivenFilters(Pageable pageable, String name, String city, String type, String payment) {
-        List<Merchant> merchantsFilteredByCity = merchantRepository.findByCity(pageable, city);
+    private List<Merchant> filterMerchantByGivenFilters(Pageable pageable, String name,
+                                                        String city, String type, String payment) {
+        List<Merchant> merchantsFilteredByCity = merchantRepository.findByCityIgnoreCase(pageable, city);
         List<String> typeList = null;
         List<String> paymentList = null;
 
@@ -318,7 +319,7 @@ public class MerchantService {
         if (name != null && !name.isEmpty()) {
             merchantsFilteredByCity =
                     merchantsFilteredByCity.stream()
-                            .filter(item -> item.getName().contains(name))
+                            .filter(item -> item.getName().toLowerCase().contains(name))
                             .collect(Collectors.toList());
         }
 

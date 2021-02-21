@@ -1,6 +1,5 @@
 package com.ifood.order.endpoint.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ifood.order.endpoint.enumeration.OrderStatusEnum;
 import com.ifood.order.endpoint.model.request.OrderRequest;
 import lombok.AllArgsConstructor;
@@ -10,8 +9,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.List;
