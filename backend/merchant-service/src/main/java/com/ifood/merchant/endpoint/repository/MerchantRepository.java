@@ -14,6 +14,5 @@ public interface MerchantRepository extends MongoRepository<Merchant, String> {
 
     Optional<Merchant> findByEmail(String email);
 
-    List<Merchant> findByCity(Pageable pageable, String city);
-
+    List<Merchant> findByCityIgnoreCase(Pageable pageable, String city);
 }

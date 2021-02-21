@@ -1,7 +1,12 @@
 package com.ifood.order.endpoint.controller;
 
+import com.ifood.order.endpoint.enumeration.OrderStatusEnum;
+import com.ifood.order.endpoint.enumeration.PaymentStatusEnum;
 import com.ifood.order.endpoint.model.Order;
+import com.ifood.order.endpoint.model.Payment;
 import com.ifood.order.endpoint.model.request.OrderRequest;
+import com.ifood.order.endpoint.model.request.UpdateOrderStatusRequest;
+import com.ifood.order.endpoint.model.request.UpdatePaymentStatusRequest;
 import com.ifood.order.endpoint.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Validated
@@ -37,5 +43,25 @@ public class OrderController {
                                      UriComponentsBuilder componentsBuilder) {
         return ResponseEntity.created(componentsBuilder.path("order/orderRequests/{id}").
                 buildAndExpand(orderService.save(orderRequest).getId()).toUri()).build();
+    }
+
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Order getOrderById(@PathVariable String id) {
+        return orderService.getOrderById(id);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping("/{orderId}/payment-status")
+    public Order updatePaymentStatus(@PathVariable String orderId,
+                                       @Valid @RequestBody UpdatePaymentStatusRequest updatePaymentStatusRequest) {
+        return orderService.updatePaymentStatus(orderId, updatePaymentStatusRequest);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping("/{orderId}/order-status")
+    public Order updateOrderStatus(@PathVariable String orderId,
+                                   @Valid @RequestBody UpdateOrderStatusRequest updateOrderStatusRequest) {
+        return orderService.updateOrderStatus(orderId, updateOrderStatusRequest);
     }
 }
