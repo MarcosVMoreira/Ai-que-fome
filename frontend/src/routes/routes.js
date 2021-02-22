@@ -15,6 +15,7 @@ import { SideNav as MerchantSideNav } from '../components/Merchant/SideNav/SideN
 import { Home as CustomerHome } from '../pages/Customer/Home/Home';
 import { Login as CustomerLogin } from '../pages/Customer/Login/Login';
 import { Order } from '../pages/Customer/Order/Order';
+import { Orders } from '../pages/Customer/Orders/Orders';
 import { OrderStatus } from '../pages/Customer/OrderStatus/OrderStatus';
 import { Profile as CustomerProfile } from '../pages/Customer/Profile/Profile';
 import { Restaurant as CustomerRestaurant } from '../pages/Customer/Restaurant/Restaurant';
@@ -74,6 +75,7 @@ export const Routes = () => {
                   component={OrderStatus}
                 />
                 <Route path="/customer/order" component={Order} />
+                <Route path="/customer/orders" component={Orders} />
                 <Route path="/not-found" component={NotFound} />
                 <Redirect to="/customer/home" />
               </Switch>

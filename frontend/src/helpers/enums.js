@@ -69,3 +69,10 @@ export const payments = {
   CARTAO_CREDITO: 'Cartão de Crédito',
   VR: 'Vale-Refeição',
 };
+
+export const orderStatus = {
+  CRIADO: 'Criado',
+  CONFIRMADO: 'Confirmado',
+  ENVIADO: 'Enviado',
+  RECEBIDO: 'Recebido',
+};

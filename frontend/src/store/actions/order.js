@@ -103,6 +103,39 @@ export const fetchOrder = payload => {
   };
 };
 
+export const fetchOrdersStart = () => ({
+  type: actionTypes.FETCH_ORDERS_START,
+});
+
+export const fetchOrdersSuccess = payload => ({
+  type: actionTypes.FETCH_ORDERS_SUCCESS,
+  payload,
+});
+
+export const fetchOrdersFail = payload => ({
+  type: actionTypes.FETCH_ORDERS_FAIL,
+  payload,
+});
+
+export const fetchOrders = payload => {
+  return dispatch => {
+    dispatch(fetchOrdersStart());
+
+    if (payload.type === 'customer') {
+      const customerId = localStorage.getItem('IFOOD_udid');
+
+      axios
+        .get(`/order/orders?customerId=${customerId}`)
+        .then(res => {
+          dispatch(fetchOrdersSuccess({ orders: res.data.content }));
+        })
+        .catch(err => {
+          dispatch(fetchOrdersFail({ error: err.response?.status || 500 }));
+        });
+    }
+  };
+};
+
 export const resetOrder = () => ({
   type: actionTypes.RESET_ORDER,
 });

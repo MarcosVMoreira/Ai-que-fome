@@ -21,6 +21,7 @@ export {
 } from './merchant';
 export {
   fetchOrder,
+  fetchOrders,
   newOrder,
   resetOrder,
   resetOrderId,

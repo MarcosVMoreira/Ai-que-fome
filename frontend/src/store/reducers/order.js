@@ -46,6 +46,26 @@ const fetchOrderFail = (state, payload) => ({
   order: null,
 });
 
+const fetchOrdersStart = state => ({
+  ...state,
+  error: null,
+  loading: true,
+});
+
+const fetchOrdersSuccess = (state, payload) => ({
+  ...state,
+  error: null,
+  loading: false,
+  orders: payload.orders,
+});
+
+const fetchOrdersFail = (state, payload) => ({
+  ...state,
+  error: payload.error,
+  loading: false,
+  orders: null,
+});
+
 const resetOrder = state => ({
   ...state,
   order: null,
@@ -76,6 +96,12 @@ const reducer = (state = initialState, { type, payload }) => {
       return fetchOrderSuccess(state, payload);
     case actionTypes.FETCH_ORDER_FAIL:
       return fetchOrderFail(state, payload);
+    case actionTypes.FETCH_ORDERS_START:
+      return fetchOrdersStart(state);
+    case actionTypes.FETCH_ORDERS_SUCCESS:
+      return fetchOrdersSuccess(state, payload);
+    case actionTypes.FETCH_ORDERS_FAIL:
+      return fetchOrdersFail(state, payload);
     case actionTypes.RESET_ORDER:
       return resetOrder(state);
     case actionTypes.RESET_ORDERS:

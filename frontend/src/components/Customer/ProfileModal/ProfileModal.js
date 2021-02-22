@@ -48,6 +48,12 @@ export const ProfileModal = withRouter(props => {
     props.history.push('/customer/login');
   };
 
+  // Go to Orders Page
+  const handleOrders = () => {
+    props.history.push('/customer/orders');
+    props.handleModal(false);
+  };
+
   // Go to Customer Profile Page
   const handleProfile = () => {
     props.history.push('/customer/profile');
@@ -84,6 +90,7 @@ export const ProfileModal = withRouter(props => {
             size="large"
             startIcon={<FastfoodRounded />}
             endIcon={<ChevronRightRounded />}
+            onClick={handleOrders}
           >
             Pedidos
           </Button>
