@@ -24,7 +24,7 @@ export const Orders = withRouter(props => {
   ]);
 
   /* Functions */
-  // Set order and restaurant data on page enter
+  // Set orders and restaurants data on page enter
   useEffect(() => {
     onFetchOrders({ type: 'customer' });
 
@@ -34,7 +34,7 @@ export const Orders = withRouter(props => {
   }, [onFetchOrders, onResetOrders]);
 
   const handleOrderDetail = id => {
-    props.history.push(`detail/${id}`);
+    props.history.push(`/customer/order/detail/${id}`);
   };
 
   let errorBlock;

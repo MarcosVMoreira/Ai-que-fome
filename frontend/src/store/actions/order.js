@@ -61,7 +61,7 @@ export const newOrder = payload => {
         .then(res => {
           dispatch(
             newOrderSuccess({
-              orderId: res.headers.location.split('orders/')[1],
+              orderId: res.headers.location.split('orderRequests/')[1],
             }),
           );
         })
