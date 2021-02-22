@@ -36,6 +36,7 @@ export const Navbar = withRouter(props => {
 
   /* Redux Selectors */
   const cart = useSelector(state => state.cart.cart);
+  const cartRestaurant = useSelector(state => state.cart.restaurant);
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
@@ -50,6 +51,14 @@ export const Navbar = withRouter(props => {
   );
   const onFetchRestaurantsFilter = payload =>
     dispatch(actions.fetchRestaurantsFilter(payload));
+
+  // Set local storage cart every time the user changes it
+  useEffect(() => {
+    localStorage.setItem(
+      'IFOOD_cart',
+      JSON.stringify({ cart: cart, restaurant: cartRestaurant }),
+    );
+  }, [cart, cartRestaurant]);
 
   useEffect(() => {
     const storedAddress = localStorage.getItem('IFOOD_address');

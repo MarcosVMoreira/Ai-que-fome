@@ -83,6 +83,10 @@ export const NEW_ORDER_START = 'NEW_ORDER_START';
 export const NEW_ORDER_SUCCESS = 'NEW_ORDER_SUCCESS';
 export const NEW_ORDER_FAIL = 'NEW_ORDER_FAIL';
 
+export const FETCH_ORDER_START = 'FETCH_ORDER_START';
+export const FETCH_ORDER_SUCCESS = 'FETCH_ORDER_SUCCESS';
+export const FETCH_ORDER_FAIL = 'FETCH_ORDER_FAIL';
+
 /*--------------------------------- RESETS ---------------------------------*/
 export const AUTH_RESET = 'AUTH_RESET';
 export const SIGNUP_RESET = 'SIGNUP_RESET';

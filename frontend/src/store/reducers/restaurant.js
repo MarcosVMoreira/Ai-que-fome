@@ -46,7 +46,7 @@ const fetchRestaurantFail = (state, payload) => ({
   ...state,
   error: payload.error,
   loading: false,
-  states: null,
+  restaurant: null,
 });
 
 const resetRestaurant = state => ({

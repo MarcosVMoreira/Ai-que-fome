@@ -23,7 +23,12 @@
     }
 
     &__item {
-      padding: 0 20px 80px !important;
+      padding: 0 20px 60px !important;
+      text-align: left !important;
+    }
+
+    &__button {
+      padding: 5px 20px !important;
       text-align: left !important;
     }
   }
@@ -33,7 +38,7 @@
 @media (max-width: 960px) {
   .container {
     &_status {
-      margin: 0 36px !important;
+      margin: 0 36px 40px !important;
     }
   }
 }

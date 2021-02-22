@@ -74,6 +74,43 @@ export const newOrder = payload => {
   };
 };
 
+export const fetchOrderStart = () => ({
+  type: actionTypes.FETCH_ORDER_START,
+});
+
+export const fetchOrderSuccess = payload => ({
+  type: actionTypes.FETCH_ORDER_SUCCESS,
+  payload,
+});
+
+export const fetchOrderFail = payload => ({
+  type: actionTypes.FETCH_ORDER_FAIL,
+  payload,
+});
+
+export const fetchOrder = payload => {
+  return dispatch => {
+    dispatch(fetchOrderStart());
+
+    axios
+      .get(`/order/orders/${payload.id}`)
+      .then(res => {
+        dispatch(fetchOrderSuccess({ order: res.data }));
+      })
+      .catch(err => {
+        dispatch(fetchOrderFail({ error: err.response?.status || 500 }));
+      });
+  };
+};
+
+export const resetOrder = () => ({
+  type: actionTypes.RESET_ORDER,
+});
+
+export const resetOrders = () => ({
+  type: actionTypes.RESET_ORDERS,
+});
+
 export const resetOrderId = () => ({
   type: actionTypes.RESET_ORDER_ID,
 });

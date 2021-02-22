@@ -75,7 +75,7 @@ export const Routes = () => {
                 />
                 <Route path="/customer/order" component={Order} />
                 <Route path="/not-found" component={NotFound} />
-                {/* <Redirect to="/customer/home" /> */}
+                <Redirect to="/customer/home" />
               </Switch>
             </Fragment>
           ) : (
