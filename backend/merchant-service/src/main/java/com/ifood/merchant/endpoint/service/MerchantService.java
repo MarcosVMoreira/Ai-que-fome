@@ -18,6 +18,7 @@ import com.ifood.merchant.endpoint.model.entity.SKU;
 import com.ifood.merchant.endpoint.repository.MerchantRepository;
 import com.ifood.merchant.producer.MerchantMessageProducer;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +53,10 @@ public class MerchantService {
 
         /*TODO REFAZER TODO ESSE CÓDIGO MACARRÔNICO. A FILTRAGEM ESTÁ PATÉTICA DE MAL FEITA. SOLID FOI PRO ESPAÇO
         ACONSELHO VOCE A NÃO OLHAR O CÓDIGO QUE ESSE MÉTODO CHAMA PORQUE ESTÁ BEM TRISTE A SITUAÇÃO*/
-        return findCustomerDistanceFromMerchants(pageable, customerCoords, name.toLowerCase(), type, payment,
+
+
+        return findCustomerDistanceFromMerchants(pageable, customerCoords,
+                StringUtils.lowerCase(name), type, payment,
                 distance, fee);
     }
 
