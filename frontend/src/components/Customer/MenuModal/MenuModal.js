@@ -115,7 +115,7 @@ export const MenuModal = props => {
           </Grid>
 
           <DialogContent className={classes.modal}>
-            <Grid container>
+            <Grid container spacing={1}>
               <Grid item sm={12} md={6}>
                 <img
                   className={classes.modal_logo}

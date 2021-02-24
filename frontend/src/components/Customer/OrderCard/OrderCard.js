@@ -28,7 +28,7 @@ export const OrderCard = props => {
           <Grid item className={classes.card_subtitle}>
             {props.items
               .map(item => `${item.quantity}x ${item.name}`)
-              .join(',')}
+              .join(', ')}
           </Grid>
 
           <Grid item className={classes.card_status}>

@@ -48,7 +48,7 @@ export const newOrder = payload => {
         totalPrice: el.itemPrice,
         discount: 0.0,
         comment: '',
-        subItems: el.subItems.map(subEl => ({
+        subItens: el.subItems.map(subEl => ({
           name: subEl.subItemName,
           quantity: subEl.subItemAmount,
         })),
@@ -133,6 +133,100 @@ export const fetchOrders = payload => {
           dispatch(fetchOrdersFail({ error: err.response?.status || 500 }));
         });
     }
+  };
+};
+
+export const orderEditStatusStart = () => ({
+  type: actionTypes.ORDER_EDIT_STATUS_START,
+});
+
+export const orderEditStatusSuccess = payload => ({
+  type: actionTypes.ORDER_EDIT_STATUS_SUCCESS,
+  payload,
+});
+
+export const orderEditStatusFail = payload => ({
+  type: actionTypes.ORDER_EDIT_STATUS_FAIL,
+  payload,
+});
+
+export const orderEditStatus = payload => {
+  return dispatch => {
+    dispatch(orderEditStatusStart());
+
+    axios
+      .put(`/order/orders/${payload.orderId}/order-status`, {
+        orderStatus: payload.status,
+      })
+      .then(res => {
+        dispatch(orderEditStatusSuccess({ order: res.data }));
+      })
+      .catch(err => {
+        dispatch(orderEditStatusFail({ error: err.response?.status || 500 }));
+      });
+  };
+};
+
+export const orderEditPaymentStart = () => ({
+  type: actionTypes.ORDER_EDIT_PAYMENT_START,
+});
+
+export const orderEditPaymentSuccess = payload => ({
+  type: actionTypes.ORDER_EDIT_PAYMENT_SUCCESS,
+  payload,
+});
+
+export const orderEditPaymentFail = payload => ({
+  type: actionTypes.ORDER_EDIT_PAYMENT_FAIL,
+  payload,
+});
+
+export const orderEditPayment = payload => {
+  return dispatch => {
+    dispatch(orderEditPaymentStart());
+    dispatch(orderEditStatus({ orderId: payload.orderId, status: 'RECEBIDO' }));
+
+    axios
+      .put(`/order/orders/${payload.orderId}/payment-status`, {
+        paymentStatus: payload.status,
+      })
+      .then(res => {
+        dispatch(orderEditPaymentSuccess({ order: res.data }));
+      })
+      .catch(err => {
+        dispatch(orderEditPaymentFail({ error: err.response?.status || 500 }));
+      });
+  };
+};
+
+export const orderRateStart = () => ({
+  type: actionTypes.ORDER_RATE_START,
+});
+
+export const orderRateSuccess = () => ({
+  type: actionTypes.ORDER_RATE_SUCCESS,
+});
+
+export const orderRateFail = payload => ({
+  type: actionTypes.ORDER_RATE_FAIL,
+  payload,
+});
+
+export const orderRate = payload => {
+  return dispatch => {
+    dispatch(orderRateStart());
+
+    axios
+      .post(`/customer/customers/${payload.customerId}/rates`, {
+        merchantId: payload.merchantId,
+        rate: payload.rate,
+      })
+      .then(() => {
+        dispatch(orderRateSuccess());
+      })
+      .catch(err => {
+        dispatch(orderRateFail({ error: err.response?.status || 500 }));
+      });
   };
 };
 

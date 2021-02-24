@@ -1,9 +1,13 @@
 import { Button, Divider, Grid, Typography } from '@material-ui/core';
-import { ArrowBackIosRounded } from '@material-ui/icons';
+import {
+  ArrowBackIosRounded,
+  ArrowForwardIosRounded,
+} from '@material-ui/icons';
 import React, { Fragment, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, withRouter } from 'react-router-dom';
 import { Spinner } from '../../../components/Shared/Spinner/Spinner';
+import { orderStatus } from '../../../helpers/enums';
 import * as actions from '../../../store/actions/index';
 import classes from './OrderDetail.module.scss';
 
@@ -36,8 +40,12 @@ export const OrderDetail = withRouter(props => {
     };
   }, [onFetchOrder, onResetOrder, id]);
 
+  const handleBack = () => {
+    props.history.push(`/customer/orders`);
+  };
+
   const handleOrderStatus = () => {
-    props.history.push(`status/${id}`);
+    props.history.push(`/customer/order/status/${id}`);
   };
 
   let errorBlock;
@@ -92,10 +100,23 @@ export const OrderDetail = withRouter(props => {
       {!order || loading ? (
         <Spinner />
       ) : (
-        <Grid container direction="column" spacing={1}>
-          <Grid item xs={2}>
-            <Button size="small" startIcon={<ArrowBackIosRounded />}>
+        <Grid container direction="column" spacing={2}>
+          <Grid container justify="space-between">
+            <Button
+              size="small"
+              startIcon={<ArrowBackIosRounded />}
+              onClick={handleBack}
+            >
               Voltar
+            </Button>
+
+            <Button
+              color="primary"
+              size="small"
+              endIcon={<ArrowForwardIosRounded />}
+              onClick={handleOrderStatus}
+            >
+              Acompanhar Pedido
             </Button>
           </Grid>
 
@@ -106,8 +127,12 @@ export const OrderDetail = withRouter(props => {
           </Grid>
 
           <Grid item>
-            <Typography>
-              Previsão de Entrega: {order.deliveryDateTime}
+            <Typography style={{ color: '#939393' }}>
+              Previsão de Entrega:
+            </Typography>
+
+            <Typography style={{ color: '#333' }}>
+              {order.deliveryDateTime}
             </Typography>
           </Grid>
 
@@ -116,19 +141,111 @@ export const OrderDetail = withRouter(props => {
           <Grid item>
             {order.items.map((item, index) => (
               <Fragment key={index}>
-                <Grid container justify="space-between">
-                  <Typography variant="h6" component="h1">
-                    {item.quantity}x {item.name}
-                  </Typography>
+                <div style={{ margin: '10px 0 20px' }}>
+                  <Grid container justify="space-between">
+                    <Typography variant="h6" component="h1">
+                      {item.quantity}x {item.name}
+                    </Typography>
 
-                  <Typography variant="h6" component="h1">
-                    R${item.totalPrice.toFixed(2).replace('.', ',')}
-                  </Typography>
-                </Grid>
+                    <Typography variant="h6" component="h1">
+                      R${item.totalPrice.toFixed(2).replace('.', ',')}
+                    </Typography>
+                  </Grid>
 
-                <Typography>1x 30CM, 2x 15CM</Typography>
+                  <Typography
+                    style={{
+                      color: '#333',
+                      margin: '0 10px',
+                      lineHeight: 1.5,
+                      textAlign: 'justify',
+                    }}
+                  >
+                    {item.subItens
+                      .map(subItem => `${subItem.quantity}x ${subItem.name}`)
+                      .join(', ')}
+                  </Typography>
+                </div>
+
+                <Divider light />
               </Fragment>
             ))}
+          </Grid>
+
+          <Grid item>
+            <Grid container justify="space-between">
+              <Typography variant="h6" component="h1">
+                SubTotal
+              </Typography>
+
+              <Typography variant="h6" component="h1">
+                R${order.subTotal.toFixed(2).replace('.', ',')}
+              </Typography>
+            </Grid>
+
+            <Grid container justify="space-between">
+              <Typography variant="body1" component="h3">
+                Taxa de Entrega
+              </Typography>
+
+              <Typography variant="body1" component="h3">
+                R${order.deliveryFee.toFixed(2).replace('.', ',')}
+              </Typography>
+            </Grid>
+
+            <Grid container justify="space-between">
+              <Typography variant="h6" component="h1">
+                Total
+              </Typography>
+
+              <Typography variant="h6" component="h1">
+                R${order.totalPrice.toFixed(2).replace('.', ',')}
+              </Typography>
+            </Grid>
+          </Grid>
+
+          <Divider light />
+
+          <Grid item>
+            <Typography style={{ color: '#939393' }}>Entrega em</Typography>
+
+            <Typography style={{ color: '#333' }}>
+              {order.deliveryAddress.streetName},{' '}
+              {order.deliveryAddress.streetNumber} -{' '}
+              {order.deliveryAddress.neighborhood} -{' '}
+              {order.deliveryAddress.city}/{order.deliveryAddress.district}
+            </Typography>
+          </Grid>
+
+          <Divider light />
+
+          <Grid item>
+            <Typography style={{ color: '#939393' }}>
+              Número do Pedido
+            </Typography>
+
+            <Typography style={{ color: '#333' }}>
+              {String(order.code).padStart(8, '0')}
+            </Typography>
+          </Grid>
+
+          <Divider light />
+
+          <Grid item>
+            <Typography style={{ color: '#939393' }}>Pedido criado</Typography>
+
+            <Typography style={{ color: '#333' }}>{order.createdAt}</Typography>
+          </Grid>
+
+          <Divider light />
+
+          <Grid item>
+            <Typography style={{ color: '#939393' }}>
+              Status do Pedido
+            </Typography>
+
+            <Typography style={{ color: '#333' }}>
+              {orderStatus[order.orderStatus]}
+            </Typography>
           </Grid>
         </Grid>
       )}

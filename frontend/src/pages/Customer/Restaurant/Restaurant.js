@@ -133,7 +133,7 @@ export const Restaurant = () => {
             id: restaurant.id,
             restaurant: restaurant.name,
             payments: restaurant.allowedPayments,
-            eta: restaurant.basePreparationTime + (restaurant.duration || 0),
+            eta: restaurant.duration || 0,
             fee: restaurant.fee || 0,
           },
           cart: {

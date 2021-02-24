@@ -9,7 +9,7 @@ export const RestaurantInfo = ({ restaurant }) => {
       <Grid item xs container className={classes.container_more}>
         <span>{categories[restaurant.merchantType[0]]}</span>
         <span> • </span>
-        <span>{restaurant.basePreparationTime} min</span>
+        <span>{restaurant.duration} min</span>
         <span> • </span>
         <span>{restaurant.distance.toFixed(1).replace('.', ',')} km</span>
         <span> • </span>

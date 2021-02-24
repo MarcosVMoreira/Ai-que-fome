@@ -184,6 +184,7 @@ export const SkuForm = props => {
       setForm({
         name: props.sku.name,
         price: props.sku.price,
+        image: props.sku.image,
         description: props.sku.description,
         options: props.sku.options,
       });

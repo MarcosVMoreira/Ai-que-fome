@@ -147,8 +147,6 @@ export const Order = withRouter(props => {
 
   // Redirects user to order status page on successful order and resets its cart
   useEffect(() => {
-    console.log(orderId);
-
     if (orderId) {
       onResetCart();
       localStorage.setItem(

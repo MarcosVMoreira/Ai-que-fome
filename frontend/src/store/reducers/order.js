@@ -66,6 +66,44 @@ const fetchOrdersFail = (state, payload) => ({
   orders: null,
 });
 
+const orderEditPaymentStart = state => ({
+  ...state,
+  error: null,
+  loading: true,
+});
+
+const orderEditPaymentSuccess = (state, payload) => ({
+  ...state,
+  error: null,
+  loading: false,
+  order: payload.order,
+});
+
+const orderEditPaymentFail = (state, payload) => ({
+  ...state,
+  error: payload.error,
+  loading: false,
+  order: null,
+});
+
+const orderRateStart = state => ({
+  ...state,
+  error: null,
+  loading: true,
+});
+
+const orderRateSuccess = state => ({
+  ...state,
+  error: null,
+  loading: false,
+});
+
+const orderRateFail = (state, payload) => ({
+  ...state,
+  error: payload.error,
+  loading: false,
+});
+
 const resetOrder = state => ({
   ...state,
   order: null,
@@ -102,6 +140,20 @@ const reducer = (state = initialState, { type, payload }) => {
       return fetchOrdersSuccess(state, payload);
     case actionTypes.FETCH_ORDERS_FAIL:
       return fetchOrdersFail(state, payload);
+    case actionTypes.ORDER_EDIT_PAYMENT_START:
+      return orderEditPaymentStart(state);
+    case actionTypes.ORDER_EDIT_PAYMENT_SUCCESS:
+      return orderEditPaymentSuccess(state, payload);
+    case actionTypes.ORDER_EDIT_PAYMENT_FAIL:
+      return orderEditPaymentFail(state, payload);
+
+    case actionTypes.ORDER_RATE_START:
+      return orderRateStart(state);
+    case actionTypes.ORDER_RATE_SUCCESS:
+      return orderRateSuccess(state);
+    case actionTypes.ORDER_RATE_FAIL:
+      return orderRateFail(state, payload);
+
     case actionTypes.RESET_ORDER:
       return resetOrder(state);
     case actionTypes.RESET_ORDERS:

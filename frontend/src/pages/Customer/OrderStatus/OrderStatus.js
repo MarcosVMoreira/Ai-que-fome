@@ -9,18 +9,23 @@ import {
   TimelineItem,
   TimelineSeparator,
 } from '@material-ui/lab';
-import React, { Fragment, useCallback, useEffect } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, withRouter } from 'react-router-dom';
+import { RateModal } from '../../../components/Customer/RateModal/RateModal';
 import { Spinner } from '../../../components/Shared/Spinner/Spinner';
 import * as actions from '../../../store/actions/index';
 import classes from './OrderStatus.module.scss';
 
 export const OrderStatus = withRouter(props => {
+  /* React State Hooks */
+  const [rateRestaurant, setRateRestaurant] = useState(false);
+
   /* Redux Selectors */
   const error = useSelector(state => state.order.error);
   const loading = useSelector(state => state.order.loading);
   const order = useSelector(state => state.order.order);
+  const customer = useSelector(state => state.customer.customer);
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
@@ -31,6 +36,9 @@ export const OrderStatus = withRouter(props => {
   const onResetOrder = useCallback(() => dispatch(actions.resetOrder()), [
     dispatch,
   ]);
+  const onOrderEditPayment = payment =>
+    dispatch(actions.orderEditPayment(payment));
+  const onOrderRate = rate => dispatch(actions.orderRate(rate));
 
   /* Constants */
   const { id } = useParams();
@@ -47,7 +55,33 @@ export const OrderStatus = withRouter(props => {
   }, [onFetchOrder, onResetOrder, id]);
 
   const handleOrderDetail = () => {
-    props.history.push(`detail/${id}`);
+    props.history.push(`/customer/order/detail/${id}`);
+  };
+
+  // Set the order status to finished and payment status to paid
+  const handleRate = () => {
+    onOrderEditPayment({ status: 'FINALIZADO', orderId: id });
+
+    // Opens Rate Modal if the user hasn't rated the restaurant yet
+    if (
+      !customer.merchantRates ||
+      !customer.merchantRates.find(el => el.merchantId === order.idMerchant)
+    ) {
+      setRateRestaurant(true);
+    }
+  };
+
+  // Rates the restaurant
+  const handleCloseRateModal = rate => {
+    if (rate) {
+      onOrderRate({
+        merchantId: order.idMerchant,
+        customerId: order.idCustomer,
+        rate: rate,
+      });
+    }
+
+    setRateRestaurant(null);
   };
 
   let errorBlock;
@@ -213,7 +247,8 @@ export const OrderStatus = withRouter(props => {
                 </TimelineContent>
 
                 <TimelineSeparator>
-                  {order.orderStatus === 'ENVIADO' ? (
+                  {order.orderStatus === 'ENVIADO' ||
+                  order.orderStatus === 'RECEBIDO' ? (
                     <Fragment>
                       <TimelineDot color="primary">
                         <CheckCircleIcon />
@@ -228,23 +263,43 @@ export const OrderStatus = withRouter(props => {
                 </TimelineSeparator>
               </TimelineItem>
 
-              {order.orderStatus === 'ENVIADO' && (
+              {(order.orderStatus === 'ENVIADO' ||
+                order.orderStatus === 'RECEBIDO') && (
                 <TimelineItem>
                   <TimelineContent className={classes.container_status__button}>
-                    <Button color="primary" variant="contained" size="large">
+                    <Button
+                      disabled={order.orderStatus === 'RECEBIDO'}
+                      color="primary"
+                      variant="contained"
+                      size="large"
+                      onClick={handleRate}
+                    >
                       Recebi meu Pedido
                     </Button>
                   </TimelineContent>
 
                   <TimelineSeparator>
-                    <TimelineDot color="primary">
-                      <RadioButtonUnchecked />
-                    </TimelineDot>
+                    {order.orderStatus === 'RECEBIDO' ? (
+                      <Fragment>
+                        <TimelineDot color="primary">
+                          <CheckCircleIcon />
+                        </TimelineDot>
+                      </Fragment>
+                    ) : (
+                      <TimelineDot color="primary">
+                        <RadioButtonUnchecked />
+                      </TimelineDot>
+                    )}
                   </TimelineSeparator>
                 </TimelineItem>
               )}
             </Timeline>
           </Grid>
+
+          <RateModal
+            open={Boolean(rateRestaurant)}
+            close={handleCloseRateModal}
+          />
         </Grid>
       )}
     </div>
