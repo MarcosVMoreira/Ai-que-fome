@@ -80,10 +80,18 @@ public class MerchantService {
         }
 
         merchant.setCode(nextSequenceService.getNextSequence("DatabaseSequence"));
-        merchant.setDuration(0F);
-        merchant.setRateAmount(0);
-        merchant.setRate(0F);
-        merchant.setBasePreparationTime(0F);
+        if (merchant.getDuration() == null) {
+            merchant.setDuration(0F);
+        }
+        if (merchant.getRateAmount() == null) {
+            merchant.setRateAmount(0);
+        }
+        if (merchant.getDuration() == null) {
+            merchant.setRate(0F);
+        }
+        if (merchant.getBasePreparationTime() == null) {
+            merchant.setBasePreparationTime(0F);
+        }
 
         Merchant savedMerchant = merchantRepository.save(merchant);
 
