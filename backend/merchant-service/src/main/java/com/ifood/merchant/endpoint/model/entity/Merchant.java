@@ -98,4 +98,6 @@ public class Merchant {
     private Float fee;
 
     private Float duration = 0F;
+
+    private String description;
 }
