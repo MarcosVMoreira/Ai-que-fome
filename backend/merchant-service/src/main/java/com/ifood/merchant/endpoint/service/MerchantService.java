@@ -93,6 +93,7 @@ public class MerchantService {
             merchant.setBasePreparationTime(0F);
         }
 
+
         Merchant savedMerchant = merchantRepository.save(merchant);
 
         messageProducer.sendMerchantDataToRabbit(savedMerchant);
