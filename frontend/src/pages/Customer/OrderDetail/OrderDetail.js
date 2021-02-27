@@ -139,7 +139,7 @@ export const OrderDetail = withRouter(props => {
           <Divider light />
 
           <Grid item>
-            {order.items.map((item, index) => (
+            {order.items?.map((item, index) => (
               <Fragment key={index}>
                 <div style={{ margin: '10px 0 20px' }}>
                   <Grid container justify="space-between">
@@ -161,7 +161,7 @@ export const OrderDetail = withRouter(props => {
                     }}
                   >
                     {item.subItens
-                      .map(subItem => `${subItem.quantity}x ${subItem.name}`)
+                      ?.map(subItem => `${subItem.quantity}x ${subItem.name}`)
                       .join(', ')}
                   </Typography>
                 </div>

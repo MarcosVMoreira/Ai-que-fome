@@ -66,6 +66,24 @@ const fetchOrdersFail = (state, payload) => ({
   orders: null,
 });
 
+const orderEditStatusStart = state => ({
+  ...state,
+  error: null,
+  loading: true,
+});
+
+const orderEditStatusSuccess = state => ({
+  ...state,
+  error: null,
+  loading: false,
+});
+
+const orderEditStatusFail = (state, payload) => ({
+  ...state,
+  error: payload.error,
+  loading: false,
+});
+
 const orderEditPaymentStart = state => ({
   ...state,
   error: null,
@@ -128,18 +146,28 @@ const reducer = (state = initialState, { type, payload }) => {
       return newOrderSuccess(state, payload);
     case actionTypes.NEW_ORDER_FAIL:
       return newOrderFail(state, payload);
+
     case actionTypes.FETCH_ORDER_START:
       return fetchOrderStart(state);
     case actionTypes.FETCH_ORDER_SUCCESS:
       return fetchOrderSuccess(state, payload);
     case actionTypes.FETCH_ORDER_FAIL:
       return fetchOrderFail(state, payload);
+
     case actionTypes.FETCH_ORDERS_START:
       return fetchOrdersStart(state);
     case actionTypes.FETCH_ORDERS_SUCCESS:
       return fetchOrdersSuccess(state, payload);
     case actionTypes.FETCH_ORDERS_FAIL:
       return fetchOrdersFail(state, payload);
+
+    case actionTypes.ORDER_EDIT_STATUS_START:
+      return orderEditStatusStart(state);
+    case actionTypes.ORDER_EDIT_STATUS_SUCCESS:
+      return orderEditStatusSuccess(state);
+    case actionTypes.ORDER_EDIT_STATUS_FAIL:
+      return orderEditStatusFail(state, payload);
+
     case actionTypes.ORDER_EDIT_PAYMENT_START:
       return orderEditPaymentStart(state);
     case actionTypes.ORDER_EDIT_PAYMENT_SUCCESS:

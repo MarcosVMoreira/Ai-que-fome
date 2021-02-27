@@ -9,7 +9,6 @@ import {
 import {
   ExitToAppRounded,
   FastfoodRounded,
-  HomeRounded,
   MenuBookRounded,
   RestaurantMenuRounded,
 } from '@material-ui/icons';
@@ -56,7 +55,7 @@ export const SideNav = withRouter(props => {
                 justify="center"
                 alignItems="center"
               >
-                <HomeRounded fontSize="large" color="primary" />
+                <FastfoodRounded fontSize="large" color="primary" />
                 <Typography color="primary">Início</Typography>
               </Grid>
             </ListItem>
@@ -86,20 +85,6 @@ export const SideNav = withRouter(props => {
               >
                 <MenuBookRounded fontSize="large" color="primary" />
                 <Typography color="primary">Cardápio</Typography>
-              </Grid>
-            </ListItem>
-          </Link>
-
-          <Link to="/merchant/orders">
-            <ListItem button selected={activeRoute === '/merchant/orders'}>
-              <Grid
-                container
-                direction="column"
-                justify="center"
-                alignItems="center"
-              >
-                <FastfoodRounded fontSize="large" color="primary" />
-                <Typography color="primary">Pedidos</Typography>
               </Grid>
             </ListItem>
           </Link>

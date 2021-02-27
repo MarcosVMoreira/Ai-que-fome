@@ -132,6 +132,17 @@ export const fetchOrders = payload => {
         .catch(err => {
           dispatch(fetchOrdersFail({ error: err.response?.status || 500 }));
         });
+    } else if (payload.type === 'merchant') {
+      const merchantId = localStorage.getItem('IFOOD_udid');
+
+      axios
+        .get(`/order/orders?merchantId=${merchantId}`)
+        .then(res => {
+          dispatch(fetchOrdersSuccess({ orders: res.data.content }));
+        })
+        .catch(err => {
+          dispatch(fetchOrdersFail({ error: err.response?.status || 500 }));
+        });
     }
   };
 };
@@ -160,6 +171,7 @@ export const orderEditStatus = payload => {
       })
       .then(res => {
         dispatch(orderEditStatusSuccess({ order: res.data }));
+        dispatch(fetchOrders({ type: 'merchant' }));
       })
       .catch(err => {
         dispatch(orderEditStatusFail({ error: err.response?.status || 500 }));

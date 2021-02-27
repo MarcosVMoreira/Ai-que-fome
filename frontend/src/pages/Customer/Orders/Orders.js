@@ -1,7 +1,8 @@
 import { Grid, Typography } from '@material-ui/core';
-import React, { useCallback, useEffect } from 'react';
+import React, { Fragment, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import empty_cart from '../../../assets/icons/empty_cart.svg';
 import { OrderCard } from '../../../components/Customer/OrderCard/OrderCard';
 import { Spinner } from '../../../components/Shared/Spinner/Spinner';
 import * as actions from '../../../store/actions/index';
@@ -90,20 +91,30 @@ export const Orders = withRouter(props => {
         <Spinner />
       ) : (
         <Grid container direction="column">
-          <Typography variant="h5" component="h1">
-            Pedidos
-          </Typography>
+          {orders.length === 0 ? (
+            <div className={classes.container_empty}>
+              <span>Nenhum pedido feito</span>
 
-          <Grid container item>
-            {orders.map(order => (
-              <Grid item xs={12} sm={12} md={6} key={order.id}>
-                <OrderCard
-                  {...order}
-                  onClick={() => handleOrderDetail(order.id)}
-                />
+              <img src={empty_cart} alt="no orders" />
+            </div>
+          ) : (
+            <Fragment>
+              <Typography variant="h5" component="h1">
+                Pedidos
+              </Typography>
+
+              <Grid container item>
+                {orders.map(order => (
+                  <Grid item xs={12} sm={12} md={6} key={order.id}>
+                    <OrderCard
+                      {...order}
+                      onClick={() => handleOrderDetail(order.id)}
+                    />
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
+            </Fragment>
+          )}
         </Grid>
       )}
     </div>
