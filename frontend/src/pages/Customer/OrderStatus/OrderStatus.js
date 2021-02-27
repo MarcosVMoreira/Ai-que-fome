@@ -152,7 +152,11 @@ export const OrderStatus = withRouter(props => {
               {order.merchantName}
             </span>
 
-            <Button color="primary" onClick={handleOrderDetail}>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={handleOrderDetail}
+            >
               Detalhes do Pedido
             </Button>
           </Grid>

@@ -45,7 +45,7 @@
         }
 
         span:last-child {
-          color: rgba(234, 29, 44, 1);
+          color: #00adb5;
           font-weight: 700;
           font-size: 0.9em;
           padding: 0px 0px 10px;
@@ -67,7 +67,7 @@
 
   &_actions {
     &__amount {
-      border: 1px solid rgba(234, 29, 44, 1);
+      border: 1px solid #00adb5;
       border-radius: 4px;
       display: flex;
       align-items: center;

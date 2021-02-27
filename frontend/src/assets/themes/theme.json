@@ -3,9 +3,9 @@
     "common": { "black": "#000", "white": "#fff" },
     "background": { "paper": "#fff", "default": "#fafafa" },
     "primary": {
-      "light": "rgba(236, 52, 65, 1)",
-      "main": "rgba(234, 29, 44, 1)",
-      "dark": "rgba(206, 26, 39, 1)",
+      "light": "#33bdc3",
+      "main": "#00ADB5",
+      "dark": "#00797e",
       "contrastText": "#fff"
     },
     "secondary": {
@@ -15,9 +15,9 @@
       "contrastText": "#000"
     },
     "error": {
-      "light": "#ffc71f",
-      "main": "#ffc20a",
-      "dark": "#f5b800",
+      "light": "#ff4569",
+      "main": "#ff1744",
+      "dark": "#b2102f",
       "contrastText": "#fff"
     },
     "text": {

@@ -78,7 +78,7 @@ export const SkuForm = props => {
     return (
       <ButtonGroup size="small" color="secondary">
         <Button onClick={() => handleDelete(params)}>
-          <DeleteRounded color="primary" />
+          <DeleteRounded style={{ color: '#EA1D2C' }} />
         </Button>
       </ButtonGroup>
     );
