@@ -4,7 +4,6 @@ import com.ifood.customer.endpoint.model.dto.AddressDTO;
 import com.ifood.customer.endpoint.model.dto.CustomerDTO;
 import com.ifood.customer.endpoint.model.entity.MerchantRate;
 import com.ifood.customer.endpoint.service.CustomerServiceImpl;
-import io.swagger.annotations.Api;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("customers")
-@Api(value = "Endpoints to manage customer")
 public class CustomerController {
 
     private CustomerServiceImpl customerServiceImpl;

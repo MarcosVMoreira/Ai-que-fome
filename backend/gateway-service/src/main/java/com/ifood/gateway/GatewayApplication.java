@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableZuulProxy
 @EnableEurekaClient
 @ComponentScan("com.ifood")
-@EnableConfigurationProperties(value = JwtConfiguration.class)
+//@EnableConfigurationProperties(value = JwtConfiguration.class)
 public class GatewayApplication {
 
     public static void main (String[] args) {

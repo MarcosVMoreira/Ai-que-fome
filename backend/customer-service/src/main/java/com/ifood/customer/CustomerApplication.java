@@ -1,22 +1,22 @@
 package com.ifood.customer;
 
-import com.ifood.core.property.JwtConfiguration;
+//import com.ifood.core.property.JwtConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
+//import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+//import org.springframework.boot.context.properties.EnableConfigurationProperties;
+//import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.util.stream.Stream;
 
 @SpringBootApplication
-@ComponentScan("com.ifood")
-@EnableEurekaClient
+//@EnableEurekaClient
 @Slf4j
-@EnableConfigurationProperties(value = JwtConfiguration.class)
+//@EnableConfigurationProperties(value = JwtConfiguration.class)
 public class CustomerApplication implements ApplicationRunner {
 
     public static void main (String[] args) {
