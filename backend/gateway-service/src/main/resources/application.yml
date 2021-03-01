@@ -4,22 +4,57 @@ spring:
 server:
   port: 8080
 
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    service-url:
-      defaultZone: http://localhost:8081/eureka/
-    fetch-registry: true
-    register-with-eureka: true
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8081/eureka/
+#    fetch-registry: true
+#    register-with-eureka: true
 
 zuul:
   sensitive-headers: Cookie
   ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
-jwt:
-  config:
-    login-url: /auth/login
-    type: signed
+  routes:
+    customer:
+      serviceId: customer
+      path: /customer/**
+      url: "http://mscustomer:8082/"
+    merchant:
+      serviceId: merchant
+      path: /merchant/**
+      url: "http://msmerchant:8084/"
+    order:
+      serviceId: order
+      path: /order/**
+      url: "http://msorder:8085/"
+#    customer:
+#      serviceId: customer
+#      path: /customer/**
+#      url: "http://localhost:8082/"
+#    merchant:
+#      serviceId: merchant
+#      path: /merchant/**
+#      url: "http://localhost:8084/"
+#    order:
+#      serviceId: order
+#      path: /order/**
+#      url: "http://localhost:8085/"
+#jwt:
+#  config:
+#    login-url: /auth/login
+#    type: signed
+
+management:
+  endpoint:
+    health:
+      show-components: always
+  endpoints:
+    web:
+      exposure:
+        include: actuator,logfile,metrics,health,info
+      base-path: /v1/actuator
 
 ribbon:
   ReadTimeout: 10000

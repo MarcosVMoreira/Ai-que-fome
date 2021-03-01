@@ -2,12 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>ifood-backend</artifactId>
-        <groupId>com.ifood</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
+<!--    <parent>-->
+<!--        <artifactId>ifood-backend</artifactId>-->
+<!--        <groupId>com.ifood</groupId>-->
+<!--        <version>1.0-SNAPSHOT</version>-->
+<!--    </parent>-->
     <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.0.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
     <artifactId>merchant-service</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -17,19 +24,31 @@
     <properties>
         <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
         <org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
+        <org.lombok.version>1.18.12</org.lombok.version>
     </properties>
 
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>com.ifood</groupId>-->
+<!--            <artifactId>core</artifactId>-->
+<!--            <version>1.0-SNAPSHOT</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.ifood</groupId>-->
+<!--            <artifactId>token</artifactId>-->
+<!--            <version>1.0-SNAPSHOT</version>-->
+<!--        </dependency>-->
+
         <dependency>
-            <groupId>com.ifood</groupId>
-            <artifactId>core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.ifood</groupId>
-            <artifactId>token</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+            <version>2.2.2.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -77,6 +96,11 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -98,6 +122,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
