@@ -36,15 +36,29 @@ export const Navbar = withRouter(props => {
 
   /* Redux Selectors */
   const cart = useSelector(state => state.cart.cart);
+  const cartRestaurant = useSelector(state => state.cart.restaurant);
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
+  const onResetCart = () => dispatch(actions.resetCart());
+  const onResetRestaurants = useCallback(
+    () => dispatch(actions.resetRestaurants()),
+    [dispatch],
+  );
   const onFetchRestaurants = useCallback(
     payload => dispatch(actions.fetchRestaurants(payload)),
     [dispatch],
   );
   const onFetchRestaurantsFilter = payload =>
     dispatch(actions.fetchRestaurantsFilter(payload));
+
+  // Set local storage cart every time the user changes it
+  useEffect(() => {
+    localStorage.setItem(
+      'IFOOD_cart',
+      JSON.stringify({ cart: cart, restaurant: cartRestaurant }),
+    );
+  }, [cart, cartRestaurant]);
 
   useEffect(() => {
     const storedAddress = localStorage.getItem('IFOOD_address');
@@ -57,7 +71,11 @@ export const Navbar = withRouter(props => {
     } else {
       setModal(true);
     }
-  }, [onFetchRestaurants]);
+
+    return () => {
+      onResetRestaurants();
+    };
+  }, [onFetchRestaurants, onResetRestaurants]);
 
   const handleSearch = event => {
     setSearch(event.target.value);
@@ -92,6 +110,7 @@ export const Navbar = withRouter(props => {
     setModal(false);
     setAddress(address);
     onFetchRestaurants({ coordinates: address.coordinates });
+    onResetCart();
   };
 
   const handleModal = event => setModal(event);

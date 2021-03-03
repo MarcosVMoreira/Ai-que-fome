@@ -78,9 +78,39 @@ export const ADD_CART_ITEM = 'ADD_CART_ITEM';
 export const REMOVE_CART_ITEM = 'REMOVE_CART_ITEM';
 export const SET_CART = 'SET_CART';
 
+/*--------------------------------- ORDER ---------------------------------*/
+export const NEW_ORDER_START = 'NEW_ORDER_START';
+export const NEW_ORDER_SUCCESS = 'NEW_ORDER_SUCCESS';
+export const NEW_ORDER_FAIL = 'NEW_ORDER_FAIL';
+
+export const FETCH_ORDER_START = 'FETCH_ORDER_START';
+export const FETCH_ORDER_SUCCESS = 'FETCH_ORDER_SUCCESS';
+export const FETCH_ORDER_FAIL = 'FETCH_ORDER_FAIL';
+
+export const FETCH_ORDERS_START = 'FETCH_ORDERS_START';
+export const FETCH_ORDERS_SUCCESS = 'FETCH_ORDERS_SUCCESS';
+export const FETCH_ORDERS_FAIL = 'FETCH_ORDERS_FAIL';
+
+export const ORDER_EDIT_STATUS_START = 'ORDER_EDIT_STATUS_START';
+export const ORDER_EDIT_STATUS_SUCCESS = 'ORDER_EDIT_STATUS_SUCCESS';
+export const ORDER_EDIT_STATUS_FAIL = 'ORDER_EDIT_STATUS_FAIL';
+
+export const ORDER_EDIT_PAYMENT_START = 'ORDER_EDIT_PAYMENT_START';
+export const ORDER_EDIT_PAYMENT_SUCCESS = 'ORDER_EDIT_PAYMENT_SUCCESS';
+export const ORDER_EDIT_PAYMENT_FAIL = 'ORDER_EDIT_PAYMENT_FAIL';
+
+export const ORDER_RATE_START = 'ORDER_RATE_START';
+export const ORDER_RATE_SUCCESS = 'ORDER_RATE_SUCCESS';
+export const ORDER_RATE_FAIL = 'ORDER_RATE_FAIL';
+
 /*--------------------------------- RESETS ---------------------------------*/
 export const AUTH_RESET = 'AUTH_RESET';
 export const SIGNUP_RESET = 'SIGNUP_RESET';
 export const ERROR_RESET = 'ERROR_RESET';
 export const LOCATE_RESET = 'LOCATE_RESET';
 export const RESET_CART = 'RESET_CART';
+export const RESET_RESTAURANT = 'RESET_RESTAURANT';
+export const RESET_RESTAURANTS = 'RESET_RESTAURANTS';
+export const RESET_ORDER = 'RESET_ORDER';
+export const RESET_ORDERS = 'RESET_ORDERS';
+export const RESET_ORDER_ID = 'RESET_ORDER_ID';

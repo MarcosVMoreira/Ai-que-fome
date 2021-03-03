@@ -22,6 +22,7 @@ export const SkuForm = props => {
   const [form, setForm] = useState({
     name: '',
     price: '',
+    image: '',
     description: '',
     options: [],
   });
@@ -77,7 +78,7 @@ export const SkuForm = props => {
     return (
       <ButtonGroup size="small" color="secondary">
         <Button onClick={() => handleDelete(params)}>
-          <DeleteRounded color="primary" />
+          <DeleteRounded style={{ color: '#EA1D2C' }} />
         </Button>
       </ButtonGroup>
     );
@@ -183,6 +184,7 @@ export const SkuForm = props => {
       setForm({
         name: props.sku.name,
         price: props.sku.price,
+        image: props.sku.image,
         description: props.sku.description,
         options: props.sku.options,
       });
@@ -224,6 +226,17 @@ export const SkuForm = props => {
               className={classes.input}
               error={!valid.price && submitted}
               helperText={!valid.price && submitted && 'Preço inválido!'}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              name="image"
+              label="Foto do Item"
+              variant="outlined"
+              className={classes.input}
+              value={form.image}
+              onChange={handleChange}
             />
           </Grid>
 

@@ -20,8 +20,21 @@ export {
   merchantPutCategories,
 } from './merchant';
 export {
+  fetchOrder,
+  fetchOrders,
+  newOrder,
+  orderEditPayment,
+  orderEditStatus,
+  orderRate,
+  resetOrder,
+  resetOrderId,
+  resetOrders,
+} from './order';
+export {
   fetchRestaurant,
   fetchRestaurants,
   fetchRestaurantsFilter,
+  resetRestaurant,
+  resetRestaurants,
 } from './restaurant';
 export { customerSignUp, merchantSignUp, signUpReset } from './signup';

@@ -46,7 +46,19 @@ const fetchRestaurantFail = (state, payload) => ({
   ...state,
   error: payload.error,
   loading: false,
-  states: null,
+  restaurant: null,
+});
+
+const resetRestaurant = state => ({
+  ...state,
+  restaurant: null,
+});
+
+const resetRestaurants = state => ({
+  ...state,
+  restaurants: null,
+  restaurant: null,
+  filter: false,
 });
 
 const reducer = (state = initialState, { type, payload }) => {
@@ -63,6 +75,10 @@ const reducer = (state = initialState, { type, payload }) => {
       return fetchRestaurantSuccess(state, payload);
     case actionTypes.FETCH_RESTAURANT_FAIL:
       return fetchRestaurantFail(state, payload);
+    case actionTypes.RESET_RESTAURANT:
+      return resetRestaurant(state);
+    case actionTypes.RESET_RESTAURANTS:
+      return resetRestaurants(state);
     default:
       return state;
   }

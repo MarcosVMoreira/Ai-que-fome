@@ -1,0 +1,34 @@
+.container {
+  max-width: 1400px;
+  margin: 25px auto 100px;
+  padding: 0 50px;
+
+  &_empty {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    margin: 25px 0;
+
+    & span {
+      color: #5d5d5d;
+      font-weight: 700;
+      font-size: 1.3em;
+    }
+
+    & img {
+      width: 500px;
+      max-width: 80%;
+    }
+  }
+}
+
+// Changes the background on mobile
+@media (max-width: 960px) {
+  .container {
+    padding: 0 25px;
+  }
+}

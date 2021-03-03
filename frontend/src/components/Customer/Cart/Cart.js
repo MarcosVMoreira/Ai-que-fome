@@ -6,7 +6,7 @@ import empty_cart from '../../../assets/icons/empty_cart.svg';
 import * as actions from '../../../store/actions/index';
 import classes from './Cart.module.scss';
 
-export const Cart = withRouter(() => {
+export const Cart = withRouter(props => {
   /* Redux Selectors */
   const cart = useSelector(state => state.cart.cart);
   const restaurant = useSelector(state => state.cart.restaurant);
@@ -142,15 +142,18 @@ export const Cart = withRouter(() => {
 
           <Divider light />
 
-          <Grid item xs>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ width: '100%' }}
-            >
-              Fazer Pedido
-            </Button>
-          </Grid>
+          {props.button && (
+            <Grid item xs>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ width: '100%' }}
+                onClick={() => props.history.push('/customer/order')}
+              >
+                Fazer Pedido
+              </Button>
+            </Grid>
+          )}
         </Grid>
       ) : (
         <Grid

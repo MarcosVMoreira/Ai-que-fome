@@ -1,4 +1,15 @@
-import { Button, Grid, Hidden, InputBase, Snackbar } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  Hidden,
+  InputBase,
+  Snackbar,
+} from '@material-ui/core';
 import {
   ExpandLessRounded,
   ExpandMoreRounded,
@@ -24,6 +35,7 @@ export const Restaurant = () => {
   const [search, setSearch] = useState('');
   const [categories, setCategories] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [clearCart, setClearCart] = useState(false);
 
   /* Redux Selectors */
   const restaurant = useSelector(state => state.restaurant.restaurant);
@@ -36,13 +48,19 @@ export const Restaurant = () => {
 
   /* Redux Dispatchers */
   const dispatch = useDispatch();
+  const onAddCartItem = cart => dispatch(actions.addCartItem(cart));
+  const onResetCart = () => dispatch(actions.resetCart());
   const onFetchRestaurant = useCallback(
     restaurantId => dispatch(actions.fetchRestaurant(restaurantId)),
     [dispatch],
   );
-  const onAddCartItem = cart => dispatch(actions.addCartItem(cart));
+  const onResetRestaurant = useCallback(
+    () => dispatch(actions.resetRestaurant()),
+    [dispatch],
+  );
 
   /* Functions */
+  // Fetch restaurant based on url id
   useEffect(() => {
     const storedAddress = localStorage.getItem('IFOOD_address');
 
@@ -52,14 +70,20 @@ export const Restaurant = () => {
         id: id,
       });
     }
-  }, [onFetchRestaurant, id]);
 
+    return () => {
+      onResetRestaurant();
+    };
+  }, [onFetchRestaurant, onResetRestaurant, id]);
+
+  // Set categories form fetched restaurant
   useEffect(() => {
     if (restaurant) {
       setCategories(restaurant.categories);
     }
   }, [restaurant]);
 
+  // Set local storage cart every time the user changes it
   useEffect(() => {
     localStorage.setItem(
       'IFOOD_cart',
@@ -67,12 +91,12 @@ export const Restaurant = () => {
     );
   }, [cart, cartRestaurant]);
 
-  /* Toggle Restaurant Info */
+  // Toggle Restaurant Info
   const handleShowMore = () => {
     setShowMore(state => !state);
   };
 
-  /* Search Input */
+  // Search Input
   const handleSearch = event => {
     let { value } = event.target;
 
@@ -80,7 +104,7 @@ export const Restaurant = () => {
     filterResults(value);
   };
 
-  /* Filter Results based on user Search */
+  // Filter Results based on user Search
   const filterResults = value => {
     setCategories(
       restaurant.categories
@@ -95,30 +119,52 @@ export const Restaurant = () => {
     );
   };
 
+  // Open Restaurant Item Menu Modal
   const handleOpenMenuModal = item => {
     setSelectedItem(item);
   };
 
+  // Adds item to cart and closes item menu modal
   const handleCloseMenuModal = item => {
     if (item) {
-      onAddCartItem({
-        restaurant: restaurant.name,
-        restaurantFee: restaurant.fee || 0,
-        id: item.id + Math.floor(Math.random() * (100 - 1) + 1),
-        itemName: item.name,
-        itemPrice: item.totalPrice,
-        itemAmount: item.amount,
-        subItems: item.options
-          .filter(el => el.amount)
-          .map(el => ({
-            subItemName: el.name,
-            subItemAmount: el.amount,
-            id: el.id,
-          })),
-      });
+      if (!cartRestaurant || cartRestaurant.id === restaurant.id) {
+        onAddCartItem({
+          restaurant: {
+            id: restaurant.id,
+            restaurant: restaurant.name,
+            payments: restaurant.allowedPayments,
+            eta: restaurant.duration || 0,
+            fee: restaurant.fee || 0,
+          },
+          cart: {
+            id: item.id + Math.floor(Math.random() * (100 - 1) + 1),
+            itemName: item.name,
+            itemPrice: item.totalPrice,
+            itemAmount: item.amount,
+            subItems: item.options
+              .filter(el => el.amount)
+              .map(el => ({
+                subItemName: el.name,
+                subItemAmount: el.amount,
+                id: el.id,
+              })),
+          },
+        });
+      } else {
+        setClearCart(true);
+      }
     }
 
     setSelectedItem(null);
+  };
+
+  // Clears Cart if trying to add item from another restaurant
+  const handleClearCart = clear => {
+    if (clear) {
+      onResetCart();
+    }
+
+    setClearCart(false);
   };
 
   // Set Toast
@@ -158,132 +204,172 @@ export const Restaurant = () => {
     (redirect = <Redirect to="/not-found" />);
 
   return (
-    <div className={classes.container}>
+    <Fragment>
       {redirect}
       {toast}
 
       {!restaurant || loading ? (
-        <Spinner />
+        <Grid container justify="center" alignItems="center">
+          <Spinner />
+        </Grid>
       ) : (
-        <Fragment>
-          <Grid container justify="center">
-            <Grid
-              item
-              xs={11}
-              lg={9}
-              xl={7}
-              className={classes.container_detail}
-            >
-              <Grid container direction="column">
-                <Grid item xs={12}>
-                  <img
-                    className={classes.container_detail__image}
-                    src="https://static-images.ifood.com.br/image/upload//capa/201805241343_9f7ee192-ac96-4dca-9525-189c0b884036_capa1@2x.jpg"
-                    alt="restaurant"
-                  />
-                </Grid>
-
-                <Grid container alignItems="center" item xs={12}>
-                  <Grid item xs={3} sm={2}>
+        <div className={classes.container}>
+          <Fragment>
+            <Grid container justify="center">
+              <Grid
+                item
+                xs={11}
+                lg={9}
+                xl={7}
+                className={classes.container_detail}
+              >
+                <Grid container direction="column">
+                  <Grid item xs={12}>
                     <img
-                      src={restaurant.logo}
-                      alt="restaurant logo"
-                      className={classes.container_detail__logo}
+                      className={classes.container_detail__image}
+                      src="https://static-images.ifood.com.br/image/upload//capa/201805241343_9f7ee192-ac96-4dca-9525-189c0b884036_capa1@2x.jpg"
+                      alt="restaurant"
                     />
                   </Grid>
 
-                  <Grid container alignItems="center" item xs={9} sm={7} md={8}>
-                    <span className={classes.container_detail__title}>
-                      {restaurant.name}
-                    </span>
-
-                    <Grid container alignItems="center" item xs>
-                      <Rating max={1} readOnly value={1} />
-                      <span className={classes.container_detail__rate}>
-                        {restaurant.rate.toFixed(2).replace('.', ',')}
-                      </span>
+                  <Grid container alignItems="center" item xs={12}>
+                    <Grid item xs={3} sm={2}>
+                      <img
+                        src={restaurant.logo}
+                        alt="restaurant logo"
+                        className={classes.container_detail__logo}
+                      />
                     </Grid>
-                  </Grid>
 
-                  <Grid container item xs={12} sm={3} md={2}>
-                    <Button
-                      color="primary"
-                      size="small"
-                      endIcon={
-                        showMore ? <ExpandLessRounded /> : <ExpandMoreRounded />
-                      }
-                      onClick={handleShowMore}
-                    >
-                      Ver mais
-                    </Button>
-                  </Grid>
-                </Grid>
-
-                <Grid item xs>
-                  {showMore && <RestaurantInfo restaurant={restaurant} />}
-                </Grid>
-
-                <Grid container justify="center" item xs>
-                  <InputBase
-                    className={classes.container_search}
-                    name="search"
-                    placeholder="Buscar no cardápio"
-                    value={search}
-                    onChange={handleSearch}
-                    startAdornment={
-                      <Search className={classes.container_search__icon} />
-                    }
-                  />
-                </Grid>
-
-                {categories && categories.length > 0 ? (
-                  categories.map(category => (
                     <Grid
-                      key={category.id}
                       container
-                      direction="column"
+                      alignItems="center"
                       item
-                      xs
+                      xs={9}
+                      sm={7}
+                      md={8}
                     >
-                      <h2>{category.name}</h2>
+                      <span className={classes.container_detail__title}>
+                        {restaurant.name}
+                      </span>
 
-                      <Grid container wrap="wrap" spacing={3} item xs>
-                        {category.skus.map(sku => (
-                          <Grid key={sku.id} item xs={12} md={6}>
-                            <MenuCard
-                              {...sku}
-                              onClick={() => handleOpenMenuModal(sku)}
-                            />
-                          </Grid>
-                        ))}
+                      <Grid container alignItems="center" item xs>
+                        <Rating max={1} readOnly value={1} />
+                        <span className={classes.container_detail__rate}>
+                          {restaurant.rate.toFixed(2).replace('.', ',')}
+                        </span>
                       </Grid>
                     </Grid>
-                  ))
-                ) : (
-                  <div className={classes.container_empty}>
-                    <img src={empty} alt="ilustração de carrinho vazio" />
-                    <h3>Nenhum produto encontrado!</h3>
-                  </div>
-                )}
+
+                    <Grid container item xs={12} sm={3} md={2}>
+                      <Button
+                        color="primary"
+                        size="small"
+                        endIcon={
+                          showMore ? (
+                            <ExpandLessRounded />
+                          ) : (
+                            <ExpandMoreRounded />
+                          )
+                        }
+                        onClick={handleShowMore}
+                      >
+                        Ver mais
+                      </Button>
+                    </Grid>
+                  </Grid>
+
+                  <Grid item xs>
+                    {showMore && <RestaurantInfo restaurant={restaurant} />}
+                  </Grid>
+
+                  <Grid container justify="center" item xs>
+                    <InputBase
+                      className={classes.container_search}
+                      name="search"
+                      placeholder="Buscar no cardápio"
+                      value={search}
+                      onChange={handleSearch}
+                      startAdornment={
+                        <Search className={classes.container_search__icon} />
+                      }
+                    />
+                  </Grid>
+
+                  {categories && categories.length > 0 ? (
+                    categories.map(category => (
+                      <Grid
+                        key={category.id}
+                        container
+                        direction="column"
+                        item
+                        xs
+                      >
+                        <h2>{category.name}</h2>
+
+                        <Grid container wrap="wrap" spacing={3} item xs>
+                          {category.skus.map(sku => (
+                            <Grid key={sku.id} item xs={12} md={6}>
+                              <MenuCard
+                                {...sku}
+                                onClick={() => handleOpenMenuModal(sku)}
+                              />
+                            </Grid>
+                          ))}
+                        </Grid>
+                      </Grid>
+                    ))
+                  ) : (
+                    <div className={classes.container_empty}>
+                      <img src={empty} alt="ilustração de carrinho vazio" />
+                      <h3>Nenhum produto encontrado!</h3>
+                    </div>
+                  )}
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
 
-          <Hidden smDown>
-            <div className={classes.container_cart}>
-              <Cart />
-            </div>
-          </Hidden>
+            <Hidden smDown>
+              <div className={classes.container_cart}>
+                <Cart button />
+              </div>
+            </Hidden>
 
-          {selectedItem && (
-            <MenuModal
-              open={Boolean(selectedItem)}
-              item={selectedItem}
-              close={handleCloseMenuModal}
-            />
-          )}
-        </Fragment>
+            {selectedItem && (
+              <MenuModal
+                open={Boolean(selectedItem)}
+                item={selectedItem}
+                close={handleCloseMenuModal}
+              />
+            )}
+
+            <Dialog open={clearCart} onClose={() => handleClearCart()}>
+              <DialogTitle>Carrinho já contém itens!</DialogTitle>
+
+              <DialogContent>
+                <DialogContentText>
+                  Seu carrinho já contém itens de outro restaurante, deseja
+                  limpá-lo?
+                </DialogContentText>
+              </DialogContent>
+
+              <DialogActions>
+                <Button onClick={() => handleClearCart()} color="primary">
+                  Cancelar
+                </Button>
+
+                <Button
+                  onClick={() => handleClearCart(true)}
+                  color="primary"
+                  autoFocus
+                >
+                  Limpar
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </Fragment>
+        </div>
       )}
-    </div>
+    </Fragment>
   );
 };

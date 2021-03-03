@@ -35,6 +35,12 @@ export const ProfilePopover = withRouter(props => {
     props.history.push('/customer/login');
   };
 
+  // Go to Orders Page
+  const handleOrders = () => {
+    props.history.push('/customer/orders');
+    props.setPopover(null);
+  };
+
   // Go to Customer Profile Page
   const handleProfile = () => {
     props.history.push('/customer/profile');
@@ -72,6 +78,7 @@ export const ProfilePopover = withRouter(props => {
               color="primary"
               size="large"
               startIcon={<FastfoodRounded />}
+              onClick={handleOrders}
             >
               Pedidos
             </Button>
