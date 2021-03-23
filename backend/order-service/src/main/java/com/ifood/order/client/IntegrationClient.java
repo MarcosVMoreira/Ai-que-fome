@@ -2,6 +2,7 @@ package com.ifood.order.client;
 
 import com.ifood.order.configuration.ApplicationConfig;
 import com.ifood.order.endpoint.error.UnprocessableEntityException;
+import com.ifood.order.endpoint.model.Customer;
 import com.ifood.order.endpoint.model.Merchant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,7 @@ public class IntegrationClient {
                     .exchange(requestEntity, Merchant.class);
             return responseEntity.getBody();
         } catch (HttpStatusCodeException e) {
-            log.error("[CSU] Error while trying to check if merchant exist. Status: {} \n Message: {}", e.getStatusCode(),
+            log.error("[Merchant Integration] Error while trying to check if merchant exist. Status: {} \n Message: {}", e.getStatusCode(),
                     e.getResponseBodyAsString(),
                     e);
             throw new UnprocessableEntityException("422.001");
@@ -47,7 +48,7 @@ public class IntegrationClient {
 
     //TODO refazer o esquema do findCustomerById para ficar parecido com
     //findMerchantById, sem retornar boolean
-    public boolean findCustomerById (String idCustomer) {
+    public Customer findCustomerById (String idCustomer) {
         log.info("[Customer Integration] Finding customer by id");
         UriBuilder builder = UriComponentsBuilder.fromUriString(applicationConfig.getCustomerFindById() + idCustomer);
 
@@ -58,11 +59,11 @@ public class IntegrationClient {
         RequestEntity<?> requestEntity = RequestEntity.get(builder.build()).headers(headers).build();
 
         try {
-            ResponseEntity<Object> responseEntity = restTemplateBuilder.build()
-                    .exchange(requestEntity, Object.class);
-            return responseEntity.getStatusCode().equals(HttpStatus.OK);
+            ResponseEntity<Customer> responseEntity = restTemplateBuilder.build()
+                    .exchange(requestEntity, Customer.class);
+            return responseEntity.getBody();
         } catch (HttpStatusCodeException e) {
-            log.error("[CSU] Error while trying to check if customer exist. Status: {} \n Message: {}", e.getStatusCode(),
+            log.error("[Customer Integration] Error while trying to check if customer exist. Status: {} \n Message: {}", e.getStatusCode(),
                     e.getResponseBodyAsString(),
                     e);
             throw new UnprocessableEntityException("422.002");

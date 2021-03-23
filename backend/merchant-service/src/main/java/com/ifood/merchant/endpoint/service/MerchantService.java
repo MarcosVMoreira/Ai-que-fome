@@ -86,8 +86,8 @@ public class MerchantService {
         if (merchant.getRateAmount() == null) {
             merchant.setRateAmount(0);
         }
-        if (merchant.getDuration() == null) {
-            merchant.setRate(0F);
+        if (merchant.getRate() == null) {
+            merchant.setRate(0f);
         }
         if (merchant.getBasePreparationTime() == null) {
             merchant.setBasePreparationTime(0F);

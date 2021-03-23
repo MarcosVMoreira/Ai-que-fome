@@ -81,7 +81,7 @@ public class Merchant {
     private List<String> coordinates;
 
     @NotNull(message = "400.003")
-    private Float basePreparationTime = (float) 0.0;
+    private Float basePreparationTime;
 
     private List<AllowedPaymentEnum> allowedPayments;
 
@@ -89,15 +89,15 @@ public class Merchant {
 
     private List<MerchantTypeEnum> merchantType;
 
-    private Float rate = (float) 0;
+    private Float rate;
 
-    private Integer rateAmount = 0;
+    private Integer rateAmount;
 
     private Float distance;
 
     private Float fee;
 
-    private Float duration = 0F;
+    private Float duration;
 
     private String description;
 }
