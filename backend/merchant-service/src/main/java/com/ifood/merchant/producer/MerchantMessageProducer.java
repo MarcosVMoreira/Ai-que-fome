@@ -19,7 +19,7 @@ public class MerchantMessageProducer {
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    private static final String USER_EXCHANGE_NAME = "user-created";
+    private static final String USER_EXCHANGE_NAME = "ifood-exchange";
 
     public void sendMerchantDataToRabbit (Merchant merchant) {
         try {
