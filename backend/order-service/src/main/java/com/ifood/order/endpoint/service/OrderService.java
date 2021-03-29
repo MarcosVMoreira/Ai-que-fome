@@ -5,6 +5,7 @@ import com.ifood.order.endpoint.enumeration.OrderStatusEnum;
 import com.ifood.order.endpoint.enumeration.PaymentStatusEnum;
 import com.ifood.order.endpoint.error.NotFoundException;
 import com.ifood.order.endpoint.error.UnprocessableEntityException;
+import com.ifood.order.endpoint.model.Customer;
 import com.ifood.order.endpoint.model.Merchant;
 import com.ifood.order.endpoint.model.Order;
 import com.ifood.order.endpoint.model.request.OrderRequest;
@@ -64,13 +65,15 @@ public class OrderService {
 
         //TO DO ver o que aconteceu agora qnd passo um merchant q nao existe
         Merchant merchantById = integrationClient.findMerchantById(orderRequest.getIdMerchant());
-        integrationClient.findCustomerById(orderRequest.getIdCustomer());
+        Customer customerById = integrationClient.findCustomerById(orderRequest.getIdCustomer());
 
         Order order = Order.valueOf(orderRequest);
 
         order.setCode(nextSequenceService.getNextSequence("DatabaseSequence"));
         order.setMerchantLogo(merchantById.getLogo());
         order.setMerchantName(merchantById.getName());
+
+        order.setCustomerName(customerById.getName());
 
         return orderRepository.save(order);
     }

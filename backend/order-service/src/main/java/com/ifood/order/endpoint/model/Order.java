@@ -26,6 +26,8 @@ public class Order {
 
     private String idCustomer;
 
+    private String customerName;
+
     private String idMerchant;
 
     private String merchantLogo;
