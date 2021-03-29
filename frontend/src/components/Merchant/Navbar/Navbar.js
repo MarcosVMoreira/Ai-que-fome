@@ -92,7 +92,9 @@ export const Navbar = () => {
                 <span className={classes.navbar_title}>{merchant.name}</span>
 
                 <Rating value={merchant.rate} readOnly precision={0.25} />
-                <span className={classes.navbar_rate}>({merchant.rate})</span>
+                <span className={classes.navbar_rate}>
+                  ({merchant.rate ? merchant.rate : '0,0'})
+                </span>
               </Grid>
 
               <Grid item container alignItems="center">

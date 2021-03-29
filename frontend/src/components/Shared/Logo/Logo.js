@@ -8,7 +8,7 @@ export const Logo = props => (
   <Grid item className={classes.container}>
     <img
       src={props.merchant ? merchantLogo : logo}
-      alt="ifood clone logo"
+      alt="Ai que Fome"
       className={props.header ? classes.toolbar : classes.logo}
       onClick={props.handleClick}
     />

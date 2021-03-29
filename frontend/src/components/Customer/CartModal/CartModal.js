@@ -44,7 +44,7 @@ export const CartModal = withRouter(props => {
       </Grid>
 
       <div>
-        <Cart button />
+        <Cart button close={handleClose} />
       </div>
     </Dialog>
   );

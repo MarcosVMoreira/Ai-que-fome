@@ -12,12 +12,10 @@ import { rootReducer } from './store/reducers/index';
 const theme = createMuiTheme(customTheme);
 
 const composeEnhancers =
-  process.env.NODE_ENV === 'development'
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        trace: true,
-        traceLimit: 25,
-      }) || compose
-    : null;
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+    trace: true,
+    traceLimit: 25,
+  }) || compose;
 
 const store = createStore(
   rootReducer,

@@ -21,6 +21,14 @@ export const Cart = withRouter(props => {
     onRemoveCartItem(index);
   };
 
+  const handleOrder = () => {
+    if (props.close) {
+      props.close();
+    }
+
+    props.history.push('/customer/order');
+  };
+
   return (
     <Fragment>
       {cart.length ? (
@@ -148,7 +156,7 @@ export const Cart = withRouter(props => {
                 variant="contained"
                 color="primary"
                 style={{ width: '100%' }}
-                onClick={() => props.history.push('/customer/order')}
+                onClick={handleOrder}
               >
                 Fazer Pedido
               </Button>

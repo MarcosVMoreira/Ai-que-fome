@@ -120,7 +120,7 @@ export const Home = () => {
                   </div>
 
                   <div>
-                    <span>Anderson</span>
+                    <span>{order.customerName}</span>
                     <span>
                       Previsto {order.deliveryDateTime.replace(':00', '')}
                     </span>
@@ -247,13 +247,23 @@ export const Home = () => {
 
                   <Fragment>
                     {selectedOrder.items.map((item, index) => (
-                      <div key={index}>
-                        <span>{item.quantity}</span>
-                        <span>{item.name}</span>
-                        <span>
-                          R${item.totalPrice.toFixed(2).replace('.', ',')}
-                        </span>
-                      </div>
+                      <Fragment key={index}>
+                        <div className={classes.item}>
+                          <span>{item.quantity}</span>
+                          <span>{item.name}</span>
+                          <span>
+                            R${item.totalPrice.toFixed(2).replace('.', ',')}
+                          </span>
+                        </div>
+
+                        {item.subItens.map((subItem, subIndex) => (
+                          <div className={classes.subItem} key={subIndex}>
+                            <span>{subItem.quantity}</span>
+                            <span>{subItem.name}</span>
+                            <span>R$0,00</span>
+                          </div>
+                        ))}
+                      </Fragment>
                     ))}
                   </Fragment>
                 </section>
