@@ -1,45 +1,29 @@
-# 🎓 Muito mais que apenas um clone
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Esse repositório contém o **projeto de conclusão de curso** para o curso de [Engenharia de Computação](https://portal.pcs.ifsuldeminas.edu.br/cursos-superiores/bacharelado/engenharia-da-computacao) do [IFSULDEMINAS - Campus Poços de Caldas](https://pcs.ifsuldeminas.edu.br/).  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;O objetivo do projeto é desenvolver uma plataforma completa e funcional (**back e frontend**) usando tecnologias semelhantes ao que o iFood usa em sua stack, focando em **desempenho e escalabilidade**.
-
-# 🛠️ Backend
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;O backend do projeto está sendo desenvolvido utilizando **microsserviços** em Java **rodando em Docker**.  
-<br>
+# 🎓 Inspirado nos melhores do mercado, feito do zero
 
 <p align = "center">
-  <img src="https://raw.githubusercontent.com/MarcosVMoreira/iFood-Clone/master/Documentation/diagrama-backend.png" alt="Diagrama do backend" width="900" height="400"/>  
+  <img src="https://raw.githubusercontent.com/MarcosVMoreira/iFood-Clone/master/Documentation/principal.png" alt="Página principal do sistema" width="900" height="448"/>  
   
   <p align = "center">
-   <b>Arquitetura do backend</b>
+   <b>Página principal do sistema</b>
   </p>
 </p>
 
-Atualmente, essas são as tecnologias que já foram utilizadas no backend, assim como as que serão implementadas até o fim do projeto:
+<br><br>
 
-✅ Spring Boot  
-✅ MongoDB  
-✅ Docker  
-✅ JUnit e Mockito  
-✅ RabbitMQ  
-✅ Kubernetes   
-⬜️ Redis
+<p align = "center">
+  <img src="https://raw.githubusercontent.com/MarcosVMoreira/iFood-Clone/master/Documentation/restaurante.PNG" alt="Restaurante" width="900" height="448"/>  
+  
+  <p align = "center">
+   <b>Restaurante</b>
+  </p>
+</p>
 
-Além disso, serão ou já foram usadas as seguintes _design patterns_ e técnicas:
-
-✅ DTO  
-✅ TDD  
-✅ Builder  
-✅ RestFUL APIs  
-✅ Inversão de controle / Injeção de dependência  
-✅ Mock object  
-✅ Produtor-consumidor  
-✅ Princípios SOLID
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Esse repositório contém o **projeto de conclusão de curso** para o curso de [Engenharia de Computação](https://portal.pcs.ifsuldeminas.edu.br/cursos-superiores/bacharelado/engenharia-da-computacao) do [IFSULDEMINAS - Campus Poços de Caldas](https://pcs.ifsuldeminas.edu.br/).  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;O objetivo do projeto é desenvolver uma plataforma completa e funcional (**back e frontend**) de delivery de comida usando tecnologias semelhantes ao que o iFood usa em sua stack, focando em **desempenho e escalabilidade**.
 
 # 📊 Frontend
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;O frontend do projeto está sendo desenvolvido utilizando a biblioteca **React** e uma das suas principais bibliotecas **Redux**.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;O frontend do projeto foi desenvolvido utilizando a biblioteca **React** e uma das suas principais bibliotecas: **Redux**.
 <br>
 
 <p align = "center">
@@ -50,17 +34,17 @@ Além disso, serão ou já foram usadas as seguintes _design patterns_ e técnic
   </p>
 </p>
 
-Atualmente, essas são as tecnologias que já foram utilizadas no frontend, assim como as que serão implementadas até o fim do projeto:
+Atualmente, essas são as tecnologias que foram utilizadas no frontend:
 
 ✅ React (v16)  
 ✅ Redux e React-Redux  
 ✅ SASS  
 ✅ ESLint e Prettier  
 ✅ Material UI  
-⬜️ Jest  
-⬜️ Cypress
+✅ Jest  
+✅ Cypress
 
-São utilizadas as seguintes ferramentas para desenvolvimento:
+Foram utilizadas as seguintes ferramentas para desenvolvimento:
 
 - IntelliJ IDEA
 - Visual Studio Code
@@ -70,6 +54,47 @@ São utilizadas as seguintes ferramentas para desenvolvimento:
 - Robo 3T
 - Trello
 - Clockify
+
+# 🛠️ Backend
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;O backend do projeto foi desenvolvido utilizando **microsserviços** em Java 8 e deployado em um **cluster Kubernetes**.  
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ao todo, o sistema conta com **quatro microsserviços** principais, sendo eles **merchant, customer, order e auth**. Cada qual conta com seu próprio banco de dados. Além disso, para deploy local, foi utilizado um microsserviço para service discovery. Todavia, para deploy em cluster, foi aproveitado o serviço de **service discovery do próprio Kubernetes**. Por fim, temos um microsserviço de **gateway** para realizar o redirecionamento dos requests e servir como porta única de entrada/saida dos requests.
+
+
+<p align = "center">
+  <img src="https://raw.githubusercontent.com/MarcosVMoreira/iFood-Clone/master/Documentation/Arquitetura.png" alt="Arquitetura do backend" width="900" height="400"/>  
+  
+  <p align = "center">
+   <b>Arquitetura do backend</b>
+  </p>
+</p>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Todos os microsserviços foram deployados em um custer Kubernetes utilizando o MicroK8S como Kubernetes local.
+
+Foram utilizadas as seguintes tecnologias no backend:
+
+✅ Java 8  
+✅ Spring Boot  
+✅ MongoDB (devido fraco relacionamento entre tabelas)  
+✅ Docker  
+✅ JUnit e Mockito  
+✅ RabbitMQ  
+✅ Kubernetes   
+✅ MicroK8S (ambiente Kubernetes local)   
+✅ Eureka (service discovery)   
+✅ Zuul (gateway)   
+
+Além disso, foram usadas os seguintes _design patterns_ e técnicas:
+
+✅ DTO  
+✅ TDD  
+✅ Builder  
+✅ RestFUL APIs  
+✅ Inversão de controle / Injeção de dependência  
+✅ Mock object  
+✅ Produtor-consumidor  
+✅ Princípios SOLID
 
 # ✒️ Equipe
 
