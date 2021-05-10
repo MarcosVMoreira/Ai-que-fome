@@ -55,6 +55,8 @@ Foram utilizadas as seguintes ferramentas para desenvolvimento:
 - Trello
 - Clockify
 
+Quer saber **como o frontend foi construído** e o **motivo da escolha das tecnologias**? Temos um [vídeo no youtube](https://www.youtube.com/watch?v=cE5O_7Fm9V8) a respeito.
+
 # 🛠️ Backend
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;O backend do projeto foi desenvolvido utilizando **microsserviços** em Java 8 e deployado em um **cluster Kubernetes**.  
